@@ -1,0 +1,30 @@
+{
+  "en" : {
+    "login-email": "E-mail",
+    "login-password": "Password",
+    "login-name": "Full name",
+    "login-username": "Username",
+    "login-btn": "Continue",
+    "signin-title": "Sign In",
+    "signup-title": "Sign Up",
+    "reset-password-title": "Reset your password",
+    "invalid_email": "Invalid email",
+    "invalid_inputs": "Invalid inputs",
+    "RES_NOT_EXIST": "Resource does not exist.",
+    "invalid_password": "Invalid password (more than 4 characters)",
+    "signin-description": "Enjoy a new and personalized way to listen,\nread, and share your favorite content.",
+    "next": "Next",
+    "USER_ALREADY_EXISTS": "A resource already exists with that username or email.",
+    "technical_error": "Technical error",
+    "view_all": "View all",
+    "podcasts": "Podcasts",
+    "podcast": "Podcast",
+    "rss": "Rss",
+    "recent_podcasts": "Recent podcasts",
+    "recent_rss": "Recent RSS",
+    "leeds": "Leeds",
+    "saved_items": "Saved items",
+    "successfully_operation": "the operation has been completed with success",
+    "processing_data": "Processing data"
+  }
+}

@@ -1,0 +1,14 @@
+@import "./../../styles/base";
+.toast {
+  position: absolute;
+  top: $spacer/2;
+  right: $spacer/2;
+  z-index: 99;
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+  svg {
+    color: $blue;
+    margin-bottom: $spacer/2;
+  }
+}

@@ -1,0 +1,66 @@
+@import "./../../styles/base";
+.viewer {
+  position: fixed;
+  bottom: $spacer;
+  left: 10%;
+  width: 80%;
+  background: $bg-1;
+  border-radius: 5px 5px 0 0;
+  box-shadow: 0 0 20px 0px $grey;
+  svg {
+    cursor: pointer;
+  }
+  .viewer__header {
+    background: $bg-2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: $spacer/2;
+    color: $text-color;
+    .viewer__header__close{
+      color: $error-color;
+    }
+    .viewer__header__share{
+      display: flex;
+      align-items: center;
+      span {
+        font-size: 11px;
+      }
+      svg {
+        margin: 0 5px;
+        &:last-child {
+          margin-left: $spacer * 2;
+        }
+      }
+    }
+  }
+  .viewer__body {
+    padding: $spacer;
+    overflow-y: auto;
+    max-height: 85vh;
+    .viewer__body__title{
+      text-align: center;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    .viewer__body__content{
+      font-size: 14px;
+      line-height: 20px;
+      margin-top: $spacer;
+      text-align: justify;
+
+      img {
+        max-width: 100%;
+        height: auto;
+      }
+      p {
+        padding: $spacer 0;
+      }
+    }
+    audio {
+      outline: 0;
+      margin: $spacer auto;
+      display: block;
+    }
+  }
+}

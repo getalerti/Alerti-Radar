@@ -1,0 +1,150 @@
+@import "./../../styles/base";
+.form {
+  background: $bg-1;
+  display: block;
+  width: 100%;
+  margin: $spacer*2 auto;
+  padding: $spacer;
+  border-radius: 5px;
+  max-width: 500px;
+  box-sizing: border-box;
+  white-space: normal;
+  align-self: flex-start;
+  .form-group {
+    margin: $spacer/2 0;
+    label {
+      font-size: 11px;
+      display: block;
+      padding-top: $spacer/2;
+      padding-bottom: $spacer/4;
+    }
+  }
+  .btn {
+    margin-top: $spacer;
+  }
+  .form__bottom-links {
+    display: flex;
+    justify-content: space-between;
+    margin-top: $spacer;
+    span {
+      font-size: 11px;
+      font-weight: 300;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+}
+.btn {
+  background: $btn-bg;
+  border: none;
+  color: $bg-2;
+  padding: 10px 20px;
+  border-radius: 100px;
+  font-weight: bold;
+  outline: 0;
+  &[disabled] {
+    opacity: 0.6;
+  }
+}
+.input {
+  display: block;
+  line-height: 30px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  color: $titles-color;
+  background: $bg-2;
+  outline: 0;
+  border: 0;
+  padding: 0 $spacer/2;
+  border-radius: 5px;
+}
+.title-1 {
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  padding-bottom: $spacer;
+}
+.description {
+  color: $text-color;
+  text-align: center;
+  font-size: 13px;
+  line-height: 16px;
+  padding: 0 $spacer*2 $spacer $spacer*2;
+  font-weight: 300;
+}
+.errors {
+  color: $error-color;
+  font-weight: 300;
+  font-size: 11px;
+  line-height: 16px;
+  margin-top: $spacer;
+  &::first-letter {
+    text-transform: uppercase;
+  }
+}
+.slider_container {
+  max-width: 560px;
+  margin-left: auto;
+  margin-right: auto;
+  overflow: hidden;
+}
+.slider {
+  width: 200%;
+  display: flex;
+  white-space: nowrap;
+  transition: all 0.3s;
+  position: relative;
+}
+.slider__item {
+  width: 50%;
+}
+
+.topics_container {
+  margin: $spacer 0;
+}
+.topics {
+  display: flex;
+  flex-wrap: wrap;
+  height: 400px;
+  flex-direction: row;
+  justify-content: space-between;
+  text-align: center;
+  .topic {
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+    margin: 5px;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    white-space: break-spaces;
+    border-radius: 15px;
+    color: $bg-2;
+    cursor: pointer;
+    background-position: center;
+    background-size: cover;
+    box-sizing: border-box;
+    &.active {
+      border: 3px solid $active-color;
+    }
+    h3 {
+      font-size: 14px;
+      padding: 10px;
+      font-weight: bold;
+      line-height: 18px;
+    }
+    p {
+      font-size: 12px;
+      font-weight: 300;
+    }
+  }
+}
+.navigation {
+  padding: $spacer;
+  display: flex;
+  justify-content: center;
+  button {
+    width: 200px;
+  }
+}

@@ -1,0 +1,26 @@
+@import "./../../styles/base";
+.alert {
+  width: 200px;
+  padding: $spacer/2;
+  border-radius: $spacer/2;
+  color: $bg-2;
+  font-size: 12px;
+  margin-bottom: $spacer/2;
+  display: flex;
+  align-items: center;
+  .alert_loader {
+    color: $white;
+    margin-right: 5px;
+    margin-bottom: 0;
+    animation: spin 1s linear infinite;
+  }
+  &[data-type="error"] {
+    background: $error-color;
+  }
+  &[data-type="success"] {
+    background: $success-color;
+  }
+  &[data-type="primary"] {
+    background: $blue;
+  }
+}

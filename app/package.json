@@ -1,0 +1,25 @@
+{
+  "name": "learn-starter",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "next": "^10.0.0",
+    "next-compose-plugins": "^2.2.1",
+    "next-images": "^1.8.1",
+    "next-translate": "^1.0.7",
+    "react": "17.0.1",
+    "react-audio-player": "^0.17.0",
+    "react-content-loader": "^6.0.3",
+    "react-dom": "17.0.1",
+    "react-icons": "^4.2.0",
+    "react-redux": "^7.2.4",
+    "redux": "^4.1.0",
+    "redux-thunk": "^2.3.0",
+    "sass": "^1.35.1"
+  }
+}
