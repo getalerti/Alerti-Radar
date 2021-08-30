@@ -29,6 +29,14 @@ const formatDate = (date) => {
         "/" +  _date.getFullYear();
 }
 const isEmail = (email) => /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email);
+const isURL = (url) => {
+    try {
+        url = new URL(url);
+        return true;
+    } catch (_) {
+        return false;
+    }
+};
 const isPassword = (password) => password && password.length >= 5;
 const isNotEmpty = (value) => value && value.length > 0;
 const getSMShareUrl = (social, text) => {
@@ -43,11 +51,20 @@ const getSMShareUrl = (social, text) => {
             return "";
     }
 }
+const validateNewSourceForm = (type, data) => {
+    console.log(isURL(data))
+    if (type === 'podcast' || type === 'rss' || type === 'website' ) {
+        return isURL(data)
+    }
+    return isNotEmpty(data);
+}
 export {
     fetchAPI,
     isEmail,
     isPassword,
     isNotEmpty,
     formatDate,
-    getSMShareUrl
+    getSMShareUrl,
+    isURL,
+    validateNewSourceForm
 }

@@ -1,16 +1,16 @@
 import styles from "./style.module.scss";
-import { FaPlus } from 'react-icons/fa';
+import {FaBookmark, FaThList} from 'react-icons/fa';
 import { BulletList } from 'react-content-loader'
 import {useEffect, useState} from "react";
-import {fetchAPI} from "../../utils";
 import useTranslation from "./../../i18n";
 import Item from "../../components/Following/Item";
-import NewFeed from "./NewFeed";
 import {loadFollwings} from "../../store/actions";
 import {connect} from "react-redux";
+import Link from "next/link";
+import Folders from "../Folders";
 
 const Following =({loadFollwings, followings}) => {
-    const [openNewFeed, setOpenNewFeed] = useState(false);
+    const [expand, setExpand] = useState(false);
     const t = useTranslation()
     useEffect(() => {
         loadFollwings();
@@ -24,15 +24,20 @@ const Following =({loadFollwings, followings}) => {
     }
     return (
         <>
-            <div className={styles.following__new_item__popup} data-show={openNewFeed}>
-                <NewFeed close={() => { setOpenNewFeed(false) }} />
-            </div>
         <div className={styles.following}>
-
-            <h4  className={styles.following__title}>{t('leeds')}
-                <FaPlus className={styles.btn} onClick={() => {setOpenNewFeed(!openNewFeed)}} />
+            <Link href={"/dashboard/all"}>
+                <div className={styles.nav_link}>
+                    <FaThList title={t('all')} /> {t('all')}
+                </div>
+            </Link>
+                <Link href={"/dashboard/saved"}>
+                    <div className={styles.nav_link}>
+                        <FaBookmark title={t('saved')} /> {t('saved')}
+                    </div>
+                </Link>
+            <h4  className={styles.following__title}>{t('feeds')}
             </h4>
-            <div className={styles.following__items}>
+            <div className={styles.following__items} data-expand={expand}>
                 { !followings && (
                     <>
                         <BulletList />
@@ -43,8 +48,12 @@ const Following =({loadFollwings, followings}) => {
                 {
                     getList()
                 }
-
             </div>
+            <span className={styles.show_more} onClick={() => setExpand(!expand)}>
+                Show {!expand ? "more" : "less"}
+            </span>
+            <Folders />
+
         </div>
             </>
     )

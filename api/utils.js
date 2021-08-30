@@ -36,7 +36,15 @@ const getFeedItems = async (url, max, type) => {
         console.log({getFeedItemsError: e});
         return [];
     }
-
+}
+const getFeedTitle = async (url) => {
+    try {
+        const feed = await parser.parseURL(url);
+        return feed.title || "";
+    } catch (e) {
+        console.log({getFeedTitle: e});
+        return "";
+    }
 }
 const mergeFeedArrays = (feeds) => {
     const result = [];
@@ -124,10 +132,13 @@ const isURL = (string) => {
     }
     return url.protocol === "http:" || url.protocol === "https:";
 }
+const genID = (pref = "") => `${pref === "" ? "" : (pref + "_")}${uuid()}`
 module.exports = {
     generateAccessToken,
     createUserContent,
     randomString,
     sendMail,
-    isURL
+    isURL,
+    genID,
+    getFeedTitle
 }

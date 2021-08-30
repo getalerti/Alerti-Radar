@@ -1,0 +1,69 @@
+@import "./../../styles/base";
+.source {
+  max-width: 1000px;
+  margin: 0 auto;
+  h2 {
+    margin-top: $spacer * 2;
+    font-size: 1.25rem;
+    font-weight: 300;
+    color: $grey;
+  }
+  .source_items {
+    display: flex;
+    justify-content: space-between;
+    .source_item {
+      display: flex;
+      align-items: center;
+      color: $grey;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: normal;
+      padding-bottom: $spacer;
+      border-bottom: 2px solid $grey;
+      width: 100%;
+      justify-content: center;
+      transition: all 0.3s;
+      &[data-selected="true"] {
+        border-color: $orange;
+        color: $orange;
+      }
+      &:hover {
+        border-color: $orange;
+        color: $orange;
+      }
+      svg {
+        margin-right: 5px;
+      }
+    }
+  }
+  .input_group_source {
+    position: relative;
+    color: $grey;
+    svg {
+      position: absolute;
+      left: $spacer/2;
+      top: 12px;
+      font-size: 20px;
+      &:hover {
+        color: $orange;
+      }
+    }
+    .input_source {
+      border: 1.5px solid $grey;
+      border-radius: 5px;
+      margin: $spacer 0;
+      width: 100%;
+      max-width: 100%;
+      line-height: 40px;
+      transition: all 0.3s;
+      padding: 0 ($spacer * 2);
+      box-sizing: border-box;
+      font-size: 14px;
+      &:hover, &:focus {
+        border-color: $orange;
+        color: $text-color;
+      }
+    }
+
+  }
+}

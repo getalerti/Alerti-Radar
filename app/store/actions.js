@@ -3,16 +3,18 @@ import useTranslation from "../i18n";
 
 export const LOAD_FEEDS         = "LOAD_FEEDS";
 export const LOAD_FOLLOWINGS    = "LOAD_FOLLOWINGS";
-export const ADD_FOLLOWING    = "ADD_FOLLOWING";
-export const REMOVE_FOLLOWING    = "REMOVE_FOLLOWING";
+export const ADD_FOLLOWING      = "ADD_FOLLOWING";
+export const REMOVE_FOLLOWING   = "REMOVE_FOLLOWING";
 export const GENERATE_FEEDS     = "GENERATE_FEEDS";
 export const SET_ERROR          = "SET_ERROR";
-export const SET_SUCCESS          = "SET_SUCCESS";
+export const SET_SUCCESS        = "SET_SUCCESS";
 export const USER_STATUS        = "USER_STATUS";
-export const SAVE_ITEM        = "SAVE_ITEM";
+export const SAVE_ITEM          = "SAVE_ITEM";
 export const SAVED_ITEMS        = "SAVED_ITEMS";
 export const VIEW_ITEM          = "VIEW_ITEM";
 export const LOADING            = "LOADING";
+export const LOAD_FOLDERS       = "GET_FOLDERS";
+export const SAVE_FOLDER        = "SAVE_FOLDER";
 
 const t = useTranslation();
 export const loadFollwings = () => dispatch => {
@@ -158,6 +160,61 @@ export const addRemoveFeed = (item, action) => dispatch => {
 export const generateFeeds = () => dispatch => {
     dispatch({ type: SET_ERROR, payload: "" });
     dispatch({ type: LOADING, payload: true });
+};
+export const loadFolders = () => dispatch => {
+    dispatch({ type: SET_ERROR, payload: "" });
+    dispatch({ type: LOADING, payload: true });
+    fetchAPI("/user/folders", "GET", null, true)
+        .then(response => {
+            if (response && response.error) {
+                if (response.error === "unauthorized") {
+                    dispatch({
+                        type: USER_STATUS,
+                        payload: "unauthorized"
+                    })
+                }
+                else
+                    dispatch({ type: SET_ERROR, payload: t("technical_error") })
+            } else {
+                dispatch({ type: LOAD_FOLDERS, payload: response })
+                dispatch({ type: LOADING, payload: false });
+                dispatch({
+                    type: USER_STATUS,
+                    payload: "authorized"
+                })
+            }
+        }).catch(error => {
+        console.log({loadFeedsError: error})
+        dispatch({ type: SET_ERROR, payload: t("technical_error") })
+    })
+};
+export const saveFolder = (name) => dispatch => {
+    dispatch({ type: SET_ERROR, payload: "" });
+    dispatch({ type: LOADING, payload: true });
+    fetchAPI("/user/folders", "POST", {name}, true)
+        .then(response => {
+            if (response && response.error) {
+                if (response.error === "unauthorized") {
+                    dispatch({
+                        type: USER_STATUS,
+                        payload: "unauthorized"
+                    })
+                }
+                else
+                    dispatch({ type: SET_ERROR, payload: t("technical_error") })
+            } else {
+                dispatch({ type: SAVE_FOLDER, payload: name })
+                dispatch({ type: LOADING, payload: false });
+                dispatch({ type: SET_SUCCESS, payload: t("successfully_operation") });
+                dispatch({
+                    type: USER_STATUS,
+                    payload: "authorized"
+                })
+            }
+        }).catch(error => {
+        console.log({loadSaveItemError: error})
+        dispatch({ type: SET_ERROR, payload: t("technical_error") })
+    })
 };
 export const viewItem = (item) => dispatch => {
     dispatch({ type: LOADING, payload: true });

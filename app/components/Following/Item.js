@@ -7,6 +7,5 @@ export default ({item}) => <div  className={styles.following__item}>
     </div>
     <div>
         <h5 className={styles.following__item__title}>{item.name}</h5>
-        <p className={styles.following__item__subtitle}>{item.url.substr(0, 17)}...</p>
     </div>
 </div>

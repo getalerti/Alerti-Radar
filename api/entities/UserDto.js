@@ -3,7 +3,7 @@ const rssByTopic = require('./../config/rssByTopic');
 const podcastByTopic = require('./../config/podcastsByTopics');
 const Feed = require('./../entities/Feed');
 module.exports = class UserDto {
-    constructor({ id, email, name, username, password, jwt, feeds, listTopics, changePassword, savedItems }) {
+    constructor({ id, email, name, username, password, jwt, feeds, listTopics, changePassword, savedItems, folders }) {
         this._id = id;
         this.email = email;
         this.name = name;
@@ -15,6 +15,7 @@ module.exports = class UserDto {
         this.changePassword = changePassword === true;
         this.savedItems = savedItems || [];
         this.jwt = jwt;
+        this.folders = folders || [];
     }
     async hashPassword() {
         this.password = await bcrypt.hash(this.password, 10);
@@ -64,6 +65,9 @@ module.exports = class UserDto {
             return;
         }
         this.feeds.push(feed)
+    }
+    addFolder(folder) {
+        this.folders.push(folder)
     }
     removeFeed(idFeed) {
         this.feeds = this.feeds.filter(feed => feed.id !== idFeed );

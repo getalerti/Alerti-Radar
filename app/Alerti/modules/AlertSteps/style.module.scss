@@ -1,0 +1,37 @@
+@import "styles/variables";
+.monitorTypes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: $spacer;
+  overflow: auto;
+  height: 62vh;
+}
+.keywords {
+  padding: $spacer;
+}
+.sources {
+  padding: $spacer;
+}
+.alertStepsContainer {
+  width: 100%;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  height: 78vh;
+}
+.alertStepsSlider {
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  max-height: 600px;
+  overflow-y: auto;
+  &>div {
+    width: 100%;
+    min-width: 100%;
+    box-sizing: border-box;
+    &[data-active-step=false] {
+      display: none;
+    }
+  }
+}

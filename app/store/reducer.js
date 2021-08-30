@@ -9,7 +9,9 @@ import {
     USER_STATUS,
     VIEW_ITEM,
     SAVED_ITEMS,
-    SAVE_ITEM
+    SAVE_ITEM,
+    LOAD_FOLDERS,
+    SAVE_FOLDER
 } from "./actions";
 import initialState from "./initialState";
 
@@ -37,6 +39,18 @@ export default (state = initialState, {type, payload}) => {
             return {
                 ...state,
                 followings: payload
+            };
+        }
+        case LOAD_FOLDERS: {
+            return {
+                ...state,
+                folders: payload
+            };
+        }
+        case SAVE_FOLDER: {
+            return {
+                ...state,
+                folders: [...state.folders, payload]
             };
         }
         case SAVED_ITEMS: {

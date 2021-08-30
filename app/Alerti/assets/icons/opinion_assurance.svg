@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" height="100%" width="100%"
+     preserveAspectRatio="xMidYMid meet" focusable="false">
+    <defs>
+        <path id="a-opinion-assurances_cache208"
+              d="M20.9 18.4c-1.1 0-1.9-.9-1.9-1.9V2.2c0-1.1.9-1.9 1.9-1.9 1.1 0 1.9.9 1.9 1.9v14.3c0 1-.8 1.9-1.9 1.9z"></path>
+    </defs>
+    <clipPath id="b-opinion-assurances_cache208">
+        <use href="#a-opinion-assurances_cache208" overflow="visible"></use>
+    </clipPath>
+    <path clip-path="url(#b-opinion-assurances_cache208)" fill="#006d81" d="M19 9.7h3.9v8.7H19z"></path>
+    <path clip-path="url(#b-opinion-assurances_cache208)" fill="#2e8999" d="M19 .3h3.9v9.5H19z"></path>
+    <defs>
+        <path id="c-opinion-assurances_cache208"
+              d="M15.1 23.8c-1.1 0-1.9-.9-1.9-1.9V4.8c0-1.1.9-1.9 1.9-1.9 1.1 0 1.9.9 1.9 1.9v17.1c0 1-.9 1.9-1.9 1.9z"></path>
+    </defs>
+    <clipPath id="d-opinion-assurances_cache208">
+        <use href="#c-opinion-assurances_cache208" overflow="visible"></use>
+    </clipPath>
+    <path d="M13.1 14.2H17v9.7h-3.9z" clip-path="url(#d-opinion-assurances_cache208)" fill="#fb2d16"></path>
+    <path d="M13.1 2.9H17v11.3h-3.9z" fill="#fc5841" clip-path="url(#d-opinion-assurances_cache208)"></path>
+    <defs>
+        <path id="e-opinion-assurances_cache208"
+              d="M9.4 21.3c-1.1 0-1.9-.9-1.9-1.9v-6.2c0-1.1.9-1.9 1.9-1.9 1.1 0 1.9.9 1.9 1.9v6.2c0 1-.8 1.9-1.9 1.9z"></path>
+    </defs>
+    <clipPath id="f-opinion-assurances_cache208">
+        <use href="#e-opinion-assurances_cache208" overflow="visible"></use>
+    </clipPath>
+    <path d="M7.5 17.4h3.9v4H7.5z" clip-path="url(#f-opinion-assurances_cache208)" fill="#ff993c"></path>
+    <path d="M7.5 11.3h3.9v6.1H7.5z" fill="#ff7f00" clip-path="url(#f-opinion-assurances_cache208)"></path>
+    <defs>
+        <path id="g-opinion-assurances_cache208"
+              d="M3.8 19.4c-1.1 0-1.9-.9-1.9-1.9v-6.8c0-1.1.9-1.9 1.9-1.9 1.1 0 1.9.9 1.9 1.9v6.8c0 1-.9 1.9-1.9 1.9z"></path>
+    </defs>
+    <clipPath id="h-opinion-assurances_cache208">
+        <use href="#g-opinion-assurances_cache208" overflow="visible"></use>
+    </clipPath>
+    <path d="M1.8 12.8h3.9v6.6H1.8z" clip-path="url(#h-opinion-assurances_cache208)" fill="#ecc9b7"></path>
+    <path d="M1.8 8.7h3.9v4.1H1.8z" fill="#f0d4c5" clip-path="url(#h-opinion-assurances_cache208)"></path>
+</svg>

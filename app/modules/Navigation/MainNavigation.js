@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { FaAlgolia, FaHome, FaRss, FaPodcast, FaUserAlt, FaBookmark, FaSignOutAlt } from 'react-icons/fa';
+import { FaAlgolia, FaHome, FaRss, FaPodcast, FaBookmark, FaSignOutAlt, FaPlus } from 'react-icons/fa';
 import styles from "./style.module.scss";
 import { useRouter } from "next/router";
 
@@ -20,6 +20,9 @@ export default () => {
             <div className={styles.navbar__items}>
                 <Link href={"/"}>
                     <FaHome className={isActiveLink("/dashboard") ? styles.navbar__item__active : ""} />
+                </Link>
+                <Link href={"/dashboard/new"}>
+                    <FaPlus title={"new"} className={isActiveLink("/dashboard/new") ? styles.navbar__item__active : ""} />
                 </Link>
                 <Link href={"/dashboard/rss"}>
                     <FaRss title={"rss"} className={isActiveLink("/dashboard/rss") ? styles.navbar__item__active : ""} />

@@ -2,14 +2,15 @@ const { validationResult } = require('express-validator');
 const elasticSearchClient = require('./../config/db');
 const UserDto = require('../entities/UserDto');
 const Feed = require('../entities/Feed');
-const { createUserContent } = require('../utils');
+const { createUserContent, getFeedTitle } = require('../utils');
 const fs = require('fs');
 
 const addRemoveFeed = async (req, res) => {
     try {
         validationResult(req).throw();
         const userId = req.user;
-        const { name, url, type, action } = req.body;
+        const { type, data, action } = req.body;
+        const name = await getFeedTitle(data);
         const queryByID = {
             index: 'users',
             id: `${userId}`
@@ -20,7 +21,7 @@ const addRemoveFeed = async (req, res) => {
             userDto.id = userId;
             userDto.feeds = user._source.feeds;
             if (action) {
-                userDto.addFeed(new Feed(name, url, "", type === "podcast" ? "podcast" : "rss"));
+                userDto.addFeed(new Feed(name, data, "", type === "podcast" ? "podcast" : "rss"));
             }
             if (!action && req.body.idFeed) {
                 userDto.removeFeed(req.body.idFeed)
