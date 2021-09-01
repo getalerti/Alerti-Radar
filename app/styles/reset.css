@@ -11,3 +11,7 @@ html {
     background: #e8e8e8;
     height: 100%;
 }
+
+input[data-valid=false] {
+    border-color: #e74c3c !important;
+}

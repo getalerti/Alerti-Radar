@@ -1,6 +1,6 @@
 export default {
-    monitorTypes: "MONITOR_TYPES",
-    reviews_form: "REVIEWS_FORM",
+    monitor_ypes: "MONITOR_TYPES",
+    keywords_form: "KEYWORDS_FORM",
     alert_sources_form: "ALERT_SOURCES_FORM",
     alert_notifications_form: "ALERT_NOTIFICATIONS_FORM",
     alert_sources: [
@@ -22,6 +22,7 @@ export default {
         "agoda",
         "trustpilot"
     ],
+    defaultLang: "fr",
     languages: [
         { code : 'ab', name : 'Abkhazian' },
         { code : 'aa', name : 'Afar' },

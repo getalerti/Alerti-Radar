@@ -4,19 +4,18 @@ const state = {
     alertType: "",
     monitorType: "",
     alertName: "",
-    steps: [consts.monitorTypes],
+    steps: [consts.monitor_ypes],
     validatedSteps: new Set(),
-    activeStep: consts.monitorTypes
+    activeStep: consts.monitor_ypes
 }
 
 const onChange = (state, name, value) => {
     state[name] = value;
     if (name === "monitorType" && state.alertType === "keywords") {
-        state.steps[1] = consts.reviews_form;
+        state.steps[1] = consts.keywords_form;
         state.steps[2] = consts.alert_sources_form;
         state.steps[3] = consts.alert_notifications_form;
         state.validatedSteps.add(state.activeStep);
-        // state.activeStep = consts.reviews_form;
     }
     return state;
 }

@@ -9,7 +9,9 @@ export default ({ alertType }) => {
     return (
         <Provider value={{ state, dispatch }}>
             <div className={styles.alertiContainer}>
-                <ProgressBarNavigation steps={state.steps} activeStep={state.activeStep} />
+                {
+                    state.steps.length > 1 && <ProgressBarNavigation steps={state.steps} activeStep={state.activeStep} />
+                }
                 <AlertSteps details={{ alertType }} />
             </div>
         </Provider>

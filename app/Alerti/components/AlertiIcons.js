@@ -21,7 +21,8 @@ import {
     FcApproval,
     FcMinus,
     FcIphone,
-    FcSelfServiceKiosk
+    FcSelfServiceKiosk,
+    FcCancel
 } from "react-icons/fc";
 import { AiOutlineInstagram, AiOutlineTwitter, AiFillFacebook, AiOutlineMail } from "react-icons/ai";
 import { HiOutlineRss } from "react-icons/hi";
@@ -62,6 +63,8 @@ export default ({name}) => {
         return <FcApproval />
     if(name === "news")
         return <FcNews />
+    if(name === "other")
+        return <FcCancel />
     if(name === "blogs")
         return <FcKindle />
     if(name === "twitter")

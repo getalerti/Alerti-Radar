@@ -1,8 +1,10 @@
 import styles from "./../styles/commun.module.scss"
 import useTranslation from "../../i18n";
 
-export default ({ next, prev, isLast = false, isFirst = false }) => {
+export default ({ next, prev, display = true, isLast = false, isFirst = false }) => {
     const t = useTranslation();
+    if (!display)
+        return <></>;
     return (
         <div className={styles.alertiNavigationContainer}>
             <button onClick={prev}>

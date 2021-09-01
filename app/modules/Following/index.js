@@ -18,8 +18,8 @@ const Following =({loadFollwings, followings}) => {
     const getList = () => {
         if(!followings)
             return null;
-        return followings.map((item) => {
-            return <Item item={item} />
+        return followings.map((item, index) => {
+            return <Item key={index} item={item} />
         })
     }
     return (

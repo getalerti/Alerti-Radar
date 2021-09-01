@@ -6,7 +6,7 @@ export default ({ folders }) => {
         <div className={styles.folders}>
             {
                 folders.map((folder, index) => {
-                    return <FolderItem name={folder.name} index={index} />;
+                    return <FolderItem key={index} name={folder.name} index={index} />;
                 })
             }
         </div>

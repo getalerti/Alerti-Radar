@@ -12,8 +12,8 @@ export default ({ name, index, items = [] }) => {
             </div>
             <div className={styles.folder__items} data-open={open}>
                 {
-                    items.map(item => {
-                        return <p><img src={item.img} />{item.name}</p>
+                    items.map((item, index) => {
+                        return <p key={index}><img src={item.img} />{item.name}</p>
                     })
                 }
             </div>

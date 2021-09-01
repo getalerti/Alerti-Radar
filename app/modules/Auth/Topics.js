@@ -27,7 +27,7 @@ export default ({ setTopics, setNext }) => {
             {
                 topics.map((topic, index) => {
                     return (
-                        <div className={styles.topic + " " + (selectedItems.indexOf(index) >= 0 ? styles.active : "")}
+                        <div key={index} className={styles.topic + " " + (selectedItems.indexOf(index) >= 0 ? styles.active : "")}
                              style={{
                                 backgroundImage: `url("${topic.image}")`
                             }}

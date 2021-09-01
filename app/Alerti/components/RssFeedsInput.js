@@ -22,12 +22,12 @@ export default ({ values = [], onchange = () => {} }) => {
             </p>
             {
                 feeds.map(feed => (
-                    <div>
+                    <div key={feed.url}>
                         <input placeholder={t('URL*')} value={feed.url} onChange={val => newFeed.url = val.target.value}/>
                         <select value={feed.source} onChange={val => newFeed.source = val.target.value}>
                             <option value={""}> </option>
                             {
-                                sources.map(source => <option value={source}>{t(source)}</option>)
+                                sources.map(source => <option key={source} value={source}>{t(source)}</option>)
                             }
                         </select>
                         <HiOutlineTrash />
@@ -39,7 +39,7 @@ export default ({ values = [], onchange = () => {} }) => {
                 <select value={newFeed.source} onChange={val => newFeed.source = val.target.value}>
                     <option value={""}> </option>
                     {
-                        sources.map(source => <option value={source}>{t(source)}</option>)
+                        sources.map(source => <option key={source} value={source}>{t(source)}</option>)
                     }
                 </select>
                 <HiOutlinePlusCircle title={t('add_rss_feed')} onClick={addFeed} />

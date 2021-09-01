@@ -14,8 +14,9 @@ export default ({details}) => {
     const sliderDiv = useRef(null);
     let scroll = 0;
     const getStepComponent = (step) => {
-        if (step === consts.monitorTypes) return <MonitorTypes details={details} />;
-        if (step === consts.reviews_form) return <KeywordsForm />;
+        return <AlertSourcesForm />;
+        if (step === consts.monitor_ypes) return <MonitorTypes details={details} />;
+        if (step === consts.keywords_form) return <KeywordsForm />;
         if (step === consts.alert_sources_form) return <AlertSourcesForm />;
         if (step === consts.alert_notifications_form) return <AlertNotifications />;
         return <div>NOTHING</div>
@@ -40,17 +41,11 @@ export default ({details}) => {
         <div className={styles.alertStepsContainer}>
             <div className={styles.alertStepsSlider} ref={sliderDiv}>
                 { state.steps.map(step => (
-                    <div data-active-step={step === state.activeStep}>
+                    <div key={step} data-active-step={step === state.activeStep}>
                         {getStepComponent(step)}
                     </div>
                 )) }
             </div>
-            {
-                state.steps.length > 1 && <SliderNavigation isFirst={slideIndex === 0}
-                                                            isLast={slideIndex === state.steps.length - 1}
-                                                            next={next}
-                                                            prev={prev} />
-            }
         </div>
     )
 }

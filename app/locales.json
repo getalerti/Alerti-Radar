@@ -48,7 +48,7 @@
     "place": "Place",
     "event": "Event",
     "MONITOR_TYPES": "Monitor type",
-    "REVIEWS_FORM": "Keywords",
+    "KEYWORDS_FORM": "Keywords",
     "ALERT_SOURCES_FORM": "Sources",
     "ALERT_NOTIFICATIONS_FORM": "Notifications",
     "alert_name": "Alert title",
@@ -93,6 +93,8 @@
     "nothing": "Nothing",
     "validate": "Validate",
 
+    "required_input": "The ### is required",
+    "invalid_input": "The ### is invalid",
 
 
 

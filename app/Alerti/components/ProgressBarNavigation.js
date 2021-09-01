@@ -7,7 +7,7 @@ export default ({steps, activeStep}) => {
         <ul className={styles.progressBarNavigation}>
             {
                 steps.map(step => (
-                    <li data-active={activeStep === step} >
+                    <li key={step} data-active={activeStep === step || steps.indexOf(step) <= steps.indexOf(activeStep)} >
                         <span>{t(step)}</span>
                     </li>
                 ))

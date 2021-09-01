@@ -159,6 +159,7 @@
       font-size: 15px;
       margin-right: 5px;
       cursor: pointer;
+      color: $white;
     }
   }
 }
@@ -276,4 +277,7 @@
     font-size: 9px;
     font-weight: 300;
   }
+}
+.fieldError {
+  color: $red;
 }

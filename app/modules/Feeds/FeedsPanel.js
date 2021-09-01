@@ -25,8 +25,8 @@ export default ({feeds, title, link, viewItemAction, single = false}) => {
         {
             !loader && <div className={styles.feed__items}>
                 {
-                    feeds.map(item => (
-                        <div className={styles.feed__item} title={item.title} onClick={() => {viewItemAction(item)}}>
+                    feeds.map((item, index) => (
+                        <div key={index} className={styles.feed__item} title={item.title} onClick={() => {viewItemAction(item)}}>
                             <p><span>{item.feed_name}:</span>{item.title}</p>
                             <span>{formatDate(item.date)}</span>
                         </div>

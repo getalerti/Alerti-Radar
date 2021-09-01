@@ -5,7 +5,7 @@ import AlertDetails from "./../../Alerti/modules/AlertDetails";
 import {useState} from "react";
 export default () => {
     const t = useTranslation();
-    const [selectedItem, setSelectedItem] = useState('rss')
+    const [selectedItem, setSelectedItem] = useState('keywords')
 
     return (
         <div className={styles.source}>
