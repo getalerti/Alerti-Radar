@@ -7,8 +7,10 @@ import {Context} from "../../context";
 import SliderNavigation from "../../components/SliderNavigation";
 import AlertSourcesForm from "./AlertSourcesForm";
 import AlertNotifications from "./AlertNotifications";
+import FacbookLogin from "../../components/FacbookLogin";
 
 export default ({details}) => {
+    return <FacbookLogin />;
     const {state, dispatch} = useContext(Context);
     const [slideIndex, setSlideIndex] = useState(0);
     const sliderDiv = useRef(null);
