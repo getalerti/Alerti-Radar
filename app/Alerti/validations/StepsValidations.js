@@ -19,5 +19,18 @@ export default (step, data) => {
             }
             return true;
         break;
+        case consts.alert_sources_form:
+            const { lang, alertSources } = data;
+            if (!lang || lang === '') {
+                return new FieldError('lang', msg('required_input', t('lang')))
+            }
+            if (!alertSources || alertSources.length === 0) {
+                return new FieldError('alertSources', msg('required_input', t('sources')))
+            }
+            return true;
+        break;
+        default:
+            return true;
+            break;
     }
 }

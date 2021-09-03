@@ -30,6 +30,8 @@
     "saved": "Saved",
     "all": "All",
     "feeds": "Feeds",
+    "url": "URL",
+    "source": "Source",
     "new": "New",
     "website": "Website",
     "keywords": "Keywords",
@@ -57,6 +59,7 @@
     "exclude": "Exclude",
     "hit_enter_keywords": "Press Enter to separate entered data",
     "all_sources": "All sources",
+    "sources": "Sources",
     "new_folder_name": "New folder name",
     "news": "News",
     "blogs": "Blogs",
@@ -95,6 +98,7 @@
 
     "required_input": "The ### is required",
     "invalid_input": "The ### is invalid",
+    "invalid_input2": "The input is invalid",
 
 
 

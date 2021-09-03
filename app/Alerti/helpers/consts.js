@@ -1,8 +1,16 @@
+import Radio from "../components/Radio";
+
 export default {
     monitor_ypes: "MONITOR_TYPES",
     keywords_form: "KEYWORDS_FORM",
     alert_sources_form: "ALERT_SOURCES_FORM",
     alert_notifications_form: "ALERT_NOTIFICATIONS_FORM",
+
+    notifications: ["reel_time", "once_day", "once_week", "nothing"],
+    defaultEmailNotification: "once_day",
+    defaultMobileNotification: "nothing",
+    defaultDesktopNotification: "nothing",
+
     alert_sources: [
         "news",
         "blogs",

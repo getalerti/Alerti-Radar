@@ -30,15 +30,11 @@ const formatDate = (date) => {
 }
 const isEmail = (email) => /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email);
 const isURL = (url) => {
-    try {
-        url = new URL(url);
-        return true;
-    } catch (_) {
-        return false;
-    }
+    var res = url.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);
+    return (res !== null);
 };
 const isPassword = (password) => password && password.length >= 5;
-const isNotEmpty = (value) => value && value.length > 0;
+const isNotEmpty = (value) => value && value.length > 0 ? true : false;
 const getSMShareUrl = (social, text) => {
     switch (social) {
         case "facebook":

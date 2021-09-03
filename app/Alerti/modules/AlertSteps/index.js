@@ -14,7 +14,6 @@ export default ({details}) => {
     const sliderDiv = useRef(null);
     let scroll = 0;
     const getStepComponent = (step) => {
-        return <AlertSourcesForm />;
         if (step === consts.monitor_ypes) return <MonitorTypes details={details} />;
         if (step === consts.keywords_form) return <KeywordsForm />;
         if (step === consts.alert_sources_form) return <AlertSourcesForm />;
@@ -39,7 +38,7 @@ export default ({details}) => {
     }, [])
     return (
         <div className={styles.alertStepsContainer}>
-            <div className={styles.alertStepsSlider} ref={sliderDiv}>
+            <div className={styles.alertStepsSlider} id={"alertStepsSlider"} ref={sliderDiv}>
                 { state.steps.map(step => (
                     <div key={step} data-active-step={step === state.activeStep}>
                         {getStepComponent(step)}

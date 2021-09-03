@@ -4,14 +4,19 @@ import AlertiIcons from "../../components/AlertiIcons";
 import useTranslation from "./../../../i18n";
 import ListInput from "../../components/ListInput";
 import Radio from "../../components/Radio";
-import {useContext} from "react";
+import {useContext, useState} from "react";
 import {Context} from "../../context";
 import SliderNavigation from "../../components/SliderNavigation";
+import consts from "../../helpers/consts";
 
 export default ({ onChangeHandler }) => {
     const t = useTranslation();
     const {state, dispatch} = useContext(Context);
     const currentStepIndex = state.steps.indexOf(state.activeStep);
+
+    const [emailNotification, setEmailNotification] = useState(consts.defaultEmailNotification);
+    const [mobileNotification, setMobileNotification] = useState(consts.defaultMobileNotification);
+    const [desktopNotification, setDesktopNotification] = useState(consts.defaultDesktopNotification);
     const validate = () => {
         //TODO: Validation
         if (state.steps && currentStepIndex >= state.steps.length - 1)
@@ -30,30 +35,42 @@ export default ({ onChangeHandler }) => {
                     <AlertiIcons name={"email"} />
                     <h3>{t('email_notification')}</h3>
                     <div className={communStyles.notifications}>
-                        <Radio name={t('reel_time')} />
-                        <Radio name={t('once_day')} />
-                        <Radio name={t('once_week')} />
-                        <Radio name={t('nothing')} />
+                        {
+                            consts.notifications.map((notif, index) => (
+                                <Radio checked={emailNotification === notif}
+                                       onchange={() => setEmailNotification(notif)}
+                                       key={index}
+                                       name={t(notif)} />
+                            ))
+                        }
                     </div>
                 </div>
                 <div className={communStyles.alertBloc}>
                     <AlertiIcons name={"mobile"} />
                     <h3>{t('mobile_notification')}</h3>
                     <div className={communStyles.notifications}>
-                        <Radio name={t('reel_time')} />
-                        <Radio name={t('once_day')} />
-                        <Radio name={t('once_week')} />
-                        <Radio name={t('nothing')} />
+                        {
+                            consts.notifications.map((notif, index) => (
+                                <Radio checked={mobileNotification === notif}
+                                       onchange={() => setMobileNotification(notif)}
+                                       key={index}
+                                       name={t(notif)} />
+                            ))
+                        }
                     </div>
                 </div>
                 <div className={communStyles.alertBloc}>
                     <AlertiIcons name={"desktop"} />
                     <h3>{t('desktop_notification')}</h3>
                     <div className={communStyles.notifications}>
-                        <Radio name={t('reel_time')} />
-                        <Radio name={t('once_day')} />
-                        <Radio name={t('once_week')} />
-                        <Radio name={t('nothing')} />
+                        {
+                            consts.notifications.map((notif, index) => (
+                                <Radio checked={desktopNotification === notif}
+                                       onchange={() => setDesktopNotification(notif)}
+                                       key={index}
+                                       name={t(notif)} />
+                            ))
+                        }
                     </div>
                 </div>
             </div>

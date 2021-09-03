@@ -6,9 +6,10 @@ import ListInput from "../../components/ListInput";
 import consts from "../../helpers/consts";
 import Checkbox from "../../components/Checkbox";
 import RssFeedsInput from "../../components/RssFeedsInput";
-import {useContext, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {Context} from "../../context";
 import SliderNavigation from "../../components/SliderNavigation";
+import StepsValidations from "../../validations/StepsValidations";
 
 export default ({ onChangeHandler }) => {
     const t = useTranslation();
@@ -19,12 +20,14 @@ export default ({ onChangeHandler }) => {
     const {state, dispatch} = useContext(Context);
     const currentStepIndex = state.steps.indexOf(state.activeStep);
 
-    const [selectedLang, setSelectedLang] = useState(consts.defaultLang);
+    const [lang, setLang] = useState(consts.defaultLang);
+    const [langError, setLangError] = useState(null);
 
     const [alertSources, setAlertSources] = useState([]);
     const [checkAllSources, setCheckAllSources] = useState(false);
     const [sourcesError, setSourcesError] = useState(null);
     const addOrRemoveSource = (source) => {
+        setSourcesError(null);
         const exist = alertSources.some(src => src === source);
         if (exist) {
             setAlertSources(alertSources.filter(src => src !== source));
@@ -48,22 +51,24 @@ export default ({ onChangeHandler }) => {
         }
     }
 
-    const [newRssFeedUrl, setNewRssFeedUrl] = useState(null);
-    const [newRssFeedType, setNewRssFeedType] = useState(null);
     const [rssFeeds, setRssFeeds] = useState([]);
     const [rssFeedsError, setRssFeedsError] = useState(null);
-    const addOrRemoveRssFeeds = (id = "") => {
-        const exist = rssFeeds.some(_rssFeeds => _rssFeeds.id === id);
-        if (exist) {
-            setRssFeeds(rssFeeds.filter(_review => _review.id !== id));
-        } else {
-            const rssFeed = {id: Date.now(), url: newRssFeedUrl, type: newRssFeedType}
-            setRssFeedsError([...rssFeeds, newRssFeed]);
-        }
-    }
+
+    const [excludeWebsites, setExcludeWebsites] = useState([]);
+
+    const [excludeDomainNames, setExcludeDomainNames] = useState([]);
+
+    const [excludeTweets, setExcludeTweets] = useState([]);
 
     const validate = () => {
-        //TODO: Validation
+        const validation = StepsValidations(consts.alert_sources_form, {lang, alertSources});
+        if (validation !== true) {
+            setLangError(validation.fieldByField('lang'));
+            setSourcesError(validation.fieldByField('alertSources'));
+            const parent = document.querySelector("#alertStepsSlider");
+            if (parent && parent.scroll) parent.scroll(0, 0);
+            return;
+        }
         if (state.steps && currentStepIndex >= state.steps.length - 1)
             return;
         dispatch({type: "CHANGE", name: "activeStep", value: state.steps[currentStepIndex+1] });
@@ -79,13 +84,14 @@ export default ({ onChangeHandler }) => {
                 <div className={communStyles.alertBloc}>
                     <AlertiIcons name={"lang"} />
                     <h3>{t('lang')}</h3>
-                    <select value={selectedLang}>
+                    <select value={lang} onChange={(e) => setLang(e.target.value)}>
                         {
                             languages.map(lang => <option key={lang.code} value={lang.code}>{lang.name}</option>)
                         }
                     </select>
+                    { langError && <div className={communStyles.fieldError}>{langError}</div> }
                 </div>
-                <div className={communStyles.alertBloc}>
+                <div className={communStyles.alertBloc} data-invalid={sourcesError !== null}>
                     <div>
                         <AlertiIcons name={"source"} />
                         <h3>{t('sources')}</h3>
@@ -131,25 +137,34 @@ export default ({ onChangeHandler }) => {
                 <div className={communStyles.alertBloc}>
                     <AlertiIcons name={"rss"} />
                     <h3>{t('rss_feed')}</h3>
-                    <RssFeedsInput />
+                    <RssFeedsInput values={rssFeeds} onchange={setRssFeeds} />
                 </div>
                 <div className={communStyles.alertBloc}>
                     <AlertiIcons name={"exclude"} />
                     <h3>{t('exclude')}</h3>
                     <div>
                         <ListInput
+                            defaultItems={excludeWebsites}
+                            onChange={setExcludeWebsites}
+                            rules={["url"]}
                             placeholder={t('excluded_website')}
                             description={t('excluded_website_description')} />
                     </div>
                     <span className={communStyles.blocSeparator}>{t('plus')}</span>
                     <div>
                         <ListInput
+                            defaultItems={excludeDomainNames}
+                            onChange={setExcludeDomainNames}
+                            rules={["tld"]}
                             placeholder={t('excluded_domain_names')}
                             description={t('excluded_domain_names_description')} />
                     </div>
                     <span className={communStyles.blocSeparator}>{t('plus')}</span>
                     <div>
                         <ListInput
+                            defaultItems={excludeTweets}
+                            onChange={setExcludeTweets}
+                            rules={["twitter"]}
                             placeholder={t('excluded_tweets')}
                             description={t('excluded_tweets_description')} />
                     </div>

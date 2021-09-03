@@ -260,7 +260,7 @@ export default {
             restricted_values: []
         },
     ],
-    alert_retrieving: [{
+        alert_retrieving: [{
         name: "retrieve_blogs",
         type: "bool",
         required: false,

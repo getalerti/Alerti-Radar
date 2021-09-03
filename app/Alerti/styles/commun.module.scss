@@ -73,6 +73,9 @@
   width: 100%;
   box-sizing: border-box;
   flex-wrap: wrap;
+  &[data-invalid=true] {
+    border: 1px solid $red;
+  }
   & > div {
     display: flex;
     justify-content: start;

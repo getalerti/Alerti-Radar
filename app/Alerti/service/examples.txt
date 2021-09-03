@@ -1,0 +1,72 @@
+// Keywords
+{
+  "alert": {
+    "monitor_type": "suppliers",
+    "name": "title",
+    "alert_type": "keywords",
+    "lang": "fr",
+    "alert_query_settings": [
+      {
+        "any_keywords": [
+          "keyword"
+        ],
+        "keywords": [
+          "keyword"
+        ],
+        "exclude_keywords": [
+          "keyword"
+        ]
+      }
+    ],
+    "exclude_domains": [
+      "keyword"
+    ],
+    "exclude_domain_extensions": [
+      ".fr"
+    ],
+    "exclude_twittos": [
+      "tweets"
+    ]
+  },
+  "alert_retrieving": {
+    "retrieve_news": true,
+    "retrieve_blogs": true,
+    "retrieve_google_forums": null,
+    "retrieve_bing": null,
+    "retrieve_twitter": null,
+    "retrieve_instagram_public": null,
+    "retrieve_instagram_public_videos": null,
+    "retrieve_images": null,
+    "retrieve_vimeo": null
+  },
+  "sharing": {
+    "favorited": null,
+    "mail_alert": "daily",
+    "web_mobile_notification_frequency": "none",
+    "web_desktop_notification_frequency": "none"
+  },
+  "xml_sources": [
+    {
+      "source": 120,
+      "source_url": "http://feeds.bbci.co.uk/news/world/rss.xml"
+    }
+  ],
+  "my_pages": {
+    "4549": {
+      "175329223140": "175329223140"
+    }
+  },
+  "google_my_business_locations": {
+    "2476": [
+      "accounts/109836663543325227260/locations/16871217276328111579"
+    ]
+  },
+  "booking_urls": [],
+  "agoda_urls": [],
+  "opinion_assurances_urls": [],
+  "google_places": [],
+  "expedia_urls": [],
+  "trip_advisor_urls": [
+    "https://www.tripadvisor.com/Restaurant_Review-g293734-d14072888-Reviews-Food_On_Demand-Marrakech_Marrakech_Safi.html"
+  ]
+}

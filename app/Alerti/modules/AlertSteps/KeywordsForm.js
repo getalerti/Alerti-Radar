@@ -36,7 +36,6 @@ export default ({ onChangeHandler }) => {
     };
     const validate = () => {
         const validation = StepsValidations(consts.keywords_form, {name, excludedKeywords, includedKeywords})
-        console.log({validation})
         if (validation !== true) {
             setNameError(validation.fieldByField('name'));
             setIncludedKeywordsError(validation.fieldByField('includedKeywords'));
