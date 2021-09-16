@@ -70,3 +70,36 @@
     "https://www.tripadvisor.com/Restaurant_Review-g293734-d14072888-Reviews-Food_On_Demand-Marrakech_Marrakech_Safi.html"
   ]
 }
+
+
+
+
+
+
+
+
+
+
+{
+  "data": [
+    {
+      "access_token": "EAAFxFWoI2pcBAJtmdnOgdItWAm9n82XQinxwTYQ3ENBxAAiYzIlSwTF9nUkRVK8KV8uQHMoX1AZCLrhJnxCRTv0cVotVtJFCqjsScLlkEy5K7rwYSYngZCgZA8UKg6mvOBGZCKJev81lNpsNfnDZC2TtPDILA9HlAP0AARrzL8bhZCvqxlNrKqH6wfRuKLrGKpL6qR6WgD8PMlkYxNj0fJqUZCEb0CWELMZD",
+      "category": "Computer and Internet website",
+      "category_list": [
+        {
+          "id": "2703",
+          "name": "Computer & Internet website"
+        }
+      ],
+      "name": "Test API",
+      "id": "106571468426205",
+      "tasks": [
+        "ANALYZE",
+        "ADVERTISE",
+        "MESSAGING",
+        "MODERATE",
+        "CREATE_CONTENT",
+        "MANAGE"
+      ]
+    }
+}

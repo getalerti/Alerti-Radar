@@ -27,6 +27,7 @@ import {
 import { AiOutlineInstagram, AiOutlineTwitter, AiFillFacebook, AiOutlineMail } from "react-icons/ai";
 import { HiOutlineRss } from "react-icons/hi";
 import CustomIcon from "./../assets/icons";
+import { SiSpinrilla } from "react-icons/si";
 
 export default ({name}) => {
     if(name === "my_company")
@@ -61,6 +62,8 @@ export default ({name}) => {
         return <FcMultipleInputs />
     if(name === "reviews")
         return <FcApproval />
+    if(name === "success")
+        return <FcApproval />
     if(name === "news")
         return <FcNews />
     if(name === "other")
@@ -91,6 +94,8 @@ export default ({name}) => {
         return <FcSelfServiceKiosk />
     if(name === "email")
         return <AiOutlineMail />
+    if(name === "spinner")
+        return <SiSpinrilla />
 
     if(name === "opinion_assurances")
         return <CustomIcon name={"opinion_assurances"} />
@@ -104,6 +109,8 @@ export default ({name}) => {
         return <CustomIcon name={"agoda"} />
     if(name === "trustpilot")
         return <CustomIcon name={"trustpilot"} />
+    if(name === "myBusiness")
+        return <CustomIcon name={"myBusiness"} />
     console.log( `if(name === "${name}")
         return <FcVideoFile />` )
     return <s>{name}</s>

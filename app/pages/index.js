@@ -4,20 +4,39 @@ import { useRouter } from "next/router";
 import { loadFeeds } from "../store/actions";
 import { connect } from 'react-redux';
 import { Instagram } from 'react-content-loader';
+import { useAuth0 } from "@auth0/auth0-react";
 
 function Home({ loading, user_status, loadFeeds}) {
+    /*
+    const { loginWithRedirect, logout } = useAuth0();
+    const { user, isAuthenticated, isLoading } = useAuth0();
+    if (isLoading) {
+        return <div>Loading ...</div>;
+    }
+    return (
+        isAuthenticated ? (
+            <div>
+                <img src={user.picture} alt={user.name} />
+                <h2>{user.name}</h2>
+                <p>{user.email}</p>
+                <button onClick={() => logout({ returnTo: process.env.AUTH0_BASE_URL })}>
+                    Log Out
+                </button>
+            </div>
+        ) : <button onClick={() => loginWithRedirect()}>Log In</button>
+    );
+*/
     const router = useRouter();
     useEffect(() => {
         loadFeeds();
     }, []);
-    if (user_status === "unauthorized")
-        router.push("/auth");
-    if (user_status === "authorized")
+    if (!loading) {
         router.push("/dashboard");
+    }
     return (
         <div className={styles.container}>
             {
-                loading && <Instagram />
+                <Instagram />
             }
         </div>
   )

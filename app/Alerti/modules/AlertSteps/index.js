@@ -4,17 +4,15 @@ import KeywordsForm from "./KeywordsForm";
 import MonitorTypes from "./MonitorTypes";
 import {useContext, useEffect, useRef, useState} from "react";
 import {Context} from "../../context";
-import SliderNavigation from "../../components/SliderNavigation";
 import AlertSourcesForm from "./AlertSourcesForm";
 import AlertNotifications from "./AlertNotifications";
-import FacbookLogin from "../../components/FacbookLogin";
+import Loader from "../../components/Loader";
+import AlertSuccess from "./AlertSuccess";
 
 export default ({details}) => {
-    return <FacbookLogin />;
     const {state, dispatch} = useContext(Context);
     const [slideIndex, setSlideIndex] = useState(0);
     const sliderDiv = useRef(null);
-    let scroll = 0;
     const getStepComponent = (step) => {
         if (step === consts.monitor_ypes) return <MonitorTypes details={details} />;
         if (step === consts.keywords_form) return <KeywordsForm />;
@@ -39,9 +37,13 @@ export default ({details}) => {
         dispatch({type: "CHANGE", name: "alertType", value: details.alertType });
     }, [])
     return (
-        <div className={styles.alertStepsContainer}>
+        <div className={styles.alertStepsContainer} data-loading={state.loading}>
+            {
+                state.loading && <Loader />
+            }
             <div className={styles.alertStepsSlider} id={"alertStepsSlider"} ref={sliderDiv}>
-                { state.steps.map(step => (
+                { state.success && <AlertSuccess /> }
+                { !state.success && state.steps.map(step => (
                     <div key={step} data-active-step={step === state.activeStep}>
                         {getStepComponent(step)}
                     </div>

@@ -10,6 +10,12 @@ import {useContext, useEffect, useState} from "react";
 import {Context} from "../../context";
 import SliderNavigation from "../../components/SliderNavigation";
 import StepsValidations from "../../validations/StepsValidations";
+import FacbookAccount from "../../components/FacbookAccount";
+import UrlListInput from "../../components/UrlListInput";
+import SearchGooglePlaces from "../../components/SearchGooglePlaces";
+import GoogleLogin from 'react-google-login';
+import GMB from 'google_my_business';
+import GoogleAccount from "../../components/GoogleAccount";
 
 export default ({ onChangeHandler }) => {
     const t = useTranslation();
@@ -41,7 +47,6 @@ export default ({ onChangeHandler }) => {
     }
 
     const [alertReviews, setAlertReviews] = useState([]);
-    const [reviewsError, setReviewsError] = useState(null);
     const addOrRemoveReview = (review) => {
         const exist = alertReviews.some(_review => _review === review);
         if (exist) {
@@ -52,7 +57,6 @@ export default ({ onChangeHandler }) => {
     }
 
     const [rssFeeds, setRssFeeds] = useState([]);
-    const [rssFeedsError, setRssFeedsError] = useState(null);
 
     const [excludeWebsites, setExcludeWebsites] = useState([]);
 
@@ -60,6 +64,38 @@ export default ({ onChangeHandler }) => {
 
     const [excludeTweets, setExcludeTweets] = useState([]);
 
+    const [opinion_assurances_urls, setOpinion_assurances_urls] = useState([]);
+    const [trip_advisor_urls, setTrip_advisor_urls] = useState([]);
+    const [booking_urls, setBooking_urls] = useState([]);
+    const [expedia_urls, setExpedia_urls] = useState([]);
+    const [agoda_urls, setAgoda_urls] = useState([]);
+    const [trustpilot_urls, setTrustpilot_urls] = useState([]);
+    const [google_places, setGoogle_places] = useState([]);
+    const [google_my_business_locations, setGoogle_my_business_locations] = useState([]);
+
+    const changeReviewURLs = (review, items) => {
+        switch (review) {
+            case "opinion_assurances_urls": setOpinion_assurances_urls(items); break;
+            case "trip_advisor_urls":       setTrip_advisor_urls(items); break;
+            case "booking_urls":            setBooking_urls(items); break;
+            case "expedia_urls":            setExpedia_urls(items); break;
+            case "agoda_urls":              setAgoda_urls(items); break;
+            case "trustpilot_urls":         setTrustpilot_urls(items); break;
+            case "google_places":           setGoogle_places(items); break;
+        }
+    }
+    const getReviewURLs = (review) => {
+        switch (review) {
+            case "opinion_assurances_urls": return opinion_assurances_urls;
+            case "trip_advisor_urls":       return trip_advisor_urls;
+            case "booking_urls":            return booking_urls;
+            case "expedia_urls":            return expedia_urls;
+            case "agoda_urls":              return agoda_urls;
+            case "trustpilot_urls":         return trustpilot_urls;
+            case "google_places":           return google_places;
+            default: return [];
+        }
+    }
     const validate = () => {
         const validation = StepsValidations(consts.alert_sources_form, {lang, alertSources});
         if (validation !== true) {
@@ -71,6 +107,9 @@ export default ({ onChangeHandler }) => {
         }
         if (state.steps && currentStepIndex >= state.steps.length - 1)
             return;
+
+        const requestParams = { lang, alertSources, alertReviews, rssFeeds, excludeWebsites, excludeDomainNames, excludeTweets, opinion_assurances_urls, trip_advisor_urls, booking_urls, expedia_urls, agoda_urls, trustpilot_urls, google_places, google_my_business_locations};
+        dispatch({type: "REQUEST", params: requestParams});
         dispatch({type: "CHANGE", name: "activeStep", value: state.steps[currentStepIndex+1] });
     }
     const back = () => {
@@ -131,9 +170,40 @@ export default ({ onChangeHandler }) => {
                                           name={t(review)} />
                                 ))
                         }
-                        { reviewsError && <div className={communStyles.fieldError}>{reviewsError}</div> }
                     </div>
+                    {
+                        reviews.map((review, index) => {
+                            return review !== "myBusiness" && review !== "facebook" && alertReviews.some(_review => _review === review) ? (
+                                    <UrlListInput key={index}
+                                                  type={review}
+                                                  values={getReviewURLs(review + "_urls")}
+                                                  onchange={(items) => { changeReviewURLs(review + "_urls", items) }}
+                                                  iconName={review}
+                                                  title={t(review + "_urls")}
+                                                  placeholder={t(review)} />
+                                )
+                                : <></>;
+                        })
+                    }
                 </div>
+                {
+                    alertReviews.some(review => review === 'myBusiness') && (
+                        <div className={communStyles.alertBloc}>
+                            <AlertiIcons name={"myBusiness"} />
+                            <h3>{t('google_mybusiness')} <GoogleAccount title={t('add_google_account')} /></h3>
+                            <SearchGooglePlaces iconName={"myBusiness"} onchange={setGoogle_places} placeholder={t('search_google_places_description')} />
+                        </div>
+                    )
+                }
+                {
+                    alertReviews.some(review => review === 'facebook') && (
+                        <div className={communStyles.alertBloc}>
+                            <AlertiIcons name={"facebook"} />
+                            <h3>{t('facebook_pages')}<FacbookAccount /></h3>
+                        </div>
+                    )
+                }
+
                 <div className={communStyles.alertBloc}>
                     <AlertiIcons name={"rss"} />
                     <h3>{t('rss_feed')}</h3>

@@ -21,7 +21,9 @@ export default ({ onChangeHandler }) => {
         //TODO: Validation
         if (state.steps && currentStepIndex >= state.steps.length - 1)
             return;
+        dispatch({type: "REQUEST", params: {emailNotification, mobileNotification, desktopNotification}});
         dispatch({type: "CHANGE", name: "activeStep", value: state.steps[currentStepIndex+1] });
+
     }
     const back = () => {
         if (currentStepIndex <= 0)

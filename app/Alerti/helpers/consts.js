@@ -6,7 +6,7 @@ export default {
     alert_sources_form: "ALERT_SOURCES_FORM",
     alert_notifications_form: "ALERT_NOTIFICATIONS_FORM",
 
-    notifications: ["reel_time", "once_day", "once_week", "nothing"],
+    notifications: ["reel_time", "once_day", "once_week", "none"],
     defaultEmailNotification: "once_day",
     defaultMobileNotification: "nothing",
     defaultDesktopNotification: "nothing",
@@ -23,6 +23,7 @@ export default {
     ],
     alert_reviews_sources: [
         "facebook",
+        "myBusiness",
         "opinion_assurances",
         "trip_advisor",
         "booking",

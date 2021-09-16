@@ -18,13 +18,17 @@
   overflow: auto;
   display: flex;
   flex-direction: column;
-  height: 78vh;
+  &[data-loading=true] {
+    position: relative;
+    .alertStepsSlider {
+      opacity: 0.4;
+    }
+  }
 }
 .alertStepsSlider {
   display: flex;
   flex-direction: row;
   overflow: hidden;
-  max-height: 600px;
   overflow-y: auto;
   &>div {
     width: 100%;
@@ -33,5 +37,18 @@
     &[data-active-step=false] {
       display: none;
     }
+  }
+}
+.alertSuccess {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  max-height: 600px;
+  overflow-y: auto;
+  text-align: center;
+  justify-items: center;
+  svg {
+    margin: $spacer auto;
+    font-size: 60px;
   }
 }
