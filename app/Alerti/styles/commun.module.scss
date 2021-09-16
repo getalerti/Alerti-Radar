@@ -1,4 +1,8 @@
 @import "variables";
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
 .notifications {
   margin-bottom: 0 !important;
   margin-top: $spacer;
@@ -93,10 +97,17 @@
   h3 {
     margin-left: 5px;
     white-space: nowrap;
+    width: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
   svg {
     font-size: 25px;
     color: $orange;
+  }
+  img {
+    width: 25px;
   }
   input, select {
     font-size: 15px;
@@ -281,6 +292,179 @@
     font-weight: 300;
   }
 }
+.searchItemsInput {
+  padding: $spacer;
+  ul {
+    position: absolute;
+    left: 8%;
+    top: 60px;
+    height: 150px;
+    overflow: auto;
+    width: 82%;
+    box-sizing: border-box;
+    box-shadow: 1px 0px 4px 0px rgb(0 0 0 / 40%);
+    z-index: 9;
+    background: $white;
+    li {
+      padding: $spacer/2;
+      margin: 5px 0;
+      font-size: 12px;
+      font-weight: 300;
+      &:hover {
+        background: $grey;
+        cursor: pointer;
+      }
+    }
+  }
+  img {
+    width: 25px;
+  }
+  &>div{
+    width: 100%;
+    box-sizing: border-box;
+    padding: $spacer;
+    display: flex;
+    align-items: center;
+    position: relative;
+    &>svg {
+      background: $orange;
+      padding: 5px;
+      font-size: 18px;
+      color: $white;
+      border-radius: 5px;
+    }
+    input, select {
+      width: 100%;
+      border: none;
+      border-bottom: 1px solid;
+      border-radius: 0;
+    }
+    svg {
+      margin: 0 5px;
+      cursor: pointer;
+    }
+  }
+  &>p{
+    font-size: 9px;
+    font-weight: 300;
+  }
+}
+.urlItemsInput {
+  padding: 5px;
+  ul {
+    position: absolute;
+    left: 8%;
+    top: 60px;
+    height: 150px;
+    overflow: auto;
+    width: 82%;
+    box-sizing: border-box;
+    box-shadow: 1px 0px 4px 0px rgb(0 0 0 / 40%);
+    z-index: 9;
+    background: $white;
+    li {
+      padding: $spacer/2;
+      margin: 5px 0;
+      font-size: 12px;
+      font-weight: 300;
+      &:hover {
+        background: $grey;
+        cursor: pointer;
+      }
+    }
+  }
+  img {
+    width: 25px;
+  }
+  &>div{
+    width: 100%;
+    box-sizing: border-box;
+    padding: $spacer;
+    display: flex;
+    align-items: center;
+    position: relative;
+    &>svg {
+      background: $orange;
+      padding: 5px;
+      font-size: 18px;
+      color: $white;
+      border-radius: 5px;
+    }
+    input, select {
+      width: 100%;
+      border: none;
+      border-bottom: 1px solid;
+      border-radius: 0;
+    }
+    svg {
+      margin: 0 5px;
+      cursor: pointer;
+    }
+  }
+  &>p{
+    font-size: 9px;
+    font-weight: 300;
+  }
+}
 .fieldError {
   color: $red;
+}
+.facebook_connect_btn {
+  &[disabled] {
+    opacity: 0.6;
+  }
+  &>div {
+    display: none;
+  }
+  span {
+    background: $blue;
+    color: $white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    justify-items: center;
+    font-size: 15px;
+    padding: 5px $spacer;
+    border-radius: 5px;
+    margin: 5px;
+    cursor: pointer;
+    svg {
+      color: $white;
+      margin-right: 5px;
+    }
+  }
+}
+.iconInput {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  justify-items: center;
+  align-items: center;
+  border-bottom: 1px solid $black;
+  padding: 5px 0;
+  margin: 0 5px;
+  input {
+    border: none !important;
+    line-height: normal !important;
+    margin: 0 !important;
+  }
+  svg {
+    width: 25px;
+    margin-left: 0 !important;
+  }
+}
+.spinner {
+  position: absolute;
+  left: calc(50% - 25px);
+  top: calc(50% - 26px);
+  svg {
+    color: $orange;
+    width: 50px;
+    height: 52px;
+    animation: spin 0.5s linear infinite;
+
+  }
+}
+.googleAccount {
+  padding: $spacer;
 }

@@ -100,6 +100,7 @@
   margin: $spacer auto;
   box-sizing: border-box;
   padding: $spacer;
+  overflow: auto;
   .sources {
     display: flex;
     justify-content: space-between;

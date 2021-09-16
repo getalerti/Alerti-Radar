@@ -3,7 +3,6 @@ import {useEffect, useState} from "react";
 import {formatDate} from "../../utils";
 import FeedPanelLoader from "../../components/loaders/FeedPanelLoader";
 import useTranslation from "./../../i18n";
-import {FaRss} from "react-icons/fa";
 import Link from "next/link";
 
 export default ({feeds, title, link, viewItemAction, single = false}) => {

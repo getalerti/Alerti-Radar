@@ -19,7 +19,7 @@ const fetchAPI = async (url, method, data, isProtected = false) => {
     if (method === "POST") {
         fetchMethod = {...fetchMethod, "body": JSON.stringify(data)}
     }
-    const response = await fetch(`${process.env.RESTURL_SPEAKERS}${url}`, fetchMethod);
+    const response = await fetch(`${process.env.API_URL}${url}`, fetchMethod);
     return response.json();
 }
 const formatDate = (date) => {

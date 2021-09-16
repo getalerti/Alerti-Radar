@@ -4,6 +4,7 @@ import booking from './booking.svg';
 import expedia from './expedia.svg';
 import trustpilot from './trustpilot.svg';
 import opinion_assurances from './opinion_assurance.svg';
+import myBusiness from './myBusiness.svg';
 
 export default ({name}) => {
     if (name === "agoda") return <img src={agoda} />;
@@ -12,5 +13,6 @@ export default ({name}) => {
     if (name === "trustpilot") return <img src={trustpilot} />;
     if (name === "expedia") return <img src={expedia} />;
     if (name === "booking") return <img src={booking} />;
+    if (name === "myBusiness") return <img src={myBusiness} />;
     return  <s>custom - {name}</s>
 }

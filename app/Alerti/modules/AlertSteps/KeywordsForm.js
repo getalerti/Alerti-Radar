@@ -18,32 +18,48 @@ export default ({ onChangeHandler }) => {
     const [includedKeywords, setIncludedKeywords] = useState([]);
     const [includedKeywordsError, setIncludedKeywordsError] = useState(null);
 
+    const [plusKeywords, setPlusKeywords] = useState([]);
+    const [plusKeywordsError, setPlusKeywordsError] = useState(null);
+
     const [excludedKeywords, setExcludedKeywords] = useState([]);
     const [excludedKeywordsError, setExcludedKeywordsError] = useState(null);
-
 
     const getName = (e) => {
         setName(e.target.value);
         setNameError(null);
     };
+    const checkKeywords = () => {
+        console.log(includedKeywords, name)
+        if (includedKeywords.length === 0 && name !== "") {
+            setIncludedKeywords([name]);
+        }
+    };
     const getIncludedKeywords = (keywords) => {
         setIncludedKeywords(keywords);
         setIncludedKeywordsError(null);
+    };
+    const getPlusKeywords = (keywords) => {
+        setPlusKeywords(keywords);
+        setPlusKeywordsError(null);
     };
     const getExcludedKeywords = (keywords) => {
         setExcludedKeywords(keywords);
         setExcludedKeywordsError(null);
     };
     const validate = () => {
-        const validation = StepsValidations(consts.keywords_form, {name, excludedKeywords, includedKeywords})
+        const validation = StepsValidations(consts.keywords_form, {name, excludedKeywords, plusKeywords, includedKeywords})
         if (validation !== true) {
             setNameError(validation.fieldByField('name'));
-            setIncludedKeywordsError(validation.fieldByField('includedKeywords'));
-            setExcludedKeywordsError(validation.fieldByField('excludedKeywords'));
             return;
         }
         if (state.steps && currentStepIndex >= state.steps.length - 1)
             return;
+
+        if (includedKeywords.length === 0)
+            setIncludedKeywords([name]);
+
+        const requestParams = {name, includedKeywords, excludedKeywords, plusKeywords};
+        dispatch({type: "REQUEST", params: requestParams});
         dispatch({type: "CHANGE", name: "activeStep", value: state.steps[currentStepIndex+1] });
     }
     const back = () => {
@@ -61,6 +77,7 @@ export default ({ onChangeHandler }) => {
                            value={name}
                            placeholder={t('alert_name') + " *"}
                            onChange={getName}
+                           onBlur={checkKeywords}
                            data-valid={nameError === null} />
                     { nameError && <div className={communStyles.fieldError}>{nameError}</div> }
                 </div>
@@ -68,10 +85,18 @@ export default ({ onChangeHandler }) => {
                     <AlertiIcons name={"keywords"} />
                     <h3>{t('included_keywords')}</h3>
                     <ListInput
+                        defaultItems={includedKeywords}
                         invalid={includedKeywordsError !== null}
                         onChange={getIncludedKeywords}
                     />
                     { includedKeywordsError && <div className={communStyles.fieldError}>{includedKeywordsError}</div> }
+                    <span className={communStyles.blocSeparator}>{t('plus')}</span>
+                    <ListInput
+                        invalid={plusKeywordsError !== null}
+                        onChange={getPlusKeywords}
+                    />
+                    { plusKeywordsError && <div className={communStyles.fieldError}>{plusKeywordsError}</div> }
+
                 </div>
                 <div className={communStyles.alertBloc}>
                     <AlertiIcons name={"keywords"} />

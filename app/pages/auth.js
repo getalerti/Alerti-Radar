@@ -1,16 +1,16 @@
-import { useState } from "react";
-import styles from './index.module.scss';
-import Login from "../modules/Auth/Login";
-import Signup from "../modules/Auth/Signup";
-import ResetPassword from "../modules/Auth/ResetPassword";
+import {useRouter} from "next/router";
+import {useAuth0} from "@auth0/auth0-react";
+import {Instagram} from "react-content-loader";
 
 export default function Home() {
-    const [mode, setMode] = useState("login");
-    return (
-        <div  className={styles.container}>
-            { mode === "login" && <Login setMode={setMode} /> }
-            { mode === "signup" && <Signup setMode={setMode} /> }
-            { mode === "reset" && <ResetPassword setMode={setMode} /> }
-        </div>
-    )
+    const router = useRouter();
+    const { isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
+    if (isLoading)
+        return <Instagram />;
+    if (isAuthenticated)
+        router.push("/dashboard");
+    else {
+        loginWithRedirect()
+    }
+    return <div>Loading...</div>
 }

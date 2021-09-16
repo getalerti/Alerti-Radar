@@ -23,6 +23,7 @@ export default ({details}) => {
     }
     const onChangeType = (newType) => {
         setSelectedType(newType);
+        dispatch({type: "REQUEST", params: {monitorType: newType}});
         dispatch({type: "CHANGE", name: "monitorType", value: newType });
     }
     return (
