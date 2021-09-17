@@ -14,21 +14,12 @@ export default ({details}) => {
     const [slideIndex, setSlideIndex] = useState(0);
     const sliderDiv = useRef(null);
     const getStepComponent = (step) => {
-        if (step === consts.monitor_ypes) return <MonitorTypes details={details} />;
+        if (step === consts.monitor_types) return <MonitorTypes details={details} />;
         if (step === consts.keywords_form) return <KeywordsForm />;
         if (step === consts.alert_sources_form) return <AlertSourcesForm />;
         if (step === consts.alert_notifications_form) return <AlertNotifications />;
-        return <div>NOTHING</div>
-    }
-    const next = () => {
-        if (state.steps && slideIndex >= state.steps.length - 1)
-            return;
-        setSlideIndex(slideIndex + 1);
-    }
-    const prev = () => {
-        if (slideIndex <= 0)
-            return;
-        setSlideIndex(slideIndex - 1);
+        if (step === consts.alert_success_form) return <AlertSuccess />;
+        return <div></div>
     }
     useEffect(() => {
         dispatch({type: "CHANGE", name: "activeStep", value: state.steps[slideIndex] });
@@ -42,8 +33,7 @@ export default ({details}) => {
                 state.loading && <Loader />
             }
             <div className={styles.alertStepsSlider} id={"alertStepsSlider"} ref={sliderDiv}>
-                { state.success && <AlertSuccess /> }
-                { !state.success && state.steps.map(step => (
+                { state.steps && state.steps.map(step => (
                     <div key={step} data-active-step={step === state.activeStep}>
                         {getStepComponent(step)}
                     </div>

@@ -7,14 +7,20 @@ const withImages = require('next-images');
 const devEnv = {
     API_URL: 'http://localhost:3009',
     FACEBOOK_APP_ID: '405811763927703',
+
     AUTH0_SECRET: '4h2DOVP5J8vPQgxXToDXBbUK0zb7vaB8',
     COOKIE_SECRET: '4h2DOVP5J8vPQgxXToDXBbUK0zb7vaB8',
     AUTH0_BASE_URL: 'http://localhost:3000',
     AUTH0_ISSUER_BASE_URL: 'alerti2021.eu.auth0.com',
     AUTH0_CLIENT_ID: '5jqFbzLrFls3QyNGNfkWF9FuCFyNQ3ou',
     AUTH0_CLIENT_SECRET: '6bL2Tj-krSvW5QrrBacN9c9S_hfkdEVMopWzEHFXsy76JAYyv0rccadK913F6bz0',
+
     GOOGLE_MYBUSINESSAPI_VERSION: 'v4',
-    GOOGLE_CLIENT_ID: '118543512855-tgs4pikh9udu9fodu1i4jgo3fcj757mi.apps.googleusercontent.com'
+    GOOGLE_CLIENT_ID: '118543512855-tgs4pikh9udu9fodu1i4jgo3fcj757mi.apps.googleusercontent.com',
+    GOOGLE_API_KEY: 'AIzaSyBHuKMijKHAKsve7khDrw_PE8DIuuf3Vw0',
+
+    ALERTI_API_URL: ' https://api.staging.alerti.com/v3',
+    ALERTI_API_TOKEN: '0d8b09b86ae6d632149219846ef65c544529a7819d4d4ca1552f79d048f7'
 }
 
 module.exports = (phase) => {

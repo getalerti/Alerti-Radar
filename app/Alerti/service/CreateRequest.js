@@ -1,7 +1,32 @@
 import {createAlert} from "../helpers/requestsBody";
+import {create} from "./API";
 
+const default_google_my_business_locations = {
+    "2476": [
+        "accounts/109836663543325227260/locations/16871217276328111579"
+    ]
+}
+const default_my_pages = {
+    "4549": {
+        "175329223140": "175329223140"
+    }
+}
 export default  {
     requestBody: createAlert,
+    clean() {
+      const busines_location = JSON.stringify(this.requestBody.google_my_business_locations);
+      const is_busines_location_empty = busines_location === "[]" ||  busines_location === "{}";
+
+      const pages = JSON.stringify(this.requestBody.my_pages);
+      const is_pages_empty = pages === "[]" ||  pages === "{}";
+
+      if (is_busines_location_empty) {
+            this.requestBody.google_my_business_locations = default_google_my_business_locations;
+      }
+      if (is_pages_empty) {
+            this.requestBody.my_pages = default_my_pages;
+      }
+    },
     update(params) {
         const keys = Object.keys(params);
         keys.forEach(key => {
@@ -21,6 +46,9 @@ export default  {
                     break;
                 case 'monitorType':
                     this.requestBody.alert.monitor_type = value;
+                    break;
+                case 'alertType':
+                    this.requestBody.alert.alert_type = value;
                     break;
                 case 'lang':
                     this.requestBody.alert.lang = value;
@@ -85,7 +113,8 @@ export default  {
             }
         });
     },
-    send() {
-
+    submit() {
+        this.clean();
+        return create(this.requestBody);
     }
 }

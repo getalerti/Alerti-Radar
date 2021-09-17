@@ -17,7 +17,7 @@ class MyDocument extends Document {
                 <Main />
                 <NextScript />
                 <script async
-                        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBSLBdByD8uF_FyaRvINZ1xcP37ci6I3pQ&libraries=places">
+                        src={`https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_API_KEY}&libraries=places`}>
                 </script>
                 <script src={"/scripts.js"}></script>
                 </body>

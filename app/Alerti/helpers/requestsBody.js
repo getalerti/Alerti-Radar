@@ -33,8 +33,8 @@ const createAlert = {
         web_desktop_notification_frequency: ""
     },
     xml_sources: [],
-    my_pages: {},
-    google_my_business_locations: {},
+    my_pages: null,
+    google_my_business_locations: null,
     booking_urls: [],
     agoda_urls: [],
     opinion_assurances_urls: [],

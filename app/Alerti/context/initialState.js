@@ -6,33 +6,33 @@ const state = {
     monitorType: "",
     alertName: "",
     loading: false,
-    success: false,
-    steps: [consts.monitor_ypes],
+    submittingRequest: "NONE",
+    steps: [consts.monitor_types],
     validatedSteps: new Set(),
-    activeStep: consts.monitor_ypes,
+    activeStep: consts.monitor_types,
     request: {...CreateRequest}
 }
-const initState = () => {
-    return {...state};
-}
 const onChange = (state, name, value) => {
-    if (name === "success") {
-        state = {...initState()}
-        state.success = true;
-        return state;
-    }
     state[name] = value;
     if (name === "monitorType" && state.alertType === "keywords") {
         state.steps[1] = consts.keywords_form;
         state.steps[2] = consts.alert_sources_form;
         state.steps[3] = consts.alert_notifications_form;
+        state.steps[4] = consts.alert_success_form;
         state.validatedSteps.add(state.activeStep);
+        console.log({ steps: state.steps })
     }
     return state;
 }
 
 const createRequest = (state, params) => {
     state.request.update(params);
+    return state;
+}
+
+const submitRequest = async (state) => {
+    await state.request.submit();
+    state.submittingRequest = "DONE";
     return state;
 }
 
@@ -46,6 +46,10 @@ const reducer = (state, {type, name, value, params}) => {
         case "REQUEST":
             return {
                 ...createRequest(state, params)
+            };
+        case "SUBMIT":
+            return {
+                ...submitRequest(state, params)
             };
         default:
             return state;

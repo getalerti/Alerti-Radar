@@ -22,6 +22,8 @@ export default ({ onChangeHandler }) => {
         if (state.steps && currentStepIndex >= state.steps.length - 1)
             return;
         dispatch({type: "REQUEST", params: {emailNotification, mobileNotification, desktopNotification}});
+        dispatch({type: "CHANGE", name: "submittingRequest", value: "IN_PROGRESS" });
+        dispatch({type: "SUBMIT" });
         dispatch({type: "CHANGE", name: "activeStep", value: state.steps[currentStepIndex+1] });
 
     }
