@@ -409,6 +409,25 @@
 .fieldError {
   color: $red;
 }
+.outlinePrimaryBtn {
+  background: $orange;
+  color: $white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  justify-items: center;
+  font-size: 15px;
+  padding: 5px $spacer;
+  border-radius: 5px;
+  margin: 5px;
+  cursor: pointer;
+  width: auto;
+  svg {
+    color: $white;
+    margin-right: 5px;
+    font-size: 25px;
+  }
+}
 .facebook_connect_btn {
   &[disabled] {
     opacity: 0.6;
@@ -454,9 +473,11 @@
   }
 }
 .spinner {
-  position: absolute;
-  left: calc(50% - 25px);
-  top: calc(50% - 26px);
+  &[position="absolute"] {
+    position: absolute;
+    left: calc(50% - 25px);
+    top: calc(50% - 26px);
+  }
   svg {
     color: $orange;
     width: 50px;

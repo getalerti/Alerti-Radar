@@ -96,6 +96,8 @@
     "excluded_tweets": "Tweets posted by the following accounts",
     "excluded_tweets_description": "Add the username of the Twitter accounts to be excluded (without the @, ex: alerti and not @alerti)",
     "plus": "Plus",
+    "OR": "OR",
+    "add_more_keywords" : "Add more keywords",
     "email_notification": "Email notifications",
     "mobile_notification": "Mobile notifications",
     "desktop_notification": "Desktop notifications",

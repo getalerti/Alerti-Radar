@@ -18,12 +18,13 @@ export default ({ onChangeHandler }) => {
     const [mobileNotification, setMobileNotification] = useState(consts.defaultMobileNotification);
     const [desktopNotification, setDesktopNotification] = useState(consts.defaultDesktopNotification);
     const validate = () => {
-        //TODO: Validation
         if (state.steps && currentStepIndex >= state.steps.length - 1)
             return;
         dispatch({type: "REQUEST", params: {emailNotification, mobileNotification, desktopNotification}});
         dispatch({type: "CHANGE", name: "submittingRequest", value: "IN_PROGRESS" });
-        dispatch({type: "SUBMIT" });
+        state.request.submit().finally(() => {
+            dispatch({type: "CHANGE", name: "submittingRequest", value: "DONE" });
+        })
         dispatch({type: "CHANGE", name: "activeStep", value: state.steps[currentStepIndex+1] });
 
     }

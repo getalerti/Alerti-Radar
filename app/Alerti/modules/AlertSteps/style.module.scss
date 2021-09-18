@@ -9,6 +9,15 @@
 }
 .keywords {
   padding: $spacer;
+  position: relative;
+  &>span {
+    cursor: pointer;
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    color: $red;
+    font-size: 20px;
+  }
 }
 .sources {
   padding: $spacer;

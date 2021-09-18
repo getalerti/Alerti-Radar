@@ -35,14 +35,8 @@ export default  {
                 case 'name':
                     this.requestBody.alert.name = value;
                     break;
-                case 'includedKeywords':
-                    this.requestBody.alert.alert_query_settings[0].any_keywords = value;
-                    break;
-                case 'excludedKeywords':
-                    this.requestBody.alert.alert_query_settings[0].exclude_keywords = value;
-                    break;
-                case 'plusKeywords':
-                    this.requestBody.alert.alert_query_settings[0].keywords = value;
+                case 'alert_query_settings':
+                    this.requestBody.alert.alert_query_settings = value;
                     break;
                 case 'monitorType':
                     this.requestBody.alert.monitor_type = value;
@@ -109,7 +103,7 @@ export default  {
                 case 'desktopNotification':
                     this.requestBody.sharing.web_desktop_notification_frequency = value;
                     break;
-                case '': break;
+                default : break;
             }
         });
     },

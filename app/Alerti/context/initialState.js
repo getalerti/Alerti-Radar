@@ -30,14 +30,7 @@ const createRequest = (state, params) => {
     return state;
 }
 
-const submitRequest = async (state) => {
-    await state.request.submit();
-    state.submittingRequest = "DONE";
-    return state;
-}
-
 const reducer = (state, {type, name, value, params}) => {
-    console.log({state})
     switch (type) {
         case "CHANGE":
             return {
@@ -46,10 +39,6 @@ const reducer = (state, {type, name, value, params}) => {
         case "REQUEST":
             return {
                 ...createRequest(state, params)
-            };
-        case "SUBMIT":
-            return {
-                ...submitRequest(state, params)
             };
         default:
             return state;
