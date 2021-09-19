@@ -1,0 +1,18 @@
+export default {
+    API_URL: '',
+    FACEBOOK_APP_ID: '',
+
+    AUTH0_SECRET: '',
+    COOKIE_SECRET: '',
+    AUTH0_BASE_URL: '',
+    AUTH0_ISSUER_BASE_URL: '',
+    AUTH0_CLIENT_ID: '',
+    AUTH0_CLIENT_SECRET: '',
+
+    GOOGLE_MYBUSINESSAPI_VERSION: 'v4',
+    GOOGLE_CLIENT_ID: '',
+    GOOGLE_API_KEY: '',
+
+    ALERTI_API_URL: '',
+    ALERTI_API_TOKEN: ''
+}
