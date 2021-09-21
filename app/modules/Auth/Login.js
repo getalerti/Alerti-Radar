@@ -1,7 +1,7 @@
-import useTranslation from "../../i18n";
+import useTranslation from "../../helpers/i18n";
 import styles from "./style.module.scss"
 import {useState} from "react";
-import {fetchAPI, isEmail, isPassword} from "../../utils";
+import {fetchAPI, isEmail, isPassword} from "../../helpers/utils";
 import {useRouter} from "next/router";
 import {useDispatch} from "react-redux";
 

@@ -1,5 +1,5 @@
 import styles from "./../styles/commun.module.scss"
-import useTranslation from "../../i18n";
+import useTranslation from "../../helpers/i18n";
 
 export default ({ next, prev, display = true, isLast = false, isFirst = false }) => {
     const t = useTranslation();

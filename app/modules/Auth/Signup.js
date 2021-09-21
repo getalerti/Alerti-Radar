@@ -1,11 +1,11 @@
-import useTranslation from "../../i18n";
+import useTranslation from "../../helpers/i18n";
 import styles from "./style.module.scss"
 import {useState} from "react";
-import {fetchAPI, isEmail, isNotEmpty, isPassword} from "../../utils";
+import {fetchAPI, isEmail, isNotEmpty, isPassword} from "../../helpers/utils";
 import {useRouter} from "next/router";
 import {useDispatch} from "react-redux";
 import Topics from "./Topics";
-import _topics from "../../topics"
+import _topics from "../../helpers/topics"
 
 export default ({ setMode }) => {
     const t = useTranslation();

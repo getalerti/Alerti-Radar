@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import { FaWindowClose, FaFacebookSquare, FaLinkedin, FaTwitterSquare, FaRegBookmark, FaBookmark } from 'react-icons/fa'
 import { viewItem, saveItem} from "../../store/actions";
 import ReactAudioPlayer from 'react-audio-player';
-import {getSMShareUrl} from "../../utils";
+import {getSMShareUrl} from "../../helpers/utils";
 import {useState} from "react";
 
 const Viewer =({ item_viewer, viewItem, saveItem }) => {

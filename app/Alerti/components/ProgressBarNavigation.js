@@ -1,5 +1,5 @@
 import styles from "./../styles/commun.module.scss"
-import useTranslation from "../../i18n";
+import useTranslation from "../../helpers/i18n";
 import consts from "../helpers/consts";
 
 export default ({steps, activeStep}) => {

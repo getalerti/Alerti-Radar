@@ -1,5 +1,5 @@
 import React from 'react';
-import useTranslation from "../../i18n";
+import useTranslation from "../../helpers/i18n";
 import styles from "./../styles/commun.module.scss"
 import GoogleLogin from "react-google-login";
 import GMB from "google_my_business";

@@ -1,6 +1,6 @@
 import styles from "./style.module.scss"
-import topics from "../../topics"
-import useTranslation from "../../i18n";
+import topics from "../../helpers/topics"
+import useTranslation from "../../helpers/i18n";
 import {useState} from "react";
 export default ({ setTopics, setNext }) => {
     const t = useTranslation();

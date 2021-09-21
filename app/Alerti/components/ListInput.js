@@ -1,8 +1,8 @@
 import styles from "./../styles/commun.module.scss"
 import { BsFillTrashFill } from "react-icons/bs";
 import {useEffect, useState} from "react";
-import useTranslation from "./../../i18n";
-import {isNotEmpty, isURL} from "../../utils";
+import useTranslation from "../../helpers/i18n";
+import {isNotEmpty, isURL} from "../../helpers/utils";
 
 export default ({placeholder, defaultItems = [], onChange, rules = [], description = "", invalid = false}) => {
     const t = useTranslation();

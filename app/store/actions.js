@@ -1,5 +1,5 @@
-import {fetchAPI} from "../utils";
-import useTranslation from "../i18n";
+import {fetchAPI} from "../helpers/utils";
+import useTranslation from "../helpers/i18n";
 
 export const LOAD_FEEDS         = "LOAD_FEEDS";
 export const LOAD_FOLLOWINGS    = "LOAD_FOLLOWINGS";

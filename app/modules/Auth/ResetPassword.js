@@ -1,4 +1,4 @@
-import useTranslation from "../../i18n";
+import useTranslation from "../../helpers/i18n";
 import styles from "./style.module.scss"
 
 export default ({ setMode }) => {

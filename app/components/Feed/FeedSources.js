@@ -1,68 +1,47 @@
 import styles from "./style.module.scss"
-import {FaRss, FaPodcast, FaGlobe, FaUsers, FaTag, FaKeyboard} from "react-icons/fa";
-import useTranslation from "../../i18n";
+import {FaRss, FaPodcast, FaUsers, FaTag, FaKeyboard} from "react-icons/fa";
+import useTranslation from "../../helpers/i18n";
 import AlertDetails from "./../../Alerti/modules/AlertDetails";
 import {useState} from "react";
+import consts from "../../helpers/consts";
 export default () => {
     const t = useTranslation();
     const [selectedItem, setSelectedItem] = useState('keywords')
-
+    const getIcon = (type) => {
+        switch (type) {
+            case consts.alertTypeRss:
+                return <FaRss />;
+            case consts.alertTypePodcast:
+                return <FaPodcast />;
+            case consts.alertTypeSocial:
+                return <FaUsers />;
+            case consts.alertTypeReviews:
+                return <FaTag />;
+            case consts.alertTypeKeywords:
+                return <FaTag />;
+        }
+    }
     return (
         <div className={styles.source}>
             <div className={styles.source_items}>
-                <div className={styles.source_item}
-                     onClick={() => { setSelectedItem('rss') }}
-                     data-selected={selectedItem === "rss"} >
-                    <FaRss />
-                    <span>
-                        {t('rss')}
-                    </span>
-                </div>
-                <div className={styles.source_item}
-                     onClick={() => { setSelectedItem('podcast') }}
-                     data-selected={selectedItem === "podcast"} >
-                    <FaPodcast />
-                    <span>
-                        {t('podcast')}
-                    </span>
-                </div>
-                {/* <div className={styles.source_item}
-                      onClick={() => {
-                          setSelectedItem('website')
-                      }}
-                      data-selected={selectedItem === "website"}>
-                    <FaGlobe/>
-                    <span>
-                        {t('website')}
-                    </span>
-                </div> */}
-                <div className={styles.source_item}
-                     onClick={() => { setSelectedItem('social') }}
-                     data-selected={selectedItem === "social"} >
-                    <FaUsers />
-                    <span>
-                        {t('social')}
-                    </span>
-                </div>
-                <div className={styles.source_item}
-                     onClick={() => { setSelectedItem('keywords') }}
-                     data-selected={selectedItem === "keywords"} >
-                    <FaTag />
-                    <span>
-                        {t('keywords')}
-                    </span>
-                </div>
-                <div className={styles.source_item}
-                     onClick={() => { setSelectedItem('reviews') }}
-                     data-selected={selectedItem === "reviews"} >
-                    <FaTag />
-                    <span>
-                        {t('reviews')}
-                    </span>
-                </div>
+                {
+                    consts.alertTypes.map((type, index) => {
+                        return (
+                            <div className={styles.source_item}
+                                 key={index}
+                                 onClick={() => { setSelectedItem(type) }}
+                                 data-selected={selectedItem === type} >
+                                {getIcon(type)}
+                                <span>
+                                    {t(type)}
+                                </span>
+                            </div>
+                        )
+                    })
+                }
             </div>
             {
-                (selectedItem === "podcast" || selectedItem === "rss") ? (
+                (selectedItem === consts.alertTypePodcast || selectedItem === consts.alertTypeRss) ? (
                     <>
                         <input type={"hidden"} name={"source_type"} id={"source_type"} value={selectedItem}/>
                         <h2>{t('feed_source_title')}</h2>

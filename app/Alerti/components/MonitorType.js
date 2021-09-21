@@ -1,5 +1,5 @@
 import AlertiIcons from "./AlertiIcons";
-import useTranslation from "../../i18n";
+import useTranslation from "../../helpers/i18n";
 import styles from "./../styles/commun.module.scss"
 
 export default ({ name, active, onClick }) => {

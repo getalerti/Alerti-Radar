@@ -3,8 +3,8 @@ import {FaPlus} from "react-icons/fa";
 import {saveFolder} from "../../store/actions";
 import {connect} from "react-redux";
 import {useState} from "react";
-import {isNotEmpty} from "../../utils";
-import useTranslation from "../../i18n";
+import {isNotEmpty} from "../../helpers/utils";
+import useTranslation from "../../helpers/i18n";
 
 const NewFolder = ({ saveFolder }) => {
     const t = useTranslation();

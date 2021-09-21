@@ -43,6 +43,36 @@ const createAlert = {
     trip_advisor_urls: []
 }
 
+const getRequestBody = (type = null) => {
+    const requestBody = {...createAlert};
+
+    if (type === "social") {
+        delete requestBody.alert.lang;
+        delete requestBody.alert.alert_query_settings;
+        delete requestBody.alert.exclude_domains;
+        delete requestBody.alert.exclude_domain_extensions;
+        delete requestBody.alert.exclude_twittos;
+        delete requestBody.alert_retrieving;
+        delete requestBody.xml_sources;
+        delete requestBody.google_my_business_locations;
+        delete requestBody.booking_urls;
+        delete requestBody.agoda_urls;
+        delete requestBody.opinion_assurances_urls;
+        delete requestBody.google_places;
+        delete requestBody.expedia_urls;
+        delete requestBody.trip_advisor_urls;
+
+        requestBody.instagram_business_accounts = {};
+        requestBody.twitter_accounts = [];
+        requestBody.other_fan_pages = [];
+        requestBody.non_admin_twitter_accounts = [];
+        requestBody.non_admin_instagram_business_accounts = [];
+    }
+    return requestBody;
+
+}
+
 export {
-    createAlert
+    createAlert,
+    getRequestBody
 }

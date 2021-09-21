@@ -19,6 +19,7 @@ class MyDocument extends Document {
                 <script async
                         src={`https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_API_KEY}&libraries=places`}>
                 </script>
+                <script src={"https://connect.facebook.net/en_US/sdk.js"}></script>
                 <script src={"/scripts.js"}></script>
                 </body>
             </Html>

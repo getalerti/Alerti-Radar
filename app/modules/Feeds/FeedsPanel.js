@@ -1,8 +1,8 @@
 import styles from "./style.module.scss";
 import {useEffect, useState} from "react";
-import {formatDate} from "../../utils";
+import {formatDate} from "../../helpers/utils";
 import FeedPanelLoader from "../../components/loaders/FeedPanelLoader";
-import useTranslation from "./../../i18n";
+import useTranslation from "../../helpers/i18n";
 import Link from "next/link";
 
 export default ({feeds, title, link, viewItemAction, single = false}) => {

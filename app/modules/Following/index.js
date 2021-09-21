@@ -2,7 +2,7 @@ import styles from "./style.module.scss";
 import {FaBookmark, FaThList} from 'react-icons/fa';
 import { BulletList } from 'react-content-loader'
 import {useEffect, useState} from "react";
-import useTranslation from "./../../i18n";
+import useTranslation from "../../helpers/i18n";
 import Item from "../../components/Following/Item";
 import {loadFollwings} from "../../store/actions";
 import {connect} from "react-redux";

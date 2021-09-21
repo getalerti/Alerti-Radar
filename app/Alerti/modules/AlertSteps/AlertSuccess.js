@@ -1,5 +1,5 @@
 import styles from "./style.module.scss";
-import useTranslation from "./../../../i18n";
+import useTranslation from "../../../helpers/i18n";
 import AlertiIcons from "../../components/AlertiIcons";
 import {useContext, useEffect} from "react";
 import {Context} from "../../context";

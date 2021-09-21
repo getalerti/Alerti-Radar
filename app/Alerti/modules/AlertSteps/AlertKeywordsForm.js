@@ -1,7 +1,7 @@
 import styles from "./style.module.scss";
 import communStyles from "./../../styles/commun.module.scss";
 import AlertiIcons from "../../components/AlertiIcons";
-import useTranslation from "./../../../i18n";
+import useTranslation from "../../../helpers/i18n";
 import {useContext, useEffect, useState} from "react";
 import {Context} from "../../context";
 import SliderNavigation from "../../components/SliderNavigation";

@@ -1,4 +1,4 @@
-import {createAlert} from "../helpers/requestsBody";
+import {createAlert, getRequestBody} from "../helpers/requestsBody";
 import {create} from "./API";
 
 const default_google_my_business_locations = {
@@ -46,6 +46,9 @@ export default  {
                     break;
                 case 'lang':
                     this.requestBody.alert.lang = value;
+                    break;
+                case 'my_pages':
+                    this.requestBody.my_pages = value;
                     break;
                 case 'alertSources':
                     this.requestBody.alert_retrieving.retrieve_bing = value.some(src => src === "bing");

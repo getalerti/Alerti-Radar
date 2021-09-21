@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import {setError, setSuccess} from "../../store/actions";
 import Alert from "../../components/Alert";
 import { FaTimesCircle } from 'react-icons/fa';
-import useTranslation from "./../../i18n";
+import useTranslation from "../../helpers/i18n";
 
 function Toasts({ error, success, setError, setSuccess, loading }) {
     const t = useTranslation()

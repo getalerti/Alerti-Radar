@@ -70,8 +70,6 @@ export default ({ onChangeHandler }) => {
     const [trustpilot_urls, setTrustpilot_urls] = useState([]);
     const [google_places, setGoogle_places] = useState([]);
     const [google_my_business_locations, setGoogle_my_business_locations] = useState([]);
-    const [my_pages_indexes, setMy_pages_indexes] = useState([]);
-    const [facebookAccounts, setFacebookAccounts] = useState([{"id":"106571468426205","client_id":"734586227134744","name":"Test API","picture":"https://z-p3-scontent.frak3-1.fna.fbcdn.net/v/t1.6435-1/cp0/p50x50/241495621_106571555092863_4577263445696920232_n.png?_nc_cat=108&ccb=1-5&_nc_sid=dbb9e7&_nc_eui2=AeHufgNj80C8oBmmhDFaSfCRedyUk6eaLEt53JSTp5osS11PQGy_Wpo1mzP-w7f6YnYIQeFzBOib6TunvV4MbzXi&_nc_ohc=JQW8eKilLVkAX8mrVrS&_nc_ht=z-p3-scontent.frak3-1.fna&edm=AP4hL3IEAAAA&oh=cce9250edd2d3de00556594d0460664c&oe=616F6BB1"},{"id":"410147365687324","client_id":"734586227134744","name":"Jnane faiza","picture":"https://z-p3-scontent.frak3-1.fna.fbcdn.net/v/t1.6435-1/cp0/p50x50/53315486_2100951439940233_1568554539336859648_n.jpg?_nc_cat=103&ccb=1-5&_nc_sid=dbb9e7&_nc_eui2=AeFsK272-22onQiA9CtVS7uEiN1SoyF1UMuI3VKjIXVQy4-0XTnVHQd_7AxH9J-Wjxd_cQCmKATKxy6fPOerj6Mz&_nc_ohc=f6KC5kLbd0IAX_hBd4A&_nc_ht=z-p3-scontent.frak3-1.fna&edm=AP4hL3IEAAAA&oh=cf0bb9b00c649ff3b5580bfd57e9dadd&oe=616CBF10"}]);
 
     const changeReviewURLs = (review, items) => {
         switch (review) {
@@ -96,11 +94,6 @@ export default ({ onChangeHandler }) => {
             default: return [];
         }
     }
-    const updateMyPagesIndexes = (index) => {
-        const exist = my_pages_indexes.some(_index => index === _index);
-        if (!exist) setMy_pages_indexes([...my_pages_indexes, index]);
-        else setMy_pages_indexes(my_pages_indexes.filter(_index => index !== _index));
-    }
     const validate = () => {
         const validation = StepsValidations(consts.alert_sources_form, {lang, alertSources});
         if (validation !== true) {
@@ -113,17 +106,7 @@ export default ({ onChangeHandler }) => {
         if (state.steps && currentStepIndex >= state.steps.length - 1)
             return;
 
-        const my_pages = {};
-        my_pages_indexes.forEach((index) => {
-            const { id, client_id } = facebookAccounts[index]
-            if (!my_pages[client_id]) my_pages[client_id] = {};
-            my_pages[client_id][id] = id;
-        });
-        const requestParams = { lang, alertSources,
-            alertReviews, rssFeeds, excludeWebsites,
-            excludeDomainNames, excludeTweets, opinion_assurances_urls,
-            trip_advisor_urls, booking_urls, expedia_urls, agoda_urls,
-            trustpilot_urls, google_places, google_my_business_locations, my_pages};
+        const requestParams = { lang, alertSources, alertReviews, rssFeeds, excludeWebsites, excludeDomainNames, excludeTweets, opinion_assurances_urls, trip_advisor_urls, booking_urls, expedia_urls, agoda_urls, trustpilot_urls, google_places, google_my_business_locations};
         dispatch({type: "REQUEST", params: requestParams});
         dispatch({type: "CHANGE", name: "activeStep", value: state.steps[currentStepIndex+1] });
     }
@@ -214,21 +197,7 @@ export default ({ onChangeHandler }) => {
                     alertReviews.some(review => review === 'facebook') && (
                         <div className={communStyles.alertBloc}>
                             <AlertiIcons name={"facebook"} />
-                            <h3>{t('facebook_pages')}<FacbookAccount handleSuccess={setFacebookAccounts} /></h3>
-                            {
-                                facebookAccounts.map((item, index) => {
-                                    return (
-                                        <div key={index} className={communStyles.item_img}>
-                                            <input
-                                                type={"checkbox"}
-                                                onClick={() => { updateMyPagesIndexes(index) }}
-                                                checked={my_pages_indexes.some(_index => index === _index)}/>
-                                            <img src={item.picture} />
-                                            <span>{item.name}</span>
-                                        </div>
-                                    )
-                                })
-                            }
+                            <h3>{t('facebook_pages')}<FacbookAccount /></h3>
                         </div>
                     )
                 }

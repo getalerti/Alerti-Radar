@@ -3,7 +3,7 @@ import {loadFeeds} from "../../store/actions";
 import {connect} from "react-redux";
 import {useEffect, useState} from "react";
 import FeedsPanel from "./FeedsPanel";
-import useTranslation from "./../../i18n";
+import useTranslation from "../../helpers/i18n";
 import FeedsLoader from "../../components/loaders/FeedsLoader";
 
 const Feeds =({ feeds, loadFeeds }) => {

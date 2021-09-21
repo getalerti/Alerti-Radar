@@ -1,9 +1,9 @@
 import styles from "./../styles/commun.module.scss"
-import useTranslation from "../../i18n";
+import useTranslation from "../../helpers/i18n";
 import {useEffect, useState} from "react";
 import { HiOutlinePlusCircle, HiOutlineTrash } from "react-icons/hi";
 import AlertiIcons from "./AlertiIcons";
-import {isURL} from "../../utils";
+import {isURL} from "../../helpers/utils";
 
 export default ({ values = [], iconName="", type = null, onchange = () => {}, title="", placeholder = "" }) => {
     const t = useTranslation();

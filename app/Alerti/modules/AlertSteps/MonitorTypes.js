@@ -11,7 +11,6 @@ export default ({details}) => {
     const {state, dispatch} = useContext(Context);
     const currentStepIndex = state.steps.indexOf(state.activeStep);
     const validate = () => {
-        //TODO: Validation
         if (state.steps && currentStepIndex >= state.steps.length - 1)
             return;
         dispatch({type: "CHANGE", name: "activeStep", value: state.steps[currentStepIndex+1] });

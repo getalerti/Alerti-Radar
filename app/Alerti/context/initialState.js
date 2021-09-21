@@ -14,14 +14,21 @@ const state = {
 }
 const onChange = (state, name, value) => {
     state[name] = value;
-    if (name === "monitorType" && state.alertType === "keywords") {
+    console.log(name, value);
+    if (name === "alertType" && state.alertType === "keywords") {
+        state.steps = [consts.monitor_types];
         state.steps[1] = consts.keywords_form;
         state.steps[2] = consts.alert_sources_form;
         state.steps[3] = consts.alert_notifications_form;
         state.steps[4] = consts.alert_success_form;
         state.validatedSteps.add(state.activeStep);
-        console.log({ steps: state.steps })
     }
+    if (name === "alertType" && state.alertType === "social") {
+        state.steps = [consts.monitor_types];
+        state.steps[1] = consts.alert_social_accounts_form;
+        state.steps[2] = consts.alert_notifications_form;
+    }
+    console.log(state.steps)
     return state;
 }
 

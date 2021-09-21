@@ -1,4 +1,4 @@
-export default {
+module.exports = {
     API_URL: '',
     FACEBOOK_APP_ID: '',
 

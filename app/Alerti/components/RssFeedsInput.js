@@ -1,9 +1,9 @@
 import styles from "./../styles/commun.module.scss"
-import useTranslation from "../../i18n";
+import useTranslation from "../../helpers/i18n";
 import {useEffect, useState} from "react";
 import { HiOutlinePlusCircle, HiOutlineTrash } from "react-icons/hi";
 import consts from "../helpers/consts";
-import {isNotEmpty, isURL} from "../../utils";
+import {isNotEmpty, isURL} from "../../helpers/utils";
 import {msg} from "../helpers/utils";
 
 export default ({ values = [], onchange = () => {} }) => {

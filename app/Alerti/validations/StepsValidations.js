@@ -1,6 +1,6 @@
 import consts from "../helpers/consts";
 import FieldError from "../parameters/FieldError";
-import useTranslation from "../../i18n";
+import useTranslation from "../../helpers/i18n";
 import { msg } from "./../helpers/utils";
 const t = useTranslation();
 

@@ -2,8 +2,8 @@ import styles from "./style.module.scss";
 import {addRemoveFeed} from "../../store/actions";
 import {connect} from "react-redux";
 import {useState} from "react";
-import {validateNewSourceForm} from "../../utils";
-import useTranslation from "../../i18n";
+import {validateNewSourceForm} from "../../helpers/utils";
+import useTranslation from "../../helpers/i18n";
 import FeedSources from "../../components/Feed/FeedSources";
 
 const NewSource = ({ addRemoveFeed }) => {

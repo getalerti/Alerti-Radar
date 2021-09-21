@@ -53,6 +53,7 @@
     "KEYWORDS_FORM": "Keywords",
     "ALERT_SOURCES_FORM": "Sources",
     "ALERT_NOTIFICATIONS_FORM": "Notifications",
+    "ALERT_SOCIAL_ACCOUNTS_FORM": "Social accounts",
     "alert_name": "Alert title",
     "included_keywords": "Included keywords",
     "excluded_keywords": "Excluded keywords",

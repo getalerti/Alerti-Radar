@@ -1,7 +1,7 @@
 import styles from "./style.module.scss";
 import communStyles from "./../../styles/commun.module.scss";
 import AlertiIcons from "../../components/AlertiIcons";
-import useTranslation from "./../../../i18n";
+import useTranslation from "../../../helpers/i18n";
 import ListInput from "../../components/ListInput";
 import {useEffect, useState} from "react";
 import { BsFillTrashFill } from "react-icons/bs";
