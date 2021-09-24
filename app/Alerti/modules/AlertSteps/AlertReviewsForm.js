@@ -6,7 +6,7 @@ import ListInput from "../../components/ListInput";
 import consts from "../../helpers/consts";
 import Checkbox from "../../components/Checkbox";
 import RssFeedsInput from "../../components/RssFeedsInput";
-import {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {Context} from "../../context";
 import SliderNavigation from "../../components/SliderNavigation";
 import StepsValidations from "../../validations/StepsValidations";
@@ -14,37 +14,23 @@ import FacbookAccount from "../../components/FacbookAccount";
 import UrlListInput from "../../components/UrlListInput";
 import SearchGooglePlaces from "../../components/SearchGooglePlaces";
 import GoogleAccount from "../../components/GoogleAccount";
+import {getFacebookFanPages, getTwitterAccounts} from "../../service/API";
+import Loader from "../../components/Loader";
 
-export default ({ onChangeHandler }) => {
+export default () => {
     const t = useTranslation();
-    const languages = consts.languages;
-    const sources = consts.alert_sources;
     const reviews = consts.alert_reviews_sources;
 
     const {state, dispatch} = useContext(Context);
     const currentStepIndex = state.steps.indexOf(state.activeStep);
-
-    const [lang, setLang] = useState(consts.defaultLang);
-    const [langError, setLangError] = useState(null);
-
-    const [alertSources, setAlertSources] = useState([]);
-    const [checkAllSources, setCheckAllSources] = useState(false);
-    const [sourcesError, setSourcesError] = useState(null);
-    const addOrRemoveSource = (source) => {
-        setSourcesError(null);
-        const exist = alertSources.some(src => src === source);
-        if (exist) {
-            setAlertSources(alertSources.filter(src => src !== source));
-        } else {
-            setAlertSources([...alertSources, source]);
-        }
-    }
-    const checkOrUncheckAllSources = () => {
-        setAlertSources(!checkAllSources ? sources : []);
-        setCheckAllSources(!checkAllSources);
-    }
-
+    const [name, setName] = useState('');
+    const [nameError, setNameError] = useState(null);
     const [alertReviews, setAlertReviews] = useState([]);
+
+    const getName = (e) => {
+        setName(e.target.value);
+        setNameError(null);
+    };
     const addOrRemoveReview = (review) => {
         const exist = alertReviews.some(_review => _review === review);
         if (exist) {
@@ -54,14 +40,6 @@ export default ({ onChangeHandler }) => {
         }
     }
 
-    const [rssFeeds, setRssFeeds] = useState([]);
-
-    const [excludeWebsites, setExcludeWebsites] = useState([]);
-
-    const [excludeDomainNames, setExcludeDomainNames] = useState([]);
-
-    const [excludeTweets, setExcludeTweets] = useState([]);
-
     const [opinion_assurances_urls, setOpinion_assurances_urls] = useState([]);
     const [trip_advisor_urls, setTrip_advisor_urls] = useState([]);
     const [booking_urls, setBooking_urls] = useState([]);
@@ -70,7 +48,24 @@ export default ({ onChangeHandler }) => {
     const [trustpilot_urls, setTrustpilot_urls] = useState([]);
     const [google_places, setGoogle_places] = useState([]);
     const [google_my_business_locations, setGoogle_my_business_locations] = useState([]);
+    const [my_pages_indexes, setMy_pages_indexes] = useState([]);
+    const [facebookAccounts, setFacebookAccounts] = useState([]);
+    const [loadFacebookFanPages, setLoadFacebookFanPages] = useState(false);
 
+    const refreshFacebookFanPages = () => {
+        setLoadFacebookFanPages(true);
+        getFacebookFanPages()
+            .then(fanPagesResponse => fanPagesResponse.json())
+            .then(fanPagesData => {
+                const { fan_pages } = fanPagesData;
+                setFacebookAccounts(fan_pages.filter(item => item.instagram_business_account == null))
+            })
+            .catch(fanPagesError => { console.log({fanPagesError}) })
+            .finally(() => { setLoadFacebookFanPages(false) })
+    }
+    useEffect(() => {
+        refreshFacebookFanPages()
+    }, [])
     const changeReviewURLs = (review, items) => {
         switch (review) {
             case "opinion_assurances_urls": setOpinion_assurances_urls(items); break;
@@ -94,19 +89,29 @@ export default ({ onChangeHandler }) => {
             default: return [];
         }
     }
+    const updateMyPagesIndexes = (index) => {
+        const exist = my_pages_indexes.some(_index => index === _index);
+        if (!exist) setMy_pages_indexes([...my_pages_indexes, index]);
+        else setMy_pages_indexes(my_pages_indexes.filter(_index => index !== _index));
+    }
     const validate = () => {
-        const validation = StepsValidations(consts.alert_sources_form, {lang, alertSources});
+        const validation = StepsValidations(consts.alert_sources_form, {name});
         if (validation !== true) {
-            setLangError(validation.fieldByField('lang'));
-            setSourcesError(validation.fieldByField('alertSources'));
-            const parent = document.querySelector("#alertStepsSlider");
             if (parent && parent.scroll) parent.scroll(0, 0);
             return;
         }
         if (state.steps && currentStepIndex >= state.steps.length - 1)
             return;
 
-        const requestParams = { lang, alertSources, alertReviews, rssFeeds, excludeWebsites, excludeDomainNames, excludeTweets, opinion_assurances_urls, trip_advisor_urls, booking_urls, expedia_urls, agoda_urls, trustpilot_urls, google_places, google_my_business_locations};
+        const my_pages = {};
+        my_pages_indexes.forEach((index) => {
+            const { id, client_id } = facebookAccounts[index]
+            if (!my_pages[client_id]) my_pages[client_id] = {};
+            my_pages[client_id][id] = id;
+        });
+        const requestParams = { name, opinion_assurances_urls,
+            trip_advisor_urls, booking_urls, expedia_urls, agoda_urls,
+            trustpilot_urls, google_places, google_my_business_locations, my_pages};
         dispatch({type: "REQUEST", params: requestParams});
         dispatch({type: "CHANGE", name: "activeStep", value: state.steps[currentStepIndex+1] });
     }
@@ -119,39 +124,13 @@ export default ({ onChangeHandler }) => {
         <>
             <div className={styles.sources}>
                 <div className={communStyles.alertBloc}>
-                    <AlertiIcons name={"lang"} />
-                    <h3>{t('lang')}</h3>
-                    <select value={lang} onChange={(e) => setLang(e.target.value)}>
-                        {
-                            languages.map(lang => <option key={lang.code} value={lang.code}>{lang.name}</option>)
-                        }
-                    </select>
-                    { langError && <div className={communStyles.fieldError}>{langError}</div> }
-                </div>
-                <div className={communStyles.alertBloc} data-invalid={sourcesError !== null}>
-                    <div>
-                        <AlertiIcons name={"source"} />
-                        <h3>{t('sources')}</h3>
-                    </div>
-                    <div>
-                        <Checkbox checked={checkAllSources}
-                                  name={t('all_sources')}
-                                  onchange={checkOrUncheckAllSources} />
-                    </div>
-                    <div>
-                        {
-                            sources.map(source => (
-                                <>
-                                <Checkbox key={source}
-                                          icon={source}
-                                          checked={alertSources.some(src => src == source)}
-                                          onchange={() => addOrRemoveSource(source)}
-                                          name={t(source)} />
-                              </>
-                            ))
-                        }
-                    </div>
-                    { sourcesError && <div className={communStyles.fieldError}>{sourcesError}</div> }
+                    <AlertiIcons name={"name"} />
+                    <input type={"text"}
+                           value={name}
+                           placeholder={t('alert_name') + " *"}
+                           onChange={getName}
+                           data-valid={nameError === null} />
+                    { nameError && <div className={communStyles.fieldError}>{nameError}</div> }
                 </div>
                 <div className={communStyles.alertBloc}>
                     <div>
@@ -197,46 +176,25 @@ export default ({ onChangeHandler }) => {
                     alertReviews.some(review => review === 'facebook') && (
                         <div className={communStyles.alertBloc}>
                             <AlertiIcons name={"facebook"} />
-                            <h3>{t('facebook_pages')}<FacbookAccount /></h3>
+                            <h3>{t('facebook_pages')}<FacbookAccount handleSuccess={setFacebookAccounts} /></h3>
+                            {
+                                loadFacebookFanPages ? <Loader /> :
+                                facebookAccounts.map((item, index) => {
+                                    return (
+                                        <div key={index} className={communStyles.item_img}>
+                                            <input
+                                                type={"checkbox"}
+                                                onClick={() => { updateMyPagesIndexes(index) }}
+                                                checked={my_pages_indexes.some(_index => index === _index)}/>
+                                            <img src={item.picture} />
+                                            <span>{item.name}</span>
+                                        </div>
+                                    )
+                                })
+                            }
                         </div>
                     )
                 }
-
-                <div className={communStyles.alertBloc}>
-                    <AlertiIcons name={"rss"} />
-                    <h3>{t('rss_feed')}</h3>
-                    <RssFeedsInput values={rssFeeds} onchange={setRssFeeds} />
-                </div>
-                <div className={communStyles.alertBloc}>
-                    <AlertiIcons name={"exclude"} />
-                    <h3>{t('exclude')}</h3>
-                    <div>
-                        <ListInput
-                            defaultItems={excludeWebsites}
-                            onChange={setExcludeWebsites}
-                            rules={["url"]}
-                            placeholder={t('excluded_website')}
-                            description={t('excluded_website_description')} />
-                    </div>
-                    <span className={communStyles.blocSeparator}>{t('plus')}</span>
-                    <div>
-                        <ListInput
-                            defaultItems={excludeDomainNames}
-                            onChange={setExcludeDomainNames}
-                            rules={["tld"]}
-                            placeholder={t('excluded_domain_names')}
-                            description={t('excluded_domain_names_description')} />
-                    </div>
-                    <span className={communStyles.blocSeparator}>{t('plus')}</span>
-                    <div>
-                        <ListInput
-                            defaultItems={excludeTweets}
-                            onChange={setExcludeTweets}
-                            rules={["twitter"]}
-                            placeholder={t('excluded_tweets')}
-                            description={t('excluded_tweets_description')} />
-                    </div>
-                </div>
             </div>
             <SliderNavigation display={state.steps.length > 1}
                               isFirst={currentStepIndex === 0}

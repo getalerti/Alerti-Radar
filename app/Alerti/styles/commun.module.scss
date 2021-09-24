@@ -194,6 +194,11 @@
     &:hover {
       background: $orange;
     }
+    &[disabled] {
+      background: $dark_grey !important;
+      opacity: 0.5 !important;
+      cursor: not-allowed;
+    }
   }
 }
 .checkbox {

@@ -51,6 +51,7 @@ export default ({details}) => {
             <SliderNavigation display={state.steps.length > 1}
                               isFirst={currentStepIndex === 0}
                               isLast={currentStepIndex === state.steps.length - 1}
+                              disableNext={!selectedType || selectedType === ""}
                               next={validate}
                               prev={back} />
         </>

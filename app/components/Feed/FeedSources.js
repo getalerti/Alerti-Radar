@@ -6,7 +6,7 @@ import {useState} from "react";
 import consts from "../../helpers/consts";
 export default () => {
     const t = useTranslation();
-    const [selectedItem, setSelectedItem] = useState('keywords')
+    const [selectedItem, setSelectedItem] = useState(consts.alertTypeSocial)
     const getIcon = (type) => {
         switch (type) {
             case consts.alertTypeRss:

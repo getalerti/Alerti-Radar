@@ -8,8 +8,9 @@ import AlertNotifications from "./AlertNotifications";
 import Loader from "../../components/Loader";
 import AlertSuccess from "./AlertSuccess";
 import AlertKeywordsForm from "./AlertKeywordsForm";
-import AlertSocialAccountsForm from "./AlertSocialAccountsForm";
+import AlertSocialAdminAccountsForm from "./AlertSocialAdminAccountsForm";
 import ProgressBarNavigation from "../../components/ProgressBarNavigation";
+import AlertReviewsForm from "./AlertReviewsForm";
 
 export default ({alertType}) => {
     const {state, dispatch} = useContext(Context);
@@ -21,7 +22,8 @@ export default ({alertType}) => {
         if (step === consts.alert_sources_form) return <AlertSourcesForm />;
         if (step === consts.alert_notifications_form) return <AlertNotifications />;
         if (step === consts.alert_success_form) return <AlertSuccess />;
-        if (step === consts.alert_social_accounts_form) return <AlertSocialAccountsForm />;
+        if (step === consts.alert_social_admin_accounts_form) return <AlertSocialAdminAccountsForm />;
+        if (step === consts.alert_reviews_form) return <AlertReviewsForm />;
         return <div></div>
     }
     useEffect(() => {

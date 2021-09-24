@@ -44,11 +44,39 @@ const remove = (id) => {
     delete requestOptions.body;
     return fetch(`${url}/alerts/${id}`, requestOptions);
 }
-
+const addOrUpdateFacebookAccount = ({access_token, account_id}) => {
+    const formdata = new FormData();
+    formdata.append("access_token", access_token);
+    formdata.append("app_key", process.env.FACEBOOK_APP_SECRET);
+    formdata.append("account_id", account_id);
+    requestOptions.method = "POST";
+    requestOptions.body = formdata;
+    return fetch(`${url}/facebook/accounts/sdk_callback`, requestOptions);
+}
+const getFacebookFanPages = (include_instagram_business_accounts= true, load_from_facebook= true) => {
+    requestOptions.method = "GET";
+    delete requestOptions.body;
+    const queryParams = objectToQueryParams({include_instagram_business_accounts, load_from_facebook})
+    return fetch(`${url}/facebook/fan_pages?${queryParams}`, requestOptions);
+}
+const getTwitterAccounts = () => {
+    requestOptions.method = "GET";
+    delete requestOptions.body;
+    return fetch(`${url}/twitter/accounts`, requestOptions);
+}
+const addTwitterAccount = (params) => {
+    requestOptions.method = "POST";
+    requestOptions.body = JSON.stringify(params);
+    return fetch(`${url}/facebook/accounts`, requestOptions);
+}
 export {
     create,
     find,
     update,
     remove,
-    list
+    list,
+    addOrUpdateFacebookAccount,
+    getFacebookFanPages,
+    getTwitterAccounts,
+    addTwitterAccount
 }

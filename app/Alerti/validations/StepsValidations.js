@@ -5,9 +5,10 @@ import { msg } from "./../helpers/utils";
 const t = useTranslation();
 
 export default (step, data) => {
+    const { name } = data;
     switch (step) {
         case consts.keywords_form:
-            const { name, includedKeywords, excludedKeywords } = data;
+            const { includedKeywords, excludedKeywords } = data;
             if (!name || name === '') {
                 return new FieldError('name', msg('required_input', t('name')))
             }
@@ -20,6 +21,16 @@ export default (step, data) => {
             }
             if (!alertSources || alertSources.length === 0) {
                 return new FieldError('alertSources', msg('required_input', t('sources')))
+            }
+            return true;
+        break;
+        case consts.alert_social_admin_accounts_form:
+            const { instagram_indexes, my_pages_indexes, twitter_indexes } = data;
+            if (!name || name === '') {
+                return new FieldError('name', msg('required_input', t('name')))
+            }
+            if (instagram_indexes.length === 0 && my_pages_indexes.length === 0 && twitter_indexes.length === 0) {
+                return new FieldError('accounts', t('must_select_account'))
             }
             return true;
         break;

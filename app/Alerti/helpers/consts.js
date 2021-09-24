@@ -4,7 +4,8 @@ export default {
     alert_sources_form: "ALERT_SOURCES_FORM",
     alert_notifications_form: "ALERT_NOTIFICATIONS_FORM",
     alert_success_form: "ALERT_SUCCESS_FORM",
-    alert_social_accounts_form: "ALERT_SOCIAL_ACCOUNTS_FORM",
+    alert_social_admin_accounts_form: "ALERT_SOCIAL_ADMIN_ACCOUNTS_FORM",
+    alert_reviews_form: "ALERT_REVIEWS_FORM",
 
     notifications: ["new_articles", "daily", "weekly", "none"],
     defaultEmailNotification: "daily",

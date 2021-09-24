@@ -18,8 +18,6 @@ export default ({ onChangeHandler }) => {
     const [mobileNotification, setMobileNotification] = useState(consts.defaultMobileNotification);
     const [desktopNotification, setDesktopNotification] = useState(consts.defaultDesktopNotification);
     const validate = () => {
-        if (state.steps && currentStepIndex >= state.steps.length - 1)
-            return;
         dispatch({type: "REQUEST", params: {emailNotification, mobileNotification, desktopNotification}});
         dispatch({type: "CHANGE", name: "submittingRequest", value: "IN_PROGRESS" });
         state.request.submit().finally(() => {

@@ -76,6 +76,8 @@ export default ({name}) => {
         return <AiOutlineInstagram />
     if(name === "instagram_public_videos")
         return <AiOutlineInstagram />
+    if(name === "instagram")
+        return <AiOutlineInstagram />
     if(name === "images")
         return <FcImageFile />
     if(name === "forums")

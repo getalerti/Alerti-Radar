@@ -25,7 +25,12 @@ const onChange = (state, name, value) => {
     }
     if (name === "alertType" && state.alertType === "social") {
         state.steps = [consts.monitor_types];
-        state.steps[1] = consts.alert_social_accounts_form;
+        state.steps[1] = consts.alert_social_admin_accounts_form;
+        state.steps[2] = consts.alert_notifications_form;
+    }
+    if (name === "alertType" && state.alertType === "reviews") {
+        state.steps = [consts.monitor_types];
+        state.steps[1] = consts.alert_reviews_form;
         state.steps[2] = consts.alert_notifications_form;
     }
     console.log(state.steps)

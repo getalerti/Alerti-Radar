@@ -5,8 +5,9 @@ import AlertiIcons from "./AlertiIcons";
 import styles from "./../styles/commun.module.scss"
 import {initFacebookSdk} from "../helpers/utils";
 import Loader from "./Loader";
+import {addOrUpdateFacebookAccount} from "../service/API";
 
-export default ({ handleSuccess = () => {} }) => {
+export default ({ dataType = "", handleSuccess = () => {} }) => {
     const t = useTranslation();
     const [ready, isReady] = useState(false);
     const [error, setError] = useState(null);
@@ -18,24 +19,28 @@ export default ({ handleSuccess = () => {} }) => {
     const handleResponse = data => {
         if (data && data.tokenDetail) {
             const client_id = data.tokenDetail.userID;
+            const access_token = data.tokenDetail.accessToken;
             setError(null);
+            const fields = dataType === "instagram" ? "accounts{instagram_business_account,name,id,picture{url}}" : "accounts{picture{url},name,id}";
             try {
                 FB.api(
                     '/me',
                     'GET',
                     {
-                        fields: 'accounts{picture{url},name,id}',
+                        fields: fields,
                         access_token: data.tokenDetail.accessToken,
                     },
                     async function (response) {
+                        /*
                         if (response.accounts) {
                             const sanitizedData = [];
                             const accounts = response.accounts;
                             const items = accounts.data;
-                            items.forEach(({ id, name, picture }) => {
+                            items.forEach(({ id, instagram_business_account, name, picture }) => {
                                 sanitizedData.push({
                                     id,
                                     client_id,
+                                    instagram_business_account,
                                     name,
                                     picture: picture.data.url,
                                 });
@@ -45,10 +50,11 @@ export default ({ handleSuccess = () => {} }) => {
                                 let result = await fetch(next);
                                 result = await result.json();
                                 const items = result.data;
-                                items.forEach(({ id, name, picture }) => {
+                                items.forEach(({ id, name,instagram_business_account, picture }) => {
                                     sanitizedData.push({
                                         id,
                                         client_id,
+                                        instagram_business_account,
                                         name,
                                         picture: picture.data.url,
                                     });
@@ -57,11 +63,23 @@ export default ({ handleSuccess = () => {} }) => {
                             }
                             handleSuccess(sanitizedData);
                         }
+
+                         */
                     }
                 );
             } catch (e) {
                 handleError(e)
             }
+            addOrUpdateFacebookAccount({
+                access_token,
+                account_id: client_id
+            }).then(addOrUpdateFacebookAccountResponse => {
+                return addOrUpdateFacebookAccountResponse.json()
+            }).then(addOrUpdateFacebookAccountResponse => {
+                console.log({addOrUpdateFacebookAccountResponse})
+            }).catch(addOrUpdateFacebookAccountError => {
+                console.log({addOrUpdateFacebookAccountError})
+            }).finally(() => { handleSuccess() })
         }
     };
 

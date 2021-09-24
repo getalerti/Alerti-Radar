@@ -24,6 +24,7 @@
     "react-google-places-autocomplete": "^3.3.2",
     "react-icons": "^4.2.0",
     "react-redux": "^7.2.4",
+    "react-twitter-login": "^1.4.0",
     "redux": "^4.1.0",
     "redux-thunk": "^2.3.0",
     "sass": "^1.35.1"

@@ -13,6 +13,28 @@ const default_my_pages = {
 }
 export default  {
     requestBody: createAlert,
+    deleteUnneededProps() {
+        if (this.requestBody.alert.alert_type === "social") {
+            const bigProps = [
+                "alert",
+                "sharing",
+                "my_pages",
+                "instagram_business_accounts",
+                "twitter_accounts",
+                "other_fan_pages",
+                "non_admin_twitter_accounts",
+                "non_admin_instagram_business_accounts",
+
+            ]
+            const keys = Object.keys(this.requestBody);
+            keys.forEach(key => { if (bigProps.indexOf(key) === -1) delete this.requestBody[key]; })
+            delete this.requestBody.alert.lang;
+            delete this.requestBody.alert.alert_query_settings
+            delete this.requestBody.alert.exclude_domains
+            delete this.requestBody.alert.exclude_domain_extensions
+            delete this.requestBody.alert.exclude_twittos
+        }
+    },
     clean() {
       const busines_location = JSON.stringify(this.requestBody.google_my_business_locations);
       const is_busines_location_empty = busines_location === "[]" ||  busines_location === "{}";
@@ -25,6 +47,9 @@ export default  {
       }
       if (is_pages_empty) {
             this.requestBody.my_pages = default_my_pages;
+      }
+      if (this.requestBody.alert.monitor_type === "other") {
+          delete this.requestBody.alert.monitor_type;
       }
     },
     update(params) {
@@ -49,6 +74,13 @@ export default  {
                     break;
                 case 'my_pages':
                     this.requestBody.my_pages = value;
+                    break;
+                case 'instagram_business_accounts':
+                    this.requestBody.instagram_business_accounts = value;
+                    break;
+                    break;
+                case 'twitterAccounts':
+                    this.requestBody.twitter_accounts = value;
                     break;
                 case 'alertSources':
                     this.requestBody.alert_retrieving.retrieve_bing = value.some(src => src === "bing");
@@ -111,6 +143,7 @@ export default  {
         });
     },
     submit() {
+        this.deleteUnneededProps();
         this.clean();
         return create(this.requestBody);
     }

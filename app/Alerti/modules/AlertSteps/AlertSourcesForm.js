@@ -14,6 +14,8 @@ import FacbookAccount from "../../components/FacbookAccount";
 import UrlListInput from "../../components/UrlListInput";
 import SearchGooglePlaces from "../../components/SearchGooglePlaces";
 import GoogleAccount from "../../components/GoogleAccount";
+import {getFacebookFanPages, getTwitterAccounts} from "../../service/API";
+import Loader from "../../components/Loader";
 
 export default ({ onChangeHandler }) => {
     const t = useTranslation();
@@ -71,8 +73,23 @@ export default ({ onChangeHandler }) => {
     const [google_places, setGoogle_places] = useState([]);
     const [google_my_business_locations, setGoogle_my_business_locations] = useState([]);
     const [my_pages_indexes, setMy_pages_indexes] = useState([]);
-    const [facebookAccounts, setFacebookAccounts] = useState([{"id":"106571468426205","client_id":"734586227134744","name":"Test API","picture":"https://z-p3-scontent.frak3-1.fna.fbcdn.net/v/t1.6435-1/cp0/p50x50/241495621_106571555092863_4577263445696920232_n.png?_nc_cat=108&ccb=1-5&_nc_sid=dbb9e7&_nc_eui2=AeHufgNj80C8oBmmhDFaSfCRedyUk6eaLEt53JSTp5osS11PQGy_Wpo1mzP-w7f6YnYIQeFzBOib6TunvV4MbzXi&_nc_ohc=JQW8eKilLVkAX8mrVrS&_nc_ht=z-p3-scontent.frak3-1.fna&edm=AP4hL3IEAAAA&oh=cce9250edd2d3de00556594d0460664c&oe=616F6BB1"},{"id":"410147365687324","client_id":"734586227134744","name":"Jnane faiza","picture":"https://z-p3-scontent.frak3-1.fna.fbcdn.net/v/t1.6435-1/cp0/p50x50/53315486_2100951439940233_1568554539336859648_n.jpg?_nc_cat=103&ccb=1-5&_nc_sid=dbb9e7&_nc_eui2=AeFsK272-22onQiA9CtVS7uEiN1SoyF1UMuI3VKjIXVQy4-0XTnVHQd_7AxH9J-Wjxd_cQCmKATKxy6fPOerj6Mz&_nc_ohc=f6KC5kLbd0IAX_hBd4A&_nc_ht=z-p3-scontent.frak3-1.fna&edm=AP4hL3IEAAAA&oh=cf0bb9b00c649ff3b5580bfd57e9dadd&oe=616CBF10"}]);
+    const [facebookAccounts, setFacebookAccounts] = useState([]);
+    const [loadFacebookFanPages, setLoadFacebookFanPages] = useState(false);
 
+    const refreshFacebookFanPages = () => {
+        setLoadFacebookFanPages(true);
+        getFacebookFanPages()
+            .then(fanPagesResponse => fanPagesResponse.json())
+            .then(fanPagesData => {
+                const { fan_pages } = fanPagesData;
+                setFacebookAccounts(fan_pages.filter(item => item.instagram_business_account == null))
+            })
+            .catch(fanPagesError => { console.log({fanPagesError}) })
+            .finally(() => { setLoadFacebookFanPages(false) })
+    }
+    useEffect(() => {
+        refreshFacebookFanPages()
+    }, [])
     const changeReviewURLs = (review, items) => {
         switch (review) {
             case "opinion_assurances_urls": setOpinion_assurances_urls(items); break;
@@ -216,6 +233,7 @@ export default ({ onChangeHandler }) => {
                             <AlertiIcons name={"facebook"} />
                             <h3>{t('facebook_pages')}<FacbookAccount handleSuccess={setFacebookAccounts} /></h3>
                             {
+                                loadFacebookFanPages ? <Loader /> :
                                 facebookAccounts.map((item, index) => {
                                     return (
                                         <div key={index} className={communStyles.item_img}>
