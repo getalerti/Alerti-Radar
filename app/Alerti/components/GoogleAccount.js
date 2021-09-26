@@ -1,23 +1,21 @@
 import React from 'react';
-import useTranslation from "../../helpers/i18n";
-import styles from "./../styles/commun.module.scss"
 import GoogleLogin from "react-google-login";
-import GMB from "google_my_business";
+import {addGoogleAccount} from "../service/API";
 
-export default ({ title }) => {
-
+export default ({ title, handleSuccess = () => {}  }) => {
     const responseGoogle = (response) => {
-        const token = response.accessToken;
-        GMB.options({version: process.env.GOOGLE_MYBUSINESSAPI_VERSION});
-        GMB.setAccessToken(token);
-        GMB.api('accounts', 'get', {}, function (res) {
-            if(!res || res.error) {
-                console.log(!res ? 'error occurred' : res.error);
-                return;
-            }
-            console.log({res});
-        });
-        console.log({response});
+        const token = response.code;
+        const params = {
+            auth_code: token,
+            redirect_uri: location.origin
+        }
+        addGoogleAccount(params).then(addGoogleAccountResponse => {
+            return addGoogleAccountResponse.json()
+        }).then(addGoogleAccountResponse => {
+            console.log({addGoogleAccountResponse})
+        }).catch(addGoogleAccountError => {
+            console.log({addGoogleAccountError})
+        }).finally(() => { handleSuccess() })
     }
     return <GoogleLogin
         clientId={process.env.GOOGLE_CLIENT_ID}
@@ -25,8 +23,9 @@ export default ({ title }) => {
         onSuccess={responseGoogle}
         onFailure={responseGoogle}
         cookiePolicy={'single_host_origin'}
-        accessType={"offline"}
-        responseType={"code permission id_token"}
-        scope={"openid profile email https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/business.manage"}
+        accessType={"online"}
+        responseType={"code"}
+        redirectUri={location.origin}
+        scope={"openid https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/business.manage]"}
     />
 }

@@ -6,7 +6,7 @@ import ListInput from "../../components/ListInput";
 import consts from "../../helpers/consts";
 import Checkbox from "../../components/Checkbox";
 import RssFeedsInput from "../../components/RssFeedsInput";
-import {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {Context} from "../../context";
 import SliderNavigation from "../../components/SliderNavigation";
 import StepsValidations from "../../validations/StepsValidations";
@@ -14,7 +14,7 @@ import FacbookAccount from "../../components/FacbookAccount";
 import UrlListInput from "../../components/UrlListInput";
 import SearchGooglePlaces from "../../components/SearchGooglePlaces";
 import GoogleAccount from "../../components/GoogleAccount";
-import {getFacebookFanPages, getTwitterAccounts} from "../../service/API";
+import {getFacebookFanPages, getGoogleLocations} from "../../service/API";
 import Loader from "../../components/Loader";
 
 export default ({ onChangeHandler }) => {
@@ -71,10 +71,12 @@ export default ({ onChangeHandler }) => {
     const [agoda_urls, setAgoda_urls] = useState([]);
     const [trustpilot_urls, setTrustpilot_urls] = useState([]);
     const [google_places, setGoogle_places] = useState([]);
-    const [google_my_business_locations, setGoogle_my_business_locations] = useState([]);
+    const [google_places_indexes, setGoogle_places_indexes] = useState([]);
     const [my_pages_indexes, setMy_pages_indexes] = useState([]);
     const [facebookAccounts, setFacebookAccounts] = useState([]);
+    const [googleAccounts, setGoogleAccounts] = useState([]);
     const [loadFacebookFanPages, setLoadFacebookFanPages] = useState(false);
+    const [loadGoogleAccounts, setLoadGoogleAccounts] = useState(false);
 
     const refreshFacebookFanPages = () => {
         setLoadFacebookFanPages(true);
@@ -87,8 +89,20 @@ export default ({ onChangeHandler }) => {
             .catch(fanPagesError => { console.log({fanPagesError}) })
             .finally(() => { setLoadFacebookFanPages(false) })
     }
+    const refreshGoogleAccounts = () => {
+        setLoadGoogleAccounts(true);
+        getGoogleLocations()
+            .then(googleAccountsResponse => googleAccountsResponse.json())
+            .then(googleAccountsData => {
+                const { my_business_locations } = googleAccountsData;
+                setGoogleAccounts(my_business_locations)
+            })
+            .catch(googleAccountsError => { console.log({googleAccountsError}) })
+            .finally(() => { setLoadGoogleAccounts(false) })
+    }
     useEffect(() => {
         refreshFacebookFanPages()
+        refreshGoogleAccounts()
     }, [])
     const changeReviewURLs = (review, items) => {
         switch (review) {
@@ -117,6 +131,11 @@ export default ({ onChangeHandler }) => {
         const exist = my_pages_indexes.some(_index => index === _index);
         if (!exist) setMy_pages_indexes([...my_pages_indexes, index]);
         else setMy_pages_indexes(my_pages_indexes.filter(_index => index !== _index));
+    }
+    const updateGoogleAccountsIndexes = (index) => {
+        const exist = google_places_indexes.some(_index => index === _index);
+        if (!exist) setGoogle_places_indexes([...google_places_indexes, index]);
+        else setGoogle_places_indexes(google_places_indexes.filter(_index => index !== _index));
     }
     const validate = () => {
         const validation = StepsValidations(consts.alert_sources_form, {lang, alertSources});
@@ -223,6 +242,21 @@ export default ({ onChangeHandler }) => {
                         <div className={communStyles.alertBloc}>
                             <AlertiIcons name={"myBusiness"} />
                             <h3>{t('google_mybusiness')} <GoogleAccount title={t('add_google_account')} /></h3>
+                            {
+                                loadGoogleAccounts ? <Loader /> :
+                                    googleAccounts.map((item, index) => {
+                                        return (
+                                            <div key={index} className={communStyles.item_img}>
+                                                <input
+                                                    type={"checkbox"}
+                                                    onClick={() => { updateGoogleAccountsIndexes(index) }}
+                                                    checked={google_places_indexes.some(_index => index === _index)}/>
+                                                <AlertiIcons name={"myBusiness"} />
+                                                <span>{item.location_name}</span>
+                                            </div>
+                                        )
+                                    })
+                            }
                             <SearchGooglePlaces iconName={"myBusiness"} onchange={setGoogle_places} placeholder={t('search_google_places_description')} />
                         </div>
                     )

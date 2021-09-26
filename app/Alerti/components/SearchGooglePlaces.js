@@ -23,7 +23,6 @@ export default ({ iconName="", values = [], onchange = () => {}, placeholder = "
     }
     useEffect(() => {
         onchange(items);
-        console.log(items)
     }, [items])
     return (
         <div className={styles.searchItemsInput}>

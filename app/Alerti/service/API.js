@@ -69,6 +69,16 @@ const addTwitterAccount = (params) => {
     requestOptions.body = JSON.stringify(params);
     return fetch(`${url}/facebook/accounts`, requestOptions);
 }
+const addGoogleAccount = (params) => {
+    requestOptions.method = "POST";
+    requestOptions.body = JSON.stringify(params);
+    return fetch(`${url}/google_plus/accounts/create_or_update`, requestOptions);
+}
+const getGoogleLocations = () => {
+    requestOptions.method = "GET";
+    delete requestOptions.body;
+    return fetch(`${url}/google_plus/my_business_locations`, requestOptions);
+}
 export {
     create,
     find,
@@ -78,5 +88,7 @@ export {
     addOrUpdateFacebookAccount,
     getFacebookFanPages,
     getTwitterAccounts,
-    addTwitterAccount
+    addTwitterAccount,
+    addGoogleAccount,
+    getGoogleLocations
 }

@@ -14,7 +14,7 @@ import FacbookAccount from "../../components/FacbookAccount";
 import UrlListInput from "../../components/UrlListInput";
 import SearchGooglePlaces from "../../components/SearchGooglePlaces";
 import GoogleAccount from "../../components/GoogleAccount";
-import {getFacebookFanPages, getTwitterAccounts} from "../../service/API";
+import {getFacebookFanPages, getGoogleLocations, getTwitterAccounts} from "../../service/API";
 import Loader from "../../components/Loader";
 
 export default () => {
@@ -47,10 +47,12 @@ export default () => {
     const [agoda_urls, setAgoda_urls] = useState([]);
     const [trustpilot_urls, setTrustpilot_urls] = useState([]);
     const [google_places, setGoogle_places] = useState([]);
-    const [google_my_business_locations, setGoogle_my_business_locations] = useState([]);
     const [my_pages_indexes, setMy_pages_indexes] = useState([]);
+    const [google_places_indexes, setGoogle_places_indexes] = useState([]);
     const [facebookAccounts, setFacebookAccounts] = useState([]);
+    const [googleAccounts, setGoogleAccounts] = useState([]);
     const [loadFacebookFanPages, setLoadFacebookFanPages] = useState(false);
+    const [loadGoogleAccounts, setLoadGoogleAccounts] = useState(false);
 
     const refreshFacebookFanPages = () => {
         setLoadFacebookFanPages(true);
@@ -63,8 +65,20 @@ export default () => {
             .catch(fanPagesError => { console.log({fanPagesError}) })
             .finally(() => { setLoadFacebookFanPages(false) })
     }
+    const refreshGoogleAccounts = () => {
+        setLoadGoogleAccounts(true);
+        getGoogleLocations()
+            .then(googleAccountsResponse => googleAccountsResponse.json())
+            .then(googleAccountsData => {
+                const { my_business_locations } = googleAccountsData;
+                setGoogleAccounts(my_business_locations)
+            })
+            .catch(googleAccountsError => { console.log({googleAccountsError}) })
+            .finally(() => { setLoadGoogleAccounts(false) })
+    }
     useEffect(() => {
         refreshFacebookFanPages()
+        refreshGoogleAccounts()
     }, [])
     const changeReviewURLs = (review, items) => {
         switch (review) {
@@ -94,24 +108,38 @@ export default () => {
         if (!exist) setMy_pages_indexes([...my_pages_indexes, index]);
         else setMy_pages_indexes(my_pages_indexes.filter(_index => index !== _index));
     }
+    const updateGoogleAccountsIndexes = (index) => {
+        const exist = google_places_indexes.some(_index => index === _index);
+        if (!exist) setGoogle_places_indexes([...google_places_indexes, index]);
+        else setGoogle_places_indexes(google_places_indexes.filter(_index => index !== _index));
+    }
     const validate = () => {
-        const validation = StepsValidations(consts.alert_sources_form, {name});
-        if (validation !== true) {
-            if (parent && parent.scroll) parent.scroll(0, 0);
-            return;
-        }
-        if (state.steps && currentStepIndex >= state.steps.length - 1)
-            return;
-
         const my_pages = {};
         my_pages_indexes.forEach((index) => {
             const { id, client_id } = facebookAccounts[index]
             if (!my_pages[client_id]) my_pages[client_id] = {};
             my_pages[client_id][id] = id;
         });
+        const google_my_business_locations = {};
+        google_places_indexes.forEach((index) => {
+            const { name, google_plus_account_id } = googleAccounts[index]
+            if (!google_my_business_locations[google_plus_account_id]) google_my_business_locations[google_plus_account_id] = [];
+            google_my_business_locations[google_plus_account_id].push(name);
+        });
+
         const requestParams = { name, opinion_assurances_urls,
             trip_advisor_urls, booking_urls, expedia_urls, agoda_urls,
             trustpilot_urls, google_places, google_my_business_locations, my_pages};
+
+        const validation = StepsValidations(consts.alert_reviews_form, requestParams);
+        if (validation !== true) {
+            if (parent && parent.scroll) parent.scroll(0, 0);
+            return;
+        }
+
+        if (state.steps && currentStepIndex >= state.steps.length - 1)
+            return;
+
         dispatch({type: "REQUEST", params: requestParams});
         dispatch({type: "CHANGE", name: "activeStep", value: state.steps[currentStepIndex+1] });
     }
@@ -168,6 +196,21 @@ export default () => {
                         <div className={communStyles.alertBloc}>
                             <AlertiIcons name={"myBusiness"} />
                             <h3>{t('google_mybusiness')} <GoogleAccount title={t('add_google_account')} /></h3>
+                            {
+                                loadGoogleAccounts ? <Loader /> :
+                                    googleAccounts.map((item, index) => {
+                                        return (
+                                            <div key={index} className={communStyles.item_img}>
+                                                <input
+                                                    type={"checkbox"}
+                                                    onClick={() => { updateGoogleAccountsIndexes(index) }}
+                                                    checked={google_places_indexes.some(_index => index === _index)}/>
+                                                <AlertiIcons name={"myBusiness"} />
+                                                <span>{item.location_name}</span>
+                                            </div>
+                                        )
+                                    })
+                            }
                             <SearchGooglePlaces iconName={"myBusiness"} onchange={setGoogle_places} placeholder={t('search_google_places_description')} />
                         </div>
                     )

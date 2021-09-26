@@ -9,7 +9,6 @@ export default ({ placeholder, onChange = () => {} }) => {
             auto = new google.maps.places.Autocomplete(input);
             auto.addListener('place_changed', function() {
                 var place = auto.getPlace();
-                console.log(onChange)
                 onChange(
                     {
                         "place_id": place.place_id,

@@ -14,8 +14,10 @@ const default_my_pages = {
 export default  {
     requestBody: createAlert,
     deleteUnneededProps() {
+        const keys = Object.keys(this.requestBody);
+        let bigProps = [];
         if (this.requestBody.alert.alert_type === "social") {
-            const bigProps = [
+            bigProps = [
                 "alert",
                 "sharing",
                 "my_pages",
@@ -26,14 +28,34 @@ export default  {
                 "non_admin_instagram_business_accounts",
 
             ]
-            const keys = Object.keys(this.requestBody);
-            keys.forEach(key => { if (bigProps.indexOf(key) === -1) delete this.requestBody[key]; })
             delete this.requestBody.alert.lang;
             delete this.requestBody.alert.alert_query_settings
             delete this.requestBody.alert.exclude_domains
             delete this.requestBody.alert.exclude_domain_extensions
             delete this.requestBody.alert.exclude_twittos
         }
+        if (this.requestBody.alert.alert_type === "reviews") {
+            bigProps = [
+                    "alert",
+                    "sharing",
+                    "my_pages",
+                    "google_my_business_locations",
+                    "google_places",
+                    "trip_advisor_urls",
+                    "expedia_urls",
+                    "agoda_urls",
+                    "trustpilot_urls",
+                    "booking_urls",
+                    "opinion_assurances_urls",
+
+            ]
+            delete this.requestBody.alert.lang;
+            delete this.requestBody.alert.alert_query_settings
+            delete this.requestBody.alert.exclude_domains
+            delete this.requestBody.alert.exclude_domain_extensions
+            delete this.requestBody.alert.exclude_twittos
+        }
+        keys.forEach(key => { if (bigProps.indexOf(key) === -1) delete this.requestBody[key]; })
     },
     clean() {
       const busines_location = JSON.stringify(this.requestBody.google_my_business_locations);
