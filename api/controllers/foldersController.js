@@ -7,7 +7,10 @@ const FOLDER_PREF = "folder";
 const addFolder = async (req, res) => {
     try {
         validationResult(req).throw();
-        const userId = req.user;
+        let userId = req.user;
+        if (userId.sub) {
+            userId = userId.id;
+        }
         const { name } = req.body;
         const queryByID = {
             index: 'users',
@@ -43,7 +46,10 @@ const addFolder = async (req, res) => {
 
 const getFolders = async (req, res) => {
     try {
-        const userId = req.user;
+        let userId = req.user;
+        if (userId.sub) {
+            userId = userId.id;
+        }
         const queryByID = {
             index: 'users',
             id: `${userId}`

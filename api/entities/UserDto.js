@@ -3,12 +3,14 @@ const rssByTopic = require('./../config/rssByTopic');
 const podcastByTopic = require('./../config/podcastsByTopics');
 const Feed = require('./../entities/Feed');
 module.exports = class UserDto {
-    constructor({ id, email, name, username, password, jwt, feeds, listTopics, changePassword, savedItems, folders }) {
+    constructor({ id, email, name, username, password, jwt, feeds, listTopics, changePassword, savedItems, folders, picture, sub }) {
         this._id = id;
         this.email = email;
+        this.picture = picture || null;
+        this.sub = sub || null;
         this.name = name;
-        this.username = username;
-        this.password = password;
+        this.username = username || null;
+        this.password = password || null;
         this.url = "";
         this.feeds = feeds || [];
         this.interests = listTopics || [];
@@ -23,7 +25,9 @@ module.exports = class UserDto {
     get sanitizedUser() {
         const getCleanUser = {...this, password: ""}
         delete getCleanUser.password;
+        delete getCleanUser.sub;
         delete getCleanUser.interests;
+        delete getCleanUser._id;
         return getCleanUser;
     }
     get sanitizedUserToUpdate() {

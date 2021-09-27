@@ -1,3 +1,5 @@
+import consts from "./consts";
+
 const fetchAPI = async (url, method, data, isProtected = false) => {
     if(typeof window === "undefined")
         return ;
@@ -5,7 +7,9 @@ const fetchAPI = async (url, method, data, isProtected = false) => {
         'Content-Type': 'application/json'
     };
     if (isProtected) {
-        const jwt = window.localStorage.getItem("jwt");
+        let authenticatedUser = window.localStorage.getItem(consts.isAuthenticatedUser);
+        authenticatedUser = JSON.parse(authenticatedUser);
+        const jwt = authenticatedUser.jwt;
         headers["Authorization"] = `Barear ${jwt}`;
     }
     let fetchMethod = {

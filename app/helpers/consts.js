@@ -4,7 +4,8 @@ const alertTypeSocial = "social";
 const alertTypeKeywords = "keywords";
 const alertTypeReviews = "reviews";
 const alertTypeWebsite = "website";
-
+const isAuthenticatedKey = "@:isAuthenticated";
+const isAuthenticatedUser = "@:isAuthenticatedUser";
 const alertTypes = [
     alertTypeRss,
     alertTypePodcast,
@@ -21,5 +22,7 @@ export default {
     alertTypeRss,
     alertTypeSocial,
     alertTypeKeywords,
-    alertTypeWebsite
+    alertTypeWebsite,
+    isAuthenticatedKey,
+    isAuthenticatedUser
 }

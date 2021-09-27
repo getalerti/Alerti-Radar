@@ -2,7 +2,10 @@ const elasticSearchClient = require('./../config/db');
 const { createUserContent } = require("./../utils")
 const generateFeeds = async () => {
     try {
-        const userId = req.user;
+        let userId = req.user;
+        if (userId.sub) {
+            userId = userId.id;
+        }
         const queryByID = {
             index: 'users',
         }

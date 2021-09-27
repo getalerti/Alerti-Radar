@@ -59,39 +59,25 @@ const mergeFeedArrays = (feeds) => {
     return result;
 }
 const createUserContent = async (userId, feeds) => {
-    const rssItems = feeds.filter(feed => feed.type === "rss").map(feed => {
+    const items = feeds.map(({name, url, type}) => {
         return {
-            name: feed.name,
-            url: feed.url
-        }
-    });
-    const podcastsItems = feeds.filter(feed => feed.type === "podcast").map(feed => {
-        return {
-            name: feed.name,
-            url: feed.url
+            name,
+            url,
+            type
         }
     });
 
-    let rssContent = [];
-    let podcastsContent = [];
-    for (let i = 0; i < rssItems.length; i++) {
-        rssContent.push({
-            name: rssItems[i].name,
-            content: await getFeedItems(rssItems[i].url, 15, "rss")
+    let content = [];
+    for (let i = 0; i < items.length; i++) {
+        content.push({
+            name: items[i].name,
+            content: await getFeedItems(items[i].url, 15, items[i].type)
         })
     }
-    for (let i = 0; i < podcastsItems.length; i++) {
-        podcastsContent.push({
-            name: podcastsItems[i].name,
-            content: await getFeedItems(podcastsItems[i].url, 15, "podcast")
-        })
-    }
-    podcastsContent = mergeFeedArrays(podcastsContent).sort((a, b) => new Date(b.date) - new Date(a.date));
-    rssContent = mergeFeedArrays(rssContent).sort((a, b) => new Date(b.date) - new Date(a.date));
+    content = mergeFeedArrays(content).sort((a, b) => new Date(b.date) - new Date(a.date));
 
     await fs.writeFileSync(`./.cache/${userId}`, JSON.stringify({
-        podcasts: podcastsContent,
-        rss: rssContent
+        content
     }));
 }
 function randomString(length) {

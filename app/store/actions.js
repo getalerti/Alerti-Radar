@@ -1,5 +1,6 @@
 import {fetchAPI} from "../helpers/utils";
 import useTranslation from "../helpers/i18n";
+import consts from "../helpers/consts";
 
 export const LOAD_FEEDS         = "LOAD_FEEDS";
 export const LOAD_FOLLOWINGS    = "LOAD_FOLLOWINGS";
@@ -17,6 +18,26 @@ export const LOAD_FOLDERS       = "GET_FOLDERS";
 export const SAVE_FOLDER        = "SAVE_FOLDER";
 
 const t = useTranslation();
+export const auth = ({sub, email, name, picture}) => dispatch => {
+    dispatch({ type: SET_ERROR, payload: "" });
+    dispatch({ type: LOADING, payload: true });
+
+    fetchAPI("/auth/sso", "POST", {sub, email, name, picture}, false)
+        .then(response => {
+            if (response && response.error) {
+                dispatch({ type: SET_ERROR, payload: t("technical_error") })
+            }
+            if (typeof window !== "undefined") {
+                window.localStorage.setItem(consts.isAuthenticatedKey, true);
+                window.localStorage.setItem(consts.isAuthenticatedUser, JSON.stringify(response));
+            }
+        }).catch(error => {
+            console.log({authError: error})
+            dispatch({ type: SET_ERROR, payload: t("technical_error") })
+        }).finally(() => {
+            dispatch({ type: LOADING, payload: false });
+        })
+};
 export const loadFollwings = () => dispatch => {
     dispatch({ type: SET_ERROR, payload: "" });
     dispatch({ type: LOADING, payload: true });

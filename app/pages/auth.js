@@ -5,10 +5,9 @@ import {Instagram} from "react-content-loader";
 export default function Home() {
     const router = useRouter();
     const { isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
-    if (isLoading)
-        return <Instagram />;
-    if (isAuthenticated)
+    if (isAuthenticated) {
         router.push("/dashboard");
+    }
     else {
         loginWithRedirect()
     }

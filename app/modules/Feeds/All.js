@@ -1,15 +1,13 @@
 import styles from "./style.module.scss";
-import {loadFeeds} from "../../store/actions";
+import {loadFeeds, viewItem} from "../../store/actions";
 import {connect} from "react-redux";
 import {useEffect, useState} from "react";
 import FeedsPanel from "./FeedsPanel";
 import useTranslation from "../../helpers/i18n";
 import FeedsLoader from "../../components/loaders/FeedsLoader";
 
-const Feeds =({ feeds, loadFeeds }) => {
-    const [alertiFeeds, setAlertiFeeds] = useState(null);
+const Feeds =({ feeds, loadFeeds, viewItem }) => {
     const t = useTranslation();
-
     useEffect(() => {
         if (!feeds) {
             loadFeeds()
@@ -20,9 +18,7 @@ const Feeds =({ feeds, loadFeeds }) => {
 
         return (
         <div className={styles.feeds}>
-            <FeedsPanel title={t("recent_rss")} link={"/dashboard/rss"} feeds={feeds && feeds.rss ? feeds.rss.slice(0, 8) : []} />
-            <FeedsPanel title={t("recent_podcasts")} link={"/dashboard/podcasts"} feeds={feeds && feeds.podcasts ? feeds.podcasts.slice(0, 8) : []} />
-            <FeedsPanel title={t("Alerti")} link={"/dashboard/alerti"} feeds={alertiFeeds} />
+            <FeedsPanel title={t("feeds")} feeds={feeds} viewItemAction={viewItem} single={true} />
         </div>
     )
 }
@@ -32,7 +28,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-    loadFeeds
+    loadFeeds,
+    viewItem
 };
 export default connect(
     mapStateToProps,
