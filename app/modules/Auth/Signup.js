@@ -1,6 +1,6 @@
 import useTranslation from "../../helpers/i18n";
 import styles from "./style.module.scss"
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {fetchAPI, isEmail, isNotEmpty, isPassword} from "../../helpers/utils";
 import {useRouter} from "next/router";
 import {useDispatch} from "react-redux";
@@ -25,7 +25,6 @@ export default ({ setMode }) => {
         const fullname = e.target.fullname.value;
         const username = e.target.username.value;
         const listTopics = _topics.filter((_,index) => topics.indexOf(index) >= 0).map(top => top.name.toLocaleLowerCase());
-        console.log(listTopics)
         if (!isEmail(email)) {
             setError(t("invalid_email"));
             setLoading(false);

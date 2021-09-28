@@ -39,18 +39,29 @@ module.exports = class UserDto {
         return await bcrypt.compare(myPlaintextPassword, this.password);
     }
     interestsToFeeds() {
-        this.interests.map(item => {
-            if (rssByTopic[item]) {
-                rssByTopic[item].map(feed => {
+        if(this.feeds.length > 0)
+            return;
+        this.interests.forEach(item => {
+            let rssKey = "";
+            rssKey = Object.keys(rssByTopic);
+            rssKey = rssKey[item] || null;
+            if (rssKey && rssByTopic[rssKey]) {
+                rssByTopic[rssKey].map(feed => {
                     this.addFeed(new Feed(feed.name, feed.url, ""))
                 })
             }
-            if (podcastByTopic[item]) {
-                podcastByTopic[item].map(feed => {
+
+            let podcastKey = "";
+            podcastKey = Object.keys(podcastByTopic);
+            podcastKey = podcastKey[item] || null;
+            if (podcastKey && podcastByTopic[podcastKey]) {
+                podcastByTopic[podcastKey].map(feed => {
                     this.addFeed(new Feed(feed.name, feed.url, "", "podcast"))
                 })
             }
         })
+        console.log(this.feeds)
+
     }
     saveItem(item) {
         if (!this.savedItems) {

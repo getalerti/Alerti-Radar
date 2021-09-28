@@ -18,11 +18,11 @@ export const LOAD_FOLDERS       = "GET_FOLDERS";
 export const SAVE_FOLDER        = "SAVE_FOLDER";
 
 const t = useTranslation();
-export const auth = ({sub, email, name, picture}) => dispatch => {
+export const auth = ({sub, email, name, picture, listTopics}) => dispatch => {
     dispatch({ type: SET_ERROR, payload: "" });
     dispatch({ type: LOADING, payload: true });
 
-    fetchAPI("/auth/sso", "POST", {sub, email, name, picture}, false)
+    fetchAPI("/auth/sso", "POST", {sub, email, name, picture, listTopics}, false)
         .then(response => {
             if (response && response.error) {
                 dispatch({ type: SET_ERROR, payload: t("technical_error") })

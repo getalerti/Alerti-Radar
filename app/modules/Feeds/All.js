@@ -15,10 +15,9 @@ const Feeds =({ feeds, loadFeeds, viewItem }) => {
     }, [feeds]);
     if (!feeds)
         return <div className={styles.feeds}> <FeedsLoader /> </div>
-
         return (
         <div className={styles.feeds}>
-            <FeedsPanel title={t("feeds")} feeds={feeds} viewItemAction={viewItem} single={true} />
+            <FeedsPanel title={t("feeds")} feeds={feeds.content} viewItemAction={viewItem} single={true} />
         </div>
     )
 }

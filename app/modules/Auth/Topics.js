@@ -1,17 +1,21 @@
 import styles from "./style.module.scss"
 import topics from "../../helpers/topics"
 import useTranslation from "../../helpers/i18n";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import consts from "../../helpers/consts";
 export default ({ setTopics, setNext }) => {
     const t = useTranslation();
     const [selectedItems, setSelectedItems] = useState([]);
     const selectItem = (index) => {
         const exist = selectedItems.indexOf(index) >= 0;
+        let newItems = [];
         if (exist)
-            setSelectedItems(selectedItems.filter(item => item !== index))
+            newItems = selectedItems.filter(item => item !== index);
         else
-            setSelectedItems([...selectedItems, index]);
-        setTopics(selectedItems);
+            newItems = [...selectedItems, index]
+        setTopics(newItems);
+        setSelectedItems(newItems);
+        window.localStorage.setItem(consts.userSelectedTopics, JSON.stringify(newItems))
     }
     return (
         <div  className={styles.topics_container}>
@@ -41,7 +45,7 @@ export default ({ setTopics, setNext }) => {
             }
         </div>
         <div className={styles.navigation}>
-            <button onClick={() => { setNext(true) }} className={styles.btn}>{t("next")}</button>
+            <button onClick={() => { setNext(process.env.AUTH_MODE === "SSO" ? "login" : true) }} className={styles.btn}>{t("next")}</button>
         </div>
         </div>
     )

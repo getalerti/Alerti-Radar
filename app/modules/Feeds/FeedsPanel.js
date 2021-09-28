@@ -1,15 +1,22 @@
 import styles from "./style.module.scss";
 import {useEffect, useState} from "react";
-import {formatDate} from "../../helpers/utils";
+import {formatDate, getSMShareUrl} from "../../helpers/utils";
 import FeedPanelLoader from "../../components/loaders/FeedPanelLoader";
 import useTranslation from "../../helpers/i18n";
 import Link from "next/link";
+import {FaRss, FaPodcast, FaList, FaMicrosoft, FaUndo, FaTwitterSquare} from "react-icons/fa";
 
 export default ({feeds, title, link, viewItemAction, single = false}) => {
     const [loader, setLoader] = useState(true);
+    const [display, setDisplay] = useState("list");
     const t = useTranslation()
+    const Icon = (type) => type === "podcast" ? <FaPodcast /> : <FaRss />;
+    const sharePost = (link) => {
+        if (typeof window !== "undefined") {
+            window.open(getSMShareUrl("twitter", link), '_blank');
+        }
+    }
     useEffect(() => {
-        console.log({feeds})
         if (feeds) {
             setLoader(false)
         } else {
@@ -17,17 +24,28 @@ export default ({feeds, title, link, viewItemAction, single = false}) => {
         }
     }, [])
     return <div className={styles.feed}  data-single={single}>
-        <h4>{title}</h4>
+        <p className={styles.feed__items__display} >
+            <FaUndo />
+            { display === "blocs" && <FaList onClick={() => { setDisplay("list") }} /> }
+            { display === "list" && <FaMicrosoft onClick={() => { setDisplay("blocs") }} /> }
+        </p>
         {
             loader && <FeedPanelLoader />
         }
         {
-            !loader && <div className={styles.feed__items}>
+            !loader && <div className={styles.feed__items} data-display={display}>
                 {
                     feeds.map((item, index) => (
-                        <div key={index} className={styles.feed__item} title={item.title} onClick={() => {viewItemAction(item)}}>
-                            <p><span>{item.feed_name}:</span>{item.title}</p>
-                            <span>{formatDate(item.date)}</span>
+                        <div key={index} className={styles.feed__item} title={item.title}>
+                            <FaTwitterSquare onClick={() => { sharePost(item.link) }} />
+                            <p onClick={() => {viewItemAction(item)}}>
+                                {Icon(item.type)}
+                                <span> {item.feed_name}:</span>
+                                <span  dangerouslySetInnerHTML={{__html: item.title}}></span>
+                            </p>
+                            <div  onClick={() => {viewItemAction(item)}} className={styles.feed__item__fullcontent} dangerouslySetInnerHTML={{__html: item.content}}>
+                            </div>
+                            <span  onClick={() => {viewItemAction(item)}}>{formatDate(item.date)}</span>
                         </div>
                     ))
                 }
