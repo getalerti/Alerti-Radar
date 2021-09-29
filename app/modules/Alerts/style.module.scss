@@ -1,0 +1,90 @@
+@import "./../../styles/base";
+.alerts {
+  background-color: $bg-1;
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-items: start;
+  justify-content: start;
+  h1 {
+    background-color: #6c1fd2;
+    background: rgb(108,31,210);
+    background: linear-gradient(
+                    90deg
+            , #6c1fd2 0%, #fa2355 50%, #ffca5f 100%);
+    color: white;
+    width: 100%;
+    font-size: 14px;
+    font-weight: 300;
+    text-align: center;
+    padding: $spacer;
+    box-sizing: border-box;
+  }
+  .alerts__list {
+    height: 100px;
+    overflow: auto;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 10px;
+    background: $bg-2;
+    margin: 10px;
+    box-sizing: border-box;
+    svg {
+      height: 100%;
+    }
+    & > div {
+      width: 100%;
+      max-width: 100%;
+      font-size: 11px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      padding: 5px;
+      margin: 3px;
+      border-radius: 5px;
+      background: $grey;
+      color: #fff;
+      box-sizing: border-box;
+      transition: all 0.3s;
+      cursor: pointer;
+      font-weight: bold;
+      &:hover, &[data-selected = true] {
+        background: $btn-bg;
+      }
+    }
+  }
+  .alerts__content__items {
+    height: calc(100vh - 150px);
+    width: 100%;
+    max-width: 100%;
+    overflow: auto;
+    svg {
+      width: 100%;
+    }
+    & > div {
+      padding: 10px;
+      background: $bg-2;
+      margin: 10px;
+      border-radius: 5px;
+      color: $text-color;
+      cursor: pointer;
+      span {
+        display: block;
+        font-size: 10px;
+      }
+      span:first-child {
+        font-weight: bold;
+      }
+      & > p {
+        margin: 10px 0;
+        font-size: 12px;
+        line-height: 15px;
+      }
+      span:last-child {
+        font-style: italic;
+      }
+    }
+  }
+}

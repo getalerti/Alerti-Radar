@@ -11,7 +11,7 @@ import {
     SAVED_ITEMS,
     SAVE_ITEM,
     LOAD_FOLDERS,
-    SAVE_FOLDER
+    SAVE_FOLDER, LOAD_ALERTS, LOAD_ALERT_ITEMS
 } from "./actions";
 import initialState from "./initialState";
 
@@ -45,6 +45,18 @@ export default (state = initialState, {type, payload}) => {
             return {
                 ...state,
                 folders: payload
+            };
+        }
+        case LOAD_ALERTS: {
+            return {
+                ...state,
+                alerts: payload
+            };
+        }
+        case LOAD_ALERT_ITEMS: {
+            return {
+                ...state,
+                alert_items: payload
             };
         }
         case SAVE_FOLDER: {

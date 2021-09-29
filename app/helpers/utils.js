@@ -1,12 +1,15 @@
 import consts from "./consts";
 
-const fetchAPI = async (url, method, data, isProtected = false) => {
+const fetchAPI = async (url, method, data, isProtected = false, isAlerti = false) => {
     if(typeof window === "undefined")
         return ;
     const headers = {
         'Content-Type': 'application/json'
     };
-    if (isProtected) {
+    if (isAlerti) {
+        headers["x-auth-token"] = process.env.ALERTI_API_TOKEN;
+    }
+    if (!isAlerti && isProtected) {
         let authenticatedUser = window.localStorage.getItem(consts.isAuthenticatedUser);
         authenticatedUser = JSON.parse(authenticatedUser);
         const jwt = authenticatedUser.jwt;
@@ -23,7 +26,7 @@ const fetchAPI = async (url, method, data, isProtected = false) => {
     if (method === "POST") {
         fetchMethod = {...fetchMethod, "body": JSON.stringify(data)}
     }
-    const response = await fetch(`${process.env.API_URL}${url}`, fetchMethod);
+    const response = await fetch(`${!isAlerti ? process.env.API_URL : ""}${url}`, fetchMethod);
     return response.json();
 }
 const formatDate = (date) => {

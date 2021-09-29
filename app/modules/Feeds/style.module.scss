@@ -96,7 +96,6 @@
         justify-content: space-between;
         align-items: center;
         transition: all 0.3s;
-        position: relative;
         & >svg:first-child {
             color: $blue;
             font-size: 20px;
@@ -132,6 +131,7 @@
         span {
           font-size: 9px;
           font-weight: bold;
+          padding-right: 20px;
         }
       }
 

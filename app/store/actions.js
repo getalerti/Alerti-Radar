@@ -16,6 +16,8 @@ export const VIEW_ITEM          = "VIEW_ITEM";
 export const LOADING            = "LOADING";
 export const LOAD_FOLDERS       = "GET_FOLDERS";
 export const SAVE_FOLDER        = "SAVE_FOLDER";
+export const LOAD_ALERTS        = "LOAD_ALERTS";
+export const LOAD_ALERT_ITEMS        = "LOAD_ALERT_ITEMS";
 
 const t = useTranslation();
 export const auth = ({sub, email, name, picture, listTopics}) => dispatch => {
@@ -247,4 +249,35 @@ export const setError = (err) => dispatch => {
 };
 export const setSuccess = (msg) => dispatch => {
     dispatch({ type: SET_SUCCESS, msg })
+};
+
+// ALERTI
+const alertApiUrl = process.env.ALERTI_API_URL || "";
+export const loadAlerts = () => dispatch => {
+    if (alertApiUrl === "")
+        return;
+    dispatch({ type: SET_ERROR, payload: "" });
+    dispatch({ type: LOADING, payload: true });
+    fetchAPI(`${alertApiUrl}/alerts?per_page=100`, "GET", null, false, true)
+        .then(response => {
+            dispatch({ type: LOAD_ALERTS, payload: response.alerts })
+            dispatch({ type: LOADING, payload: false });
+        }).catch(error => {
+        console.log({loadAlertsError: error})
+        dispatch({ type: SET_ERROR, payload: t("technical_error") })
+    })
+};
+export const loadAlert = (id, page = "") => dispatch => {
+    if (alertApiUrl === "")
+        return;
+    dispatch({ type: SET_ERROR, payload: "" });
+    dispatch({ type: LOADING, payload: true });
+    fetchAPI(`${alertApiUrl}/alerts/${id}/entries?per_page=100&${page}`, "GET", null, false, true)
+        .then(response => {
+            dispatch({ type: LOAD_ALERT_ITEMS, payload: { paging: response.paging, entries: response.entries } })
+            dispatch({ type: LOADING, payload: false });
+        }).catch(error => {
+        console.log({loadAlertError: error})
+        dispatch({ type: SET_ERROR, payload: t("technical_error") })
+    })
 };

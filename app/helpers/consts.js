@@ -12,13 +12,18 @@ const alertTypes = [
     alertTypeRss,
     alertTypePodcast,
     // alertTypeWebsite,
-    alertTypeSocial,
-    alertTypeKeywords,
-    alertTypeReviews
 ]
-
+const getAlertTypes = () => {
+    if (process.env.ALERTI_API_URL && process.env.ALERTI_API_TOKEN) {
+        return [...alertTypes,
+            alertTypeSocial,
+            alertTypeKeywords,
+            alertTypeReviews
+        ]
+    }
+    return alertTypes;
+}
 export default {
-    alertTypes,
     alertTypePodcast,
     alertTypeReviews,
     alertTypeRss,
@@ -28,5 +33,6 @@ export default {
     isAuthenticatedKey,
     isAuthenticatedUser,
     isUserSelectTopics,
-    userSelectedTopics
+    userSelectedTopics,
+    alertTypes: getAlertTypes(),
 }
