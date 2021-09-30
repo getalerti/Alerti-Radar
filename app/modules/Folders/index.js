@@ -9,7 +9,8 @@ import ListFolders from "../../components/Folder/ListFolders";
 
 const Folders =({ folders, loadFolders }) => {
     const t = useTranslation();
-    const title = <h4 className={styles.title}>{t('folders')}</h4>
+    // const title = <h4 className={styles.title}>{t('folders')}</h4>
+    const title = ""
     useEffect(() => {
         if (!folders) {
             loadFolders()

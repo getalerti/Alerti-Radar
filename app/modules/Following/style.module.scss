@@ -66,6 +66,23 @@
   justify-content: space-between;
   align-items: center;
   line-height: 2rem;
+  position: relative;
+  padding-left: 10px;
+  & > svg {
+    position: absolute;
+    left: -5px;
+    top: 10px;
+    opacity: 0;
+    transition: all 0.3s;
+    cursor: pointer;
+    cursor: grab;
+    &:active {
+      cursor: grabbing;
+    }
+  }
+  &:hover > svg {
+    opacity: 1;
+  }
   @media screen and (max-width: 768px){
     border: none;
     padding: 0 $spacer/2;
@@ -86,12 +103,12 @@
   .following__item__img {
     width: 15px;
     height: 20px;
-    padding-right: 10px;
     background: $bg-2;
     border-radius: 100px;
     align-items: center;
     justify-items: center;
     display: flex;
+    margin-right: 10px;
     img {
       width: 100%;
       height: auto;

@@ -8,6 +8,8 @@ import {loadFollwings} from "../../store/actions";
 import {connect} from "react-redux";
 import Link from "next/link";
 import Folders from "../Folders";
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 
 const Following =({loadFollwings, followings}) => {
     const [expand, setExpand] = useState(false);
@@ -37,6 +39,7 @@ const Following =({loadFollwings, followings}) => {
                 </Link>
             <h4  className={styles.following__title}>{t('feeds')}
             </h4>
+            <DndProvider backend={HTML5Backend}>
             <div className={styles.following__items} data-expand={expand}>
                 { !followings && (
                     <>
@@ -53,8 +56,10 @@ const Following =({loadFollwings, followings}) => {
                 Show {!expand ? "more" : "less"}
             </span>
             <Folders />
+            </DndProvider>
 
         </div>
+
             </>
     )
 }

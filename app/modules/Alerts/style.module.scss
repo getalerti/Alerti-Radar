@@ -20,38 +20,52 @@
     text-align: center;
     padding: $spacer;
     box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
   }
   .alerts__list {
-    height: 100px;
+    height: 150px;
+    width: 100%;
     overflow: auto;
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
-    padding: 10px;
+    padding-bottom: 10px;
     background: $bg-2;
-    margin: 10px;
     box-sizing: border-box;
+    & > input {
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+      font-size: 11px;
+      padding: 5px;
+    }
     svg {
       height: 100%;
     }
-    & > div {
+    .alerts__list__content {
       width: 100%;
-      max-width: 100%;
-      font-size: 11px;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      overflow: hidden;
-      padding: 5px;
-      margin: 3px;
-      border-radius: 5px;
-      background: $grey;
-      color: #fff;
-      box-sizing: border-box;
-      transition: all 0.3s;
-      cursor: pointer;
-      font-weight: bold;
-      &:hover, &[data-selected = true] {
-        background: $btn-bg;
+      height: 100px;
+      overflow: auto;
+      & > div {
+        width: 100%;
+        max-width: 100%;
+        font-size: 11px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        padding: 10px;
+        margin: 2px 0;
+        background: $grey;
+        color: #fff;
+        box-sizing: border-box;
+        transition: all 0.3s;
+        cursor: pointer;
+        font-weight: bold;
+        position: relative;
+        &:hover, &[data-selected = true] {
+          background: $btn-bg;
+        }
       }
     }
   }
@@ -60,6 +74,14 @@
     width: 100%;
     max-width: 100%;
     overflow: auto;
+    .alerts__content__items__shareIcon {
+      cursor: pointer;
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      width: auto;
+      color: $blue;
+    }
     svg {
       width: 100%;
     }
@@ -70,6 +92,7 @@
       border-radius: 5px;
       color: $text-color;
       cursor: pointer;
+      position: relative;
       span {
         display: block;
         font-size: 10px;

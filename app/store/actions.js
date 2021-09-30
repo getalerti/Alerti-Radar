@@ -265,6 +265,8 @@ export const loadAlerts = () => dispatch => {
         }).catch(error => {
         console.log({loadAlertsError: error})
         dispatch({ type: SET_ERROR, payload: t("technical_error") })
+        }).finally(() => {
+        dispatch({ type: LOADING, payload: false });
     })
 };
 export const loadAlert = (id, page = "") => dispatch => {
@@ -272,12 +274,14 @@ export const loadAlert = (id, page = "") => dispatch => {
         return;
     dispatch({ type: SET_ERROR, payload: "" });
     dispatch({ type: LOADING, payload: true });
-    fetchAPI(`${alertApiUrl}/alerts/${id}/entries?per_page=100&${page}`, "GET", null, false, true)
+    fetchAPI(`${alertApiUrl}/alerts/${id}/entries?per_page=100${page}`, "GET", null, false, true)
         .then(response => {
             dispatch({ type: LOAD_ALERT_ITEMS, payload: { paging: response.paging, entries: response.entries } })
             dispatch({ type: LOADING, payload: false });
         }).catch(error => {
         console.log({loadAlertError: error})
         dispatch({ type: SET_ERROR, payload: t("technical_error") })
+        }).finally(() => {
+        dispatch({ type: LOADING, payload: false });
     })
 };
