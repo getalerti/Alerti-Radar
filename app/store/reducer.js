@@ -1,17 +1,14 @@
 import {
     SET_SUCCESS,
     SET_ERROR,
-    ADD_FOLLOWING,
     LOAD_FEEDS,
     LOAD_FOLLOWINGS,
     LOADING,
-    REMOVE_FOLLOWING,
     USER_STATUS,
     VIEW_ITEM,
     SAVED_ITEMS,
-    SAVE_ITEM,
     LOAD_FOLDERS,
-    SAVE_FOLDER, LOAD_ALERTS, LOAD_ALERT_ITEMS
+    LOAD_ALERTS, LOAD_ALERT_ITEMS, SET_FEED_FOLDER
 } from "./actions";
 import initialState from "./initialState";
 
@@ -59,34 +56,10 @@ export default (state = initialState, {type, payload}) => {
                 alert_items: payload
             };
         }
-        case SAVE_FOLDER: {
-            return {
-                ...state,
-                folders: [...state.folders, payload]
-            };
-        }
         case SAVED_ITEMS: {
             return {
                 ...state,
                 saved_items: payload
-            };
-        }
-        case SAVE_ITEM: {
-            return {
-                ...state,
-                saved_items: [...state.saved_items, payload]
-            };
-        }
-        case ADD_FOLLOWING: {
-            return {
-                ...state,
-                followings: [...state.followings, payload]
-            };
-        }
-        case REMOVE_FOLLOWING: {
-            return {
-                ...state,
-                followings: state.followings.filter(item => item.url !== payload.url)
             };
         }
         case LOADING: {

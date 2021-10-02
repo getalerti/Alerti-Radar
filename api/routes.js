@@ -9,7 +9,7 @@ const folderValidation = require('./validations/FolderValidation');
 const signUpController = require('./controllers/signUpController');
 const signInController = require('./controllers/signInController');
 const ssoController = require('./controllers/ssoController');
-const { addRemoveFeed, generateFeeds, getFeeds, getSavedItems, following, saveFeedItem, deleteSavedFeedItem} = require('./controllers/userFeedController');
+const { addRemoveFeed, generateFeeds, getFeeds, getSavedItems, following, saveFeedItem, deleteSavedFeedItem, updateFeedFolder} = require('./controllers/userFeedController');
 const { resetPassword, updateUser, removeUser} = require('./controllers/userController');
 const { addFolder, getFolders } = require('./controllers/foldersController');
 
@@ -23,6 +23,7 @@ router.delete('/user',authenticateToken, removeUser)
 
 // Feeds
 router.post('/user/feeds',[authenticateToken, userFeedValidation], addRemoveFeed );
+router.put('/user/feeds/folder',authenticateToken, updateFeedFolder );
 router.post('/user/saved',[authenticateToken, userFeedItemValidation], saveFeedItem );
 router.delete('/user/saved',[authenticateToken, userFeedItemValidation], deleteSavedFeedItem );
 router.get('/user/saved',authenticateToken, getSavedItems );

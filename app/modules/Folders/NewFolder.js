@@ -16,6 +16,7 @@ const NewFolder = ({ saveFolder }) => {
         const name = e.target.name.value;
         if (isNotEmpty(name)) {
             saveFolder(name)
+            e.target.name.value = ""
         } else {
             setError(t("invalid_inputs"));
         }

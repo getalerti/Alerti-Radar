@@ -17,7 +17,8 @@ export const LOADING            = "LOADING";
 export const LOAD_FOLDERS       = "GET_FOLDERS";
 export const SAVE_FOLDER        = "SAVE_FOLDER";
 export const LOAD_ALERTS        = "LOAD_ALERTS";
-export const LOAD_ALERT_ITEMS        = "LOAD_ALERT_ITEMS";
+export const LOAD_ALERT_ITEMS   = "LOAD_ALERT_ITEMS";
+export const SET_FEED_FOLDER    = "SET_FEED_FOLDER";
 
 const t = useTranslation();
 export const auth = ({sub, email, name, picture, listTopics}) => dispatch => {
@@ -109,7 +110,6 @@ export const saveItem = (item) => dispatch => {
                 else
                     dispatch({ type: SET_ERROR, payload: t("technical_error") })
             } else {
-                dispatch({ type: SAVE_ITEM, payload: item })
                 dispatch({ type: LOADING, payload: false });
                 dispatch({ type: SET_SUCCESS, payload: t("successfully_operation") });
                 dispatch({
@@ -164,19 +164,44 @@ export const addRemoveFeed = (item, action) => dispatch => {
                 else
                     dispatch({ type: SET_ERROR, payload: t("technical_error") })
             } else {
-                if (action)
-                    dispatch({ type: ADD_FOLLOWING, payload: item });
-                else
-                    dispatch({ type: REMOVE_FOLLOWING, payload: item });
                 dispatch({ type: SET_SUCCESS, payload: t("successfully_operation") });
                 dispatch({ type: LOADING, payload: false });
                 dispatch({
                     type: USER_STATUS,
                     payload: "authorized"
                 })
+                dispatch(loadFollwings())
             }
         }).catch(error => {
             console.log({loadFeedsError: error})
+            dispatch({ type: SET_ERROR, payload: t("technical_error") })
+        })
+};
+export const updateFeedFolder = (feedId, folderId) => dispatch => {
+    dispatch({ type: SET_ERROR, payload: "" });
+    dispatch({ type: LOADING, payload: true });
+    fetchAPI("/user/feeds/folder", "PUT", {feedId, folderId}, true)
+        .then(response => {
+            if (response && response.error) {
+                if (response.error === "unauthorized") {
+                    dispatch({
+                        type: USER_STATUS,
+                        payload: "unauthorized"
+                    })
+                }
+                else
+                    dispatch({ type: SET_ERROR, payload: t("technical_error") })
+            } else {
+                dispatch({ type: SET_SUCCESS, payload: t("successfully_operation") });
+                dispatch({ type: LOADING, payload: false });
+                dispatch({
+                    type: USER_STATUS,
+                    payload: "authorized"
+                })
+                dispatch(loadFollwings())
+            }
+        }).catch(error => {
+            console.log({updateFeedFolderError: error})
             dispatch({ type: SET_ERROR, payload: t("technical_error") })
         })
 };
@@ -226,13 +251,13 @@ export const saveFolder = (name) => dispatch => {
                 else
                     dispatch({ type: SET_ERROR, payload: t("technical_error") })
             } else {
-                dispatch({ type: SAVE_FOLDER, payload: name })
                 dispatch({ type: LOADING, payload: false });
                 dispatch({ type: SET_SUCCESS, payload: t("successfully_operation") });
                 dispatch({
                     type: USER_STATUS,
                     payload: "authorized"
                 })
+                dispatch(loadFolders())
             }
         }).catch(error => {
         console.log({loadSaveItemError: error})

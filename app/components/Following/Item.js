@@ -1,18 +1,16 @@
 import styles from "../../modules/Following/style.module.scss";
 import Image from "../Images";
 import {FaEllipsisV} from "react-icons/fa";
-import { useDrag } from 'react-dnd'
+import {useEffect} from "react";
 
-export default ({item}) => {
-    const [collected, drag, dragPreview] = useDrag(() => ({
-        type: item.id,
-        item
-    }))
-    return collected.isDragging ? (
-        <div ref={dragPreview} />
-    ) : (
-        <div  className={styles.following__item} ref={dragPreview}>
-            <FaEllipsisV />
+export default ({item, draggable}) => {
+    const {id, url} = item
+    const onDragItem = (ev) => {
+        ev.dataTransfer.setData("item", JSON.stringify({id, url}))
+    }
+    return (
+        <div draggable={draggable} onDragStart={onDragItem} className={styles.following__item}>
+            { draggable && <FaEllipsisV /> }
             <div className={styles.following__item__img}>
                 <Image src={item.image} />
             </div>

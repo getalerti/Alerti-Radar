@@ -5,6 +5,10 @@ const fs = require('fs');
 const nodemailer = require("nodemailer");
 const { uuid } = require('uuidv4');
 
+const USER_COLLECTION_PREF_ID = "usr";
+const FEED_COLLECTION_PREF_ID = "feed";
+const FOLDER_COLLECTION_PREF_ID = "folder";
+
 const generateAccessToken = (username) => {
     return jwt.sign(username, process.env.JWT_SECRET);
 }
@@ -126,5 +130,8 @@ module.exports = {
     sendMail,
     isURL,
     genID,
-    getFeedTitle
+    getFeedTitle,
+    USER_COLLECTION_PREF_ID,
+    FEED_COLLECTION_PREF_ID,
+    FOLDER_COLLECTION_PREF_ID
 }

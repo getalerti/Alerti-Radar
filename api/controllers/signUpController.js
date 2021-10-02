@@ -1,15 +1,14 @@
 const { validationResult } = require('express-validator');
 const elasticSearchClient = require('./../config/db');
 const UserDto = require('../entities/UserDto');
-const { uuid } = require('uuidv4');
 const { generateAccessToken } = require('../utils')
-
+const { genID, USER_COLLECTION_PREF_ID } = require('../utils');
 module.exports =  async (req, res) => {
     try {
         validationResult(req).throw();
         const userDto = new UserDto(req.body);
         await userDto.hashPassword();
-        const id = uuid();
+        const id = genID(USER_COLLECTION_PREF_ID);
         userDto.jwt = generateAccessToken(id);
 
         const queryByUsername = {

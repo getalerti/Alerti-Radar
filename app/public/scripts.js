@@ -1,5 +1,5 @@
 function checkEnter(e){
-    const skip = e.target && e.target.name && e.target.name == "source_data";
+    const skip = e.target && e.target.name && e.target.name == "source_url";
     if (!skip) {
         e = e || event;
         var txtArea = /textarea/i.test((e.target || e.srcElement).tagName);

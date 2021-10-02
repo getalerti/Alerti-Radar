@@ -73,13 +73,27 @@ module.exports = class UserDto {
         this.savedItems = this.savedItems.filter(_item => _item.id !== item.id)
     }
     addFeed(feed) {
+        let exist = false;
         if (!this.feeds) {
             this.feeds = [];
         }
-        if (this.feeds.indexOf(f => f.url === feed.url) >= 0) {
+        for (let i = 0; i < this.feeds.length; i++) {
+            if (this.feeds[i].url == feed.url) {
+                exist = true
+            }
+        }
+        if (exist) {
             return;
         }
         this.feeds.push(feed)
+    }
+    changeFeedFolder(feedId, folderId) {
+        for (var i = 0; i < this.feeds.length; i++) {
+            if (this.feeds[i].id == feedId) {
+                this.feeds[i].folder = folderId;
+                return;
+            }
+        }
     }
     addFolder(folder) {
         this.folders.push(folder)

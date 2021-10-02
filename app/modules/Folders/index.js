@@ -1,14 +1,12 @@
 import styles from "./style.module.scss";
-import { loadFolders } from "../../store/actions";
+import { loadFolders, updateFeedFolder } from "../../store/actions";
 import {connect} from "react-redux";
 import {useEffect} from "react";
-import useTranslation from "../../helpers/i18n";
 import FeedsLoader from "../../components/loaders/FeedsLoader";
 import NewFolder from "./NewFolder";
-import ListFolders from "../../components/Folder/ListFolders";
+import FolderItem from "../../components/Folder/FolderItem";
 
-const Folders =({ folders, loadFolders }) => {
-    const t = useTranslation();
+const Folders =({ folders, loadFolders, updateFeedFolder, followings }) => {
     // const title = <h4 className={styles.title}>{t('folders')}</h4>
     const title = ""
     useEffect(() => {
@@ -22,18 +20,31 @@ const Folders =({ folders, loadFolders }) => {
         return (
         <div className={styles.folders}>
             {title}
-            <ListFolders folders={folders} />
+            <div className={styles.folders_list}>
+                {
+                    folders.map((folder, index) => {
+                        return <FolderItem
+                            updateFeedFolder={updateFeedFolder}
+                            key={index}
+                            items={followings ? followings.filter(feed => feed.folder === folder.id) : []}
+                            folder={folder}
+                            index={index} />;
+                    })
+                }
+            </div>
             <NewFolder />
         </div>
     )
 }
 
 const mapStateToProps = state => ({
+    followings: state.followings,
     folders: state.folders,
 });
 
 const mapDispatchToProps = {
-    loadFolders
+    loadFolders,
+    updateFeedFolder
 };
 export default connect(
     mapStateToProps,

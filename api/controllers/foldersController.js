@@ -1,8 +1,7 @@
 const elasticSearchClient = require('./../config/db');
 const { validationResult } = require('express-validator');
 const UserDto = require('../entities/UserDto');
-const { genID } = require('../utils');
-const FOLDER_PREF = "folder";
+const { genID, FOLDER_COLLECTION_PREF_ID } = require('../utils');
 
 const addFolder = async (req, res) => {
     try {
@@ -16,7 +15,7 @@ const addFolder = async (req, res) => {
             index: 'users',
             id: `${userId}`
         }
-        const idFolder = genID(FOLDER_PREF)
+        const idFolder = genID(FOLDER_COLLECTION_PREF_ID)
         const user = await elasticSearchClient.get(queryByID);
         if (user && user._source) {
             const userDto = new UserDto(user._source)

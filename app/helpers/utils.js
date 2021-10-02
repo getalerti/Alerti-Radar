@@ -23,7 +23,7 @@ const fetchAPI = async (url, method, data, isProtected = false, isAlerti = false
         redirect: 'follow',
         referrerPolicy: 'no-referrer',
     }
-    if (method === "POST") {
+    if (method === "POST" || method === "PUT") {
         fetchMethod = {...fetchMethod, "body": JSON.stringify(data)}
     }
     const response = await fetch(`${!isAlerti ? process.env.API_URL : ""}${url}`, fetchMethod);
@@ -55,11 +55,13 @@ const getSMShareUrl = (social, text) => {
     }
 }
 const validateNewSourceForm = (type, data) => {
-    console.log(isURL(data))
     if (type === 'podcast' || type === 'rss' || type === 'website' ) {
         return isURL(data)
     }
     return isNotEmpty(data);
+}
+const sanitizeUrl = (url) => {
+    return `${url.slice(0, 4) !== "http" ? "https://" : ""}${url}`;
 }
 export {
     fetchAPI,
@@ -69,5 +71,6 @@ export {
     formatDate,
     getSMShareUrl,
     isURL,
-    validateNewSourceForm
+    validateNewSourceForm,
+    sanitizeUrl
 }

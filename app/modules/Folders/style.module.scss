@@ -1,6 +1,10 @@
 @import "./../../styles/base";
 .folders {
   margin-top: $spacer;
+  .folders_list {
+    max-height: 200px;
+    overflow: auto;
+  }
   .title {
     font-weight: bold;
     display: flex;
@@ -16,7 +20,6 @@
   .new_item {
     border-radius: 5px;
     overflow: hidden;
-    width: 100%;
     box-sizing: border-box;
     display: flex;
     margin-left: $spacer / 2;

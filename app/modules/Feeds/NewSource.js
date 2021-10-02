@@ -2,23 +2,26 @@ import styles from "./style.module.scss";
 import {addRemoveFeed} from "../../store/actions";
 import {connect} from "react-redux";
 import {useState} from "react";
-import {validateNewSourceForm} from "../../helpers/utils";
+import {validateNewSourceForm, sanitizeUrl} from "../../helpers/utils";
 import useTranslation from "../../helpers/i18n";
 import FeedSources from "../../components/Feed/FeedSources";
 
 const NewSource = ({ addRemoveFeed }) => {
     const t = useTranslation();
     const [error, setError] = useState("");
-    const [source, setSource] = useState(null);
     const submitHandler = (e) => {
+        console.log("ddd")
         e.preventDefault();
         setError("");
-        if (!e.target.source_data)
+        if (!e.target.source_url)
             return;
-        const data = e.target.source_data.value;
+        let url = e.target.source_url.value;
         const type = e.target.source_type.value;
-        if (validateNewSourceForm(type, data)) {
-            addRemoveFeed({type, data}, true)
+        url = sanitizeUrl(url)
+        if (validateNewSourceForm(type, url)) {
+            addRemoveFeed({type, data: url}, true)
+            e.target.source_url.value = "";
+            e.target.source_type.value = "";
         } else {
             setError(t("invalid_inputs"));
         }

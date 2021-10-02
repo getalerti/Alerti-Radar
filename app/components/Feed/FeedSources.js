@@ -47,7 +47,7 @@ export default () => {
                         <h2>{t('feed_source_title')}</h2>
                         <div className={styles.input_group_source}>
                             <FaKeyboard/>
-                            <input type={"text"} name={"source_data"} id={"source_data"} className={styles.input_source} placeholder={t('type_feed_source')}/>
+                            <input type={"text"} name={"source_url"} id={"source_url"} className={styles.input_source} placeholder={t('type_feed_source')}/>
                         </div>
                     </>
                 ) : <AlertDetails alertType={selectedItem} />

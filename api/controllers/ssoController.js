@@ -1,8 +1,7 @@
 const { validationResult } = require('express-validator');
 const elasticSearchClient = require('./../config/db');
 const UserDto = require('../entities/UserDto');
-const { generateAccessToken } = require('../utils');
-const { uuid } = require('uuidv4');
+const { generateAccessToken, genID, USER_COLLECTION_PREF_ID } = require('../utils');
 
 module.exports =  async (req, res) => {
     try {
@@ -37,7 +36,7 @@ module.exports =  async (req, res) => {
             });
         } else {
             const userDto = new UserDto({ email, name, picture, sub });
-            const id = uuid();
+            const id = genID(USER_COLLECTION_PREF_ID);;
             console.log(userDto.feeds)
             if (userDto.feeds.length === 0) {
                 userDto.interests = listTopics;

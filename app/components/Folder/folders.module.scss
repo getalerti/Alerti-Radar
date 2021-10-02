@@ -1,43 +1,46 @@
 @import "./../../styles/base";
-.folders {
-  .folder {
-    cursor: pointer;
-    margin-left: $spacer/2;
-    .folder__name {
+.folder {
+  cursor: pointer;
+  padding: 5px 0;
+  &[data-highlight=true] {
+    border: 2px dotted $btn-bg;
+    padding: 10px 5px;
+  }
+  margin-left: $spacer/2;
+  .folder__name {
+    display: flex;
+    align-items: center;
+    svg {
+      margin-right: 5px;
+    }
+  }
+  .folder__items {
+    transition: all 0.3s;
+    overflow: hidden;
+    height: 0;
+    margin-top: $spacer / 2;
+    &[data-open=true] {
+      height: auto;
+      max-height: 200px;
+      overflow: auto;
+    }
+    p {
       display: flex;
       align-items: center;
-      svg {
+      margin-left: $spacer / 2;
+      padding: 5px 0;
+      cursor: pointer;
+      color: $text-color;
+      font-size: 11px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      img {
+        width: 15px;
         margin-right: 5px;
       }
-    }
-    .folder__items {
-      transition: all 0.3s;
-      overflow: hidden;
-      height: 0;
-      margin-top: $spacer / 2;
-      &[data-open=true] {
-        height: auto;
-        max-height: 200px;
-        overflow: auto;
-      }
-      p {
-        display: flex;
-        align-items: center;
-        margin-left: $spacer / 2;
-        padding: 5px 0;
-        cursor: pointer;
-        color: $text-color;
-        font-size: 11px;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        img {
-          width: 15px;
-          margin-right: 5px;
-        }
-        &:hover {
-          text-decoration: underline;
-          font-weight: bold;
-        }
+      &:hover {
+        text-decoration: underline;
+        font-weight: bold;
       }
     }
   }
