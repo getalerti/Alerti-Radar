@@ -146,7 +146,14 @@ export const loadFeeds = () => dispatch => {
             }
         }).catch(error => {
             console.log({loadFeedsError: error})
-            dispatch({ type: SET_ERROR, payload: t("technical_error") })
+            if (error === "NO_AUTH") {
+                dispatch({
+                    type: USER_STATUS,
+                    payload: "unauthorized"
+                })
+            } else {
+                dispatch({ type: SET_ERROR, payload: t("technical_error") })
+            }
         })
 };
 export const addRemoveFeed = (item, action) => dispatch => {
@@ -174,7 +181,14 @@ export const addRemoveFeed = (item, action) => dispatch => {
             }
         }).catch(error => {
             console.log({loadFeedsError: error})
-            dispatch({ type: SET_ERROR, payload: t("technical_error") })
+            if (error === "NO_AUTH") {
+                dispatch({
+                    type: USER_STATUS,
+                    payload: "unauthorized"
+                })
+            } else {
+                dispatch({ type: SET_ERROR, payload: t("technical_error") })
+            }
         })
 };
 export const updateFeedFolder = (feedId, folderId) => dispatch => {
@@ -208,6 +222,37 @@ export const updateFeedFolder = (feedId, folderId) => dispatch => {
 export const generateFeeds = () => dispatch => {
     dispatch({ type: SET_ERROR, payload: "" });
     dispatch({ type: LOADING, payload: true });
+    fetchAPI("/user/generate-feeds", "GET", null, true)
+        .then(response => {
+            if (response && response.error) {
+                if (response.error === "unauthorized") {
+                    dispatch({
+                        type: USER_STATUS,
+                        payload: "unauthorized"
+                    })
+                }
+                else
+                    dispatch({ type: SET_ERROR, payload: t("technical_error") })
+            } else {
+                dispatch({ type: SET_SUCCESS, payload: t("successfully_operation") });
+                dispatch({ type: LOADING, payload: false });
+                dispatch({
+                    type: USER_STATUS,
+                    payload: "authorized"
+                })
+                dispatch(loadFeeds())
+            }
+        }).catch(error => {
+        console.log({loadFeedsError: error})
+        if (error === "NO_AUTH") {
+            dispatch({
+                type: USER_STATUS,
+                payload: "unauthorized"
+            })
+        } else {
+            dispatch({ type: SET_ERROR, payload: t("technical_error") })
+        }
+    })
 };
 export const loadFolders = () => dispatch => {
     dispatch({ type: SET_ERROR, payload: "" });
@@ -232,8 +277,15 @@ export const loadFolders = () => dispatch => {
                 })
             }
         }).catch(error => {
-        console.log({loadFeedsError: error})
-        dispatch({ type: SET_ERROR, payload: t("technical_error") })
+            console.log({loadFeedsError: error})
+            if (error === "NO_AUTH") {
+                dispatch({
+                    type: USER_STATUS,
+                    payload: "unauthorized"
+                })
+            } else {
+                dispatch({ type: SET_ERROR, payload: t("technical_error") })
+            }
     })
 };
 export const saveFolder = (name) => dispatch => {

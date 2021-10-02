@@ -9,15 +9,15 @@ import Topics from "../modules/Auth/Topics";
 import consts from "../helpers/consts";
 
 export default function Home() {
-    const router = useRouter();
     const { loginWithRedirect } = useAuth0();
     const auth_mode = process.env.AUTH_MODE;
-    const [topics, setTopics] = useState([]);
+    const [_, setTopics] = useState([]);
     const [mode, setMode] = useState("");
 
     useEffect(() => {
         if (typeof window !== "undefined") {
-            const isUserSelectTopics = window.localStorage.getItem(consts.isUserSelectTopics)
+            const isUserSelectTopics = window.localStorage.getItem(consts.userSelectedTopics)
+            console.log({isUserSelectTopics})
             if (auth_mode === "SSO" && !isUserSelectTopics) {
                 setMode("topics");
             } else {

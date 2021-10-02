@@ -6,7 +6,7 @@ import useTranslation from "../../helpers/i18n";
 import Link from "next/link";
 import {FaRss, FaPodcast, FaList, FaMicrosoft, FaUndo, FaTwitterSquare} from "react-icons/fa";
 
-export default ({feeds, title, link, viewItemAction, single = false}) => {
+export default ({feeds, title, link, viewItemAction, generateContent, single = false}) => {
     const [loader, setLoader] = useState(true);
     const [display, setDisplay] = useState("list");
     const t = useTranslation()
@@ -25,7 +25,7 @@ export default ({feeds, title, link, viewItemAction, single = false}) => {
     }, [])
     return <div className={styles.feed}  data-single={single}>
         <p className={styles.feed__items__display} >
-            <FaUndo />
+            <FaUndo onClick={generateContent}  />
             { display === "blocs" && <FaList onClick={() => { setDisplay("list") }} /> }
             { display === "list" && <FaMicrosoft onClick={() => { setDisplay("blocs") }} /> }
         </p>

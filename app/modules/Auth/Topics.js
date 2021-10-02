@@ -17,6 +17,14 @@ export default ({ setTopics, setNext }) => {
         setSelectedItems(newItems);
         window.localStorage.setItem(consts.userSelectedTopics, JSON.stringify(newItems))
     }
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const topics = window.localStorage.getItem(consts.userSelectedTopics);
+            if (topics) {
+                setNext(process.env.AUTH_MODE === "SSO" ? "login" : true)
+            }
+        }
+    }, [])
     return (
         <div  className={styles.topics_container}>
         <h2 className={styles["title-1"]}>

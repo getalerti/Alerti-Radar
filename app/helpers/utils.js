@@ -11,6 +11,8 @@ const fetchAPI = async (url, method, data, isProtected = false, isAlerti = false
     }
     if (!isAlerti && isProtected) {
         let authenticatedUser = window.localStorage.getItem(consts.isAuthenticatedUser);
+        if (!authenticatedUser)
+            throw "NO_AUTH"
         authenticatedUser = JSON.parse(authenticatedUser);
         const jwt = authenticatedUser.jwt;
         headers["Authorization"] = `Barear ${jwt}`;

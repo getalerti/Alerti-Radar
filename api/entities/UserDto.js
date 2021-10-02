@@ -60,8 +60,6 @@ module.exports = class UserDto {
                 })
             }
         })
-        console.log(this.feeds)
-
     }
     saveItem(item) {
         if (!this.savedItems) {

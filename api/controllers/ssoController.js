@@ -37,11 +37,9 @@ module.exports =  async (req, res) => {
         } else {
             const userDto = new UserDto({ email, name, picture, sub });
             const id = genID(USER_COLLECTION_PREF_ID);;
-            console.log(userDto.feeds)
             if (userDto.feeds.length === 0) {
                 userDto.interests = listTopics;
                 userDto.interestsToFeeds();
-                console.log("heree1")
             }
             userDto.jwt = generateAccessToken(JSON.stringify({ id, email, sub }));
             userDto.interestsToFeeds();

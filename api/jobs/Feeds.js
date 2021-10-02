@@ -1,6 +1,6 @@
 const elasticSearchClient = require('./../config/db');
 const { createUserContent } = require("./../utils")
-const generateFeeds = async () => {
+export const generateFeeds = async () => {
     try {
         let userId = req.user;
         if (userId.sub) {

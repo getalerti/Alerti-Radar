@@ -26,14 +26,8 @@ export default () => {
                 <Link href={"/"}>
                     <FaHome className={isActiveLink("/dashboard") ? styles.navbar__item__active : ""} />
                 </Link>
-                <Link href={"/dashboard/new"}>
+                <Link href={"/dashboard"}>
                     <FaPlus title={"new"} className={isActiveLink("/dashboard/new") ? styles.navbar__item__active : ""} />
-                </Link>
-                <Link href={"/dashboard/rss"}>
-                    <FaRss title={"rss"} className={isActiveLink("/dashboard/rss") ? styles.navbar__item__active : ""} />
-                </Link>
-                <Link href={"/dashboard/podcasts"}>
-                    <FaPodcast title={"podcasts"} className={isActiveLink("/dashboard/podcasts") ? styles.navbar__item__active : ""} />
                 </Link>
                 <Link href={"/dashboard/saved"}>
                     <FaBookmark title={"saved"} className={isActiveLink("/dashboard/saved") ? styles.navbar__item__active : ""} />

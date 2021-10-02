@@ -6,9 +6,11 @@ import consts from "../../helpers/consts";
 import {auth} from "../../store/actions";
 import {connect} from "react-redux";
 import All from "../../modules/Feeds/All";
+import {useRouter} from "next/router";
 
-function Dashboard({auth}) {
+function Dashboard({auth, user_status}) {
     const { user, isAuthenticated, isLoading } = useAuth0();
+    const router = useRouter();
     useEffect(() => {
         if (typeof window != "undefined") {
             const isAuthenticatedValue = window.localStorage.getItem(consts.isAuthenticatedKey);
@@ -22,6 +24,10 @@ function Dashboard({auth}) {
             }
         }
     }, [])
+    if (user_status === "unauthorized") {
+        router.push("/auth");
+        return <></>
+    }
     return (
         <DashboardLayout>
             <All />
@@ -30,7 +36,9 @@ function Dashboard({auth}) {
 }
 
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+    user_status: state.user_status
+});
 
 const mapDispatchToProps = {
     auth
