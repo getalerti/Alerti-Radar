@@ -1,11 +1,7 @@
 const elasticSearchClient = require('./../config/db');
 const { createUserContent } = require("./../utils")
-export const generateFeeds = async () => {
+const generateFeeds = async () => {
     try {
-        let userId = req.user;
-        if (userId.sub) {
-            userId = userId.id;
-        }
         const queryByID = {
             index: 'users',
         }
@@ -19,4 +15,7 @@ export const generateFeeds = async () => {
     } catch (e) {
         console.log({ jobGenerateFeeds: e })
     }
+}
+module.exports = {
+    generateFeeds
 }
