@@ -2,10 +2,16 @@ const elasticSearchClient = require('./../config/db');
 const { validationResult } = require('express-validator');
 const UserDto = require('../entities/UserDto');
 const { genID, FOLDER_COLLECTION_PREF_ID } = require('../utils');
+const { TechnicalError } = require('../errors/TechnicalError');
+const { InvalidFolderData } = require('../errors/FolderError');
 
 const addFolder = async (req, res) => {
     try {
         validationResult(req).throw();
+    } catch (_) {
+        return res.status(InvalidFolderData.code).json(InvalidFolderData)
+    }
+    try {
         let userId = req.user;
         if (userId.sub) {
             userId = userId.id;
@@ -35,10 +41,10 @@ const addFolder = async (req, res) => {
             await elasticSearchClient.update(queryUpdate);
             return res.json({success: true})
         }
-        return res.status(404).json({error: 'technical error'})
+        return res.status(TechnicalError.code).json(TechnicalError.code)
     } catch (e) {
         console.log({error: e});
-        return res.status(403).json({error: 'invalid data'})
+        return res.status(TechnicalError.code).json(TechnicalError)
     }
 
 }

@@ -2,6 +2,7 @@ const { validationResult } = require('express-validator');
 const elasticSearchClient = require('./../config/db');
 const UserDto = require('../entities/UserDto');
 const { generateAccessToken, genID, USER_COLLECTION_PREF_ID } = require('../utils');
+const { TechnicalError } = require('../errors/TechnicalError');
 
 module.exports =  async (req, res) => {
     try {
@@ -55,11 +56,8 @@ module.exports =  async (req, res) => {
                 ...userDto.sanitizedUser
             });
         }
-        return res.status(404).json({
-            error: "RES_NOT_EXIST"
-        });
     } catch (err) {
         console.log(err);
-        return res.status(400).json({error: "invalid_inputs"});
+        return res.status(TechnicalError.code).json(TechnicalError);
     }
 }

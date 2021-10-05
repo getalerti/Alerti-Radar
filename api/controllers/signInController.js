@@ -1,10 +1,17 @@
 const { validationResult } = require('express-validator');
 const elasticSearchClient = require('./../config/db');
 const UserDto = require('../entities/UserDto');
-const { generateAccessToken } = require('../utils')
+const { generateAccessToken } = require('../utils');
+const { UserNotFound, InvalidUserData } = require('../errors/UserError');
+const { TechnicalError } = require('../errors/TechnicalError');
+
 module.exports =  async (req, res) => {
     try {
         validationResult(req).throw();
+    } catch (_) {
+        return res.status(InvalidUserData.code).json(InvalidUserData);
+    }
+    try {
         const { email, password } = req.body;
         const queryByUsername = {
             index: 'users',
@@ -22,11 +29,9 @@ module.exports =  async (req, res) => {
                 });
             }
         }
-        return res.status(404).json({
-            error: "RES_NOT_EXIST"
-        });
+        return res.status(UserNotFound.code).json(UserNotFound);
     } catch (err) {
         console.log(err);
-        return res.status(400).json({error: "invalid_inputs"});
+        return res.status(TechnicalError.code).json(TechnicalError);
     }
 }

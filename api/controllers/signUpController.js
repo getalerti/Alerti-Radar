@@ -3,9 +3,16 @@ const elasticSearchClient = require('./../config/db');
 const UserDto = require('../entities/UserDto');
 const { generateAccessToken } = require('../utils')
 const { genID, USER_COLLECTION_PREF_ID } = require('../utils');
+const { UserNotFound, InvalidUserData } = require('../errors/UserError');
+const { TechnicalError } = require('../errors/TechnicalError');
+
 module.exports =  async (req, res) => {
     try {
         validationResult(req).throw();
+    } catch (_) {
+        return res.status(InvalidUserData.code).json(InvalidUserData);
+    }
+    try {
         const userDto = new UserDto(req.body);
         await userDto.hashPassword();
         const id = genID(USER_COLLECTION_PREF_ID);
@@ -38,11 +45,9 @@ module.exports =  async (req, res) => {
             });
 
         }
-        return res.status(409).json({
-            error: "USER_ALREADY_EXISTS"
-        });
+        return res.status(UserNotFound.code).json(UserNotFound);
     } catch (err) {
         console.log(err)
-        return res.status(400).json({error: "invalid_inputs"});
+        return res.status(TechnicalError.code).json(TechnicalError);
     }
 }

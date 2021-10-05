@@ -4,6 +4,7 @@ const UserDto = require('../entities/UserDto');
 const Feed = require('../entities/Feed');
 const { createUserContent, getFeedTitle } = require('../utils');
 const fs = require('fs');
+const { TechnicalError } = require('../errors/TechnicalError');
 
 const addRemoveFeed = async (req, res) => {
     try {
@@ -40,10 +41,10 @@ const addRemoveFeed = async (req, res) => {
             await elasticSearchClient.update(queryUpdate);
             return res.json({success: true})
         }
-        return res.status(404).json({error: 'technical error'})
+        return res.status(TechnicalError.code).json(TechnicalError.code)
     } catch (e) {
         console.log({error: e});
-        return res.status(403).json({error: 'invalid data'})
+        return res.status(TechnicalError.code).json(TechnicalError)
     }
 
 }
@@ -77,10 +78,10 @@ const updateFeedFolder = async (req, res) => {
             await elasticSearchClient.update(queryUpdate);
             return res.json({success: true})
         }
-        return res.status(404).json({error: 'technical error'})
+        return res.status(TechnicalError.code).json(TechnicalError.code)
     } catch (e) {
         console.log({error: e});
-        return res.status(403).json({error: 'invalid data'})
+        return res.status(TechnicalError.code).json(TechnicalError)
     }
 
 }
@@ -105,7 +106,7 @@ const generateFeeds = async (req, res) => {
         }
     } catch (e) {
         console.log({ generateFeedsError: e })
-        res.status(403).json({error: 'invalid data'})
+        return res.status(TechnicalError.code).json(TechnicalError)
     }
 }
 
@@ -134,7 +135,7 @@ const getFeeds = async (req, res) => {
         }
     } catch (e) {
         console.log({getFeeds: e})
-        return res.status(403).json({error: 'invalid data'})
+        return res.status(TechnicalError.code).json(TechnicalError)
     }
 }
 const getSavedItems = async (req, res) => {
@@ -154,7 +155,7 @@ const getSavedItems = async (req, res) => {
         }
     } catch (e) {
         console.log(e)
-        return res.status(403).json({error: 'invalid data'})
+        return res.status(TechnicalError.code).json(TechnicalError)
     }
 }
 const saveFeedItem = async (req, res) => {
@@ -185,10 +186,10 @@ const saveFeedItem = async (req, res) => {
             await elasticSearchClient.update(queryUpdate);
             return res.json({success: true})
         }
-        return res.status(404).json({error: 'technical error'})
+        return res.status(TechnicalError.code).json(TechnicalError.code)
     } catch (e) {
         console.log({error: e});
-        return res.status(403).json({error: 'invalid data'})
+        return res.status(TechnicalError.code).json(TechnicalError)
     }
 
 }
@@ -220,7 +221,7 @@ const deleteSavedFeedItem = async (req, res) => {
             await elasticSearchClient.update(queryUpdate);
             return res.json({success: true})
         }
-        return res.status(404).json({error: 'technical error'})
+        return res.status(TechnicalError.code).json(TechnicalError.code)
     } catch (e) {
         console.log({error: e});
         return res.status(403).json({error: 'invalid data'})

@@ -2,6 +2,8 @@ const elasticSearchClient = require('./../config/db');
 const UserDto = require('../entities/UserDto');
 const { randomString, sendMail } = require('../utils');
 const resetPasswordEmail = require('./../emails/resetPassword');
+const { UserNotFound, UserAlreadyExists } = require('../errors/UserError');
+const { TechnicalError } = require('../errors/TechnicalError');
 
 const resetPassword = async (req, res) => {
     try {
@@ -32,10 +34,10 @@ const resetPassword = async (req, res) => {
             await elasticSearchClient.update(queryUpdate);
             return res.status(200).json({success: true});
         }
-        return res.status(402).json({error: 'invalid data'})
+        return res.status(UserNotFound.code).json(UserNotFound);
     } catch (e) {
         console.log(e);
-        res.status(500).json({error: 'technical error'})
+        res.status(TechnicalError.code).json(TechnicalError)
     }
 
 }
@@ -60,9 +62,7 @@ const updateUser = async (req, res) => {
                 }
                 const resByEmail= await elasticSearchClient.search(queryByEmail);
                 if (resByEmail && resByEmail.hits && resByEmail.hits.hits && resByEmail.hits.hits.length > 0) {
-                    res.status(409).json({
-                        error: "A resource already exists with that username or email."
-                    });
+                    return res.status(UserAlreadyExists.code).json(UserAlreadyExists);
                 }
             }
             if (username !== userDto.username) {
@@ -72,9 +72,7 @@ const updateUser = async (req, res) => {
                 }
                 const resByUsername = await elasticSearchClient.search(queryByUsername);
                 if (resByUsername && resByUsername.hits && resByUsername.hits.hits && resByUsername.hits.hits.length > 0) {
-                    res.status(409).json({
-                        error: "A resource already exists with that username or email."
-                    });
+                    return res.status(UserAlreadyExists.code).json(UserAlreadyExists);
                 }
             }
             userDto.changePassword = false;
@@ -95,10 +93,10 @@ const updateUser = async (req, res) => {
             await elasticSearchClient.update(queryUpdate);
             return res.json({success: true})
         }
-        return res.status(402).json({error: 'invalid data'})
+        return res.status(UserNotFound.code).json(UserNotFound)
     } catch (e) {
         console.log(e);
-        return res.status(500).json({error: 'technical error'})
+        return res.status(TechnicalError.code).json(TechnicalError)
     }
 }
 const removeUser = (req, res) => {
