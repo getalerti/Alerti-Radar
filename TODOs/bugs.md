@@ -1,0 +1,1 @@
++ The user can access to the NEW page even he is not logged
