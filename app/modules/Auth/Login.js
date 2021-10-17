@@ -4,13 +4,13 @@ import {useState} from "react";
 import {fetchAPI, isEmail, isPassword} from "../../helpers/utils";
 import {useRouter} from "next/router";
 import {useDispatch} from "react-redux";
+import consts from "../../helpers/consts";
 
 export default ({ setMode }) => {
     const t = useTranslation();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const router = useRouter();
-    const dispatch = useDispatch();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -33,7 +33,7 @@ export default ({ setMode }) => {
             setError(t(response.error))
         if (response && response.jwt) {
             if (typeof window !== "undefined") {
-                window.localStorage.setItem("jwt", response.jwt)
+                window.localStorage.setItem(consts.isAuthenticatedUser, JSON.stringify(response))
                 router.push("/dashboard")
             }
         }

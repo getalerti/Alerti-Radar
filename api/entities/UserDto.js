@@ -27,6 +27,9 @@ module.exports = class UserDto {
         delete getCleanUser.password;
         delete getCleanUser.sub;
         delete getCleanUser.interests;
+        delete getCleanUser.feeds;
+        delete getCleanUser.folders;
+        delete getCleanUser.savedItems;
         delete getCleanUser._id;
         return getCleanUser;
     }

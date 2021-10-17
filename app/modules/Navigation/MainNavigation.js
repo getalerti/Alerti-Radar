@@ -3,18 +3,16 @@ import { FaAlgolia, FaHome, FaRss, FaPodcast, FaBookmark, FaSignOutAlt, FaPlus }
 import styles from "./style.module.scss";
 import consts from "./../../helpers/consts";
 import { useRouter } from "next/router";
-import {useAuth0} from "@auth0/auth0-react";
 
 export default () => {
     const router = useRouter();
-    const { logout } = useAuth0();
 
     const isActiveLink = (path) => router.pathname === path;
     const handleLogout = () => {
         if (typeof window != "undefined") {
             window.localStorage.removeItem(consts.isAuthenticatedKey);
             window.localStorage.removeItem(consts.isAuthenticatedUser);
-            logout({ returnTo: process.env.AUTH0_BASE_URL })
+            router.push("/auth")
         }
     }
     return (
@@ -36,12 +34,6 @@ export default () => {
             <span className={styles.navbar__logout} onClick={() => { handleLogout()}}>
                 <FaSignOutAlt />
             </span>
-            {/*
-            TODO: update user data
-            <Link href={"#"}>
-                <FaUserAlt className={styles.navbar__user} />
-            </Link>
-            */ }
         </nav>
     )
 }

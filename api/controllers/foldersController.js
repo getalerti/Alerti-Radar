@@ -12,10 +12,11 @@ const addFolder = async (req, res) => {
         return res.status(InvalidFolderData.code).json(InvalidFolderData)
     }
     try {
-        let userId = req.user;
+        let userId = req.user;/*
         if (userId.sub) {
             userId = userId.id;
         }
+        */
         const { name } = req.body;
         const queryByID = {
             index: 'users',
@@ -51,10 +52,12 @@ const addFolder = async (req, res) => {
 
 const getFolders = async (req, res) => {
     try {
-        let userId = req.user;
+        let userId = req.user;/*
         if (userId.sub) {
             userId = userId.id;
         }
+        */
+        console.log({userId})
         const queryByID = {
             index: 'users',
             id: `${userId}`
@@ -65,7 +68,7 @@ const getFolders = async (req, res) => {
             return res.status(200).json(items)
         }
     } catch (e) {
-        console.log(e)
+        console.log({getFolders: e})
         return res.status(403).json({error: 'invalid data', e})
     }
 }

@@ -1,0 +1,23 @@
+@import "./../../styles/base";
+.sso_container {
+  max-width: 500px;
+  margin: 0 auto;
+  button {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 100px;
+    padding: 10px 5px;
+    background: $blue;
+    color: $white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    img {
+      width: 50px;
+      margin-left: 5px;
+    }
+    &[disabled] {
+      opacity: 0.6;
+    }
+  }
+}

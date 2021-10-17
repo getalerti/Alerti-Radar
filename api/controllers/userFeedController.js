@@ -9,10 +9,11 @@ const { TechnicalError } = require('../errors/TechnicalError');
 const addRemoveFeed = async (req, res) => {
     try {
         validationResult(req).throw();
-        let userId = req.user;
+        let userId = req.user;/*
         if (userId.sub) {
             userId = userId.id;
         }
+        */
         const { type, data, action } = req.body;
         const name = await getFeedTitle(data);
         const queryByID = {
@@ -52,10 +53,11 @@ const addRemoveFeed = async (req, res) => {
 const updateFeedFolder = async (req, res) => {
     try {
         validationResult(req).throw();
-        let userId = req.user;
+        let userId = req.user;/*
         if (userId.sub) {
             userId = userId.id;
         }
+        */
         const { feedId, folderId } = req.body;
         const queryByID = {
             index: 'users',
@@ -89,10 +91,11 @@ const updateFeedFolder = async (req, res) => {
 // generate feeds content for a user
 const generateFeeds = async (req, res) => {
     try {
-        let userId = req.user;
+        let userId = req.user;/*
         if (userId.sub) {
             userId = userId.id;
         }
+        */
         const queryByID = {
             index: 'users',
             id: `${userId}`
@@ -113,10 +116,11 @@ const generateFeeds = async (req, res) => {
 // get feeds content for a user
 const getFeeds = async (req, res) => {
     try {
-        let userId = req.user;
+        let userId = req.user;/*
         if (userId.sub) {
             userId = userId.id;
         }
+        */
         const fileExists = await fs.existsSync(`./.cache/${userId}`);
         if (fileExists) {
             const feed = await fs.readFileSync(`./.cache/${userId}`);
@@ -140,10 +144,11 @@ const getFeeds = async (req, res) => {
 }
 const getSavedItems = async (req, res) => {
     try {
-        let userId = req.user;
+        let userId = req.user;/*
         if (userId.sub) {
             userId = userId.id;
         }
+        */
         const queryByID = {
             index: 'users',
             id: `${userId}`
@@ -161,10 +166,11 @@ const getSavedItems = async (req, res) => {
 const saveFeedItem = async (req, res) => {
     try {
         validationResult(req).throw();
-        let userId = req.user;
+        let userId = req.user;/*
         if (userId.sub) {
             userId = userId.id;
         }
+        */
         const { item } = req.body;
         const queryByID = {
             index: 'users',
@@ -196,10 +202,11 @@ const saveFeedItem = async (req, res) => {
 const deleteSavedFeedItem = async (req, res) => {
     try {
         validationResult(req).throw();
-        let userId = req.user;
+        let userId = req.user;/*
         if (userId.sub) {
             userId = userId.id;
         }
+        */
         const { item } = req.body;
         const queryByID = {
             index: 'users',
@@ -230,10 +237,11 @@ const deleteSavedFeedItem = async (req, res) => {
 }
 const following = async (req, res) => {
     try {
-        let userId = req.user;
+        let userId = req.user;/*
         if (userId.sub) {
             userId = userId.id;
         }
+        */
         if (!userId || userId === "")
             return res.status(403).json({error: 'invalid data'})
         const queryByID = {

@@ -43,10 +43,11 @@ const resetPassword = async (req, res) => {
 }
 const updateUser = async (req, res) => {
     try {
-        let userId = req.user;
+        let userId = req.user;/*
         if (userId.sub) {
             userId = userId.id;
         }
+        */
         const { name, email, username, changePassword, password } = req.body
         const queryByID = {
             index: 'users',

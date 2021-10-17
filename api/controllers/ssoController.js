@@ -7,10 +7,11 @@ const { TechnicalError } = require('../errors/TechnicalError');
 module.exports =  async (req, res) => {
     try {
         validationResult(req).throw();
-        const { email, name, picture, sub, listTopics } = req.body;
+        let { email, name, picture, sub, listTopics } = req.body;
+        sub = sub.replace("|", "_")
         const queryByUsername = {
             index: 'users',
-            q: `email:${email}`
+            q: `email:"${email}"`
         }
         const resByEmail = await elasticSearchClient.search(queryByUsername);
         if (resByEmail && resByEmail.hits && resByEmail.hits.hits && resByEmail.hits.hits.length > 0) {
@@ -37,7 +38,7 @@ module.exports =  async (req, res) => {
             });
         } else {
             const userDto = new UserDto({ email, name, picture, sub });
-            const id = genID(USER_COLLECTION_PREF_ID);;
+            const id = genID(USER_COLLECTION_PREF_ID);
             if (userDto.feeds.length === 0) {
                 userDto.interests = listTopics;
                 userDto.interestsToFeeds();

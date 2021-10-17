@@ -21,7 +21,7 @@ export default ({ setTopics, setNext }) => {
         if (typeof window !== "undefined") {
             const topics = window.localStorage.getItem(consts.userSelectedTopics);
             if (topics) {
-                setNext(process.env.AUTH_MODE === "SSO" ? "login" : true)
+                setNext("login")
             }
         }
     }, [])
@@ -53,7 +53,7 @@ export default ({ setTopics, setNext }) => {
             }
         </div>
         <div className={styles.navigation}>
-            <button onClick={() => { setNext(process.env.AUTH_MODE === "SSO" ? "login" : true) }} className={styles.btn}>{t("next")}</button>
+            <button onClick={() => { setNext("login") }} className={styles.btn}>{t("next")}</button>
         </div>
         </div>
     )

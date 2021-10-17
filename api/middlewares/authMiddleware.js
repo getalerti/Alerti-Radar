@@ -7,7 +7,11 @@ module.exports = authenticateToken = (req, res, next) => {
         return res.status(UnauthorizedUser.code).json(UnauthorizedUser);
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
         if (err) return res.status(UnauthorizedUser.code).json(UnauthorizedUser);
-        req.user = user
+        if (typeof user.sub === "string" && user.sub) {
+            req.user = user.id
+        } else {
+            req.user = user
+        }
         next()
     })
 }

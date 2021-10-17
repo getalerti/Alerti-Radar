@@ -1,17 +1,21 @@
 import "./../styles/reset.css";
 import {Provider} from 'react-redux';
 import { store } from "../store/store";
-import { Auth0Provider } from "@auth0/auth0-react";
 
 function MyApp({ Component, pageProps }) {
-    return (
-        <Auth0Provider domain={process.env.AUTH0_ISSUER_BASE_URL}
-                       clientId={process.env.AUTH0_CLIENT_ID}
-                       redirectUri={process.env.AUTH0_BASE_URL}>
+    const auth_mode = process.env.AUTH_MODE;
+    if (auth_mode === "SSO") {
+        return (
             <Provider store={store}>
                 <Component {...pageProps} />
             </Provider>
-        </Auth0Provider>
+        )
+    }
+
+    return (
+        <Provider store={store}>
+            <Component {...pageProps} />
+        </Provider>
     )
 
 }

@@ -3,7 +3,7 @@ const elasticSearchClient = require('./../config/db');
 const UserDto = require('../entities/UserDto');
 const { generateAccessToken } = require('../utils')
 const { genID, USER_COLLECTION_PREF_ID } = require('../utils');
-const { UserNotFound, InvalidUserData } = require('../errors/UserError');
+const { UserAlreadyExists, InvalidUserData } = require('../errors/UserError');
 const { TechnicalError } = require('../errors/TechnicalError');
 
 module.exports =  async (req, res) => {
@@ -45,7 +45,7 @@ module.exports =  async (req, res) => {
             });
 
         }
-        return res.status(UserNotFound.code).json(UserNotFound);
+        return res.status(UserAlreadyExists.code).json(UserAlreadyExists);
     } catch (err) {
         console.log(err)
         return res.status(TechnicalError.code).json(TechnicalError);
