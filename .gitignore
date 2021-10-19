@@ -9,6 +9,7 @@
 api/.idea
 app/.idea
 app/env.js
+app/out
 # User-specific stuff
 .idea/**/workspace.xml
 .idea/**/tasks.xml
