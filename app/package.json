@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npx next build && npx dev export",
+    "build": "npx next build && npx next export",
     "start": "next start -p 3001"
   },
   "dependencies": {
