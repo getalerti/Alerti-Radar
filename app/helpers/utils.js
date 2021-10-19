@@ -31,6 +31,25 @@ const fetchAPI = async (url, method, data, isProtected = false, isAlerti = false
     const response = await fetch(`${!isAlerti ? process.env.API_URL : ""}${url}`, fetchMethod);
     return response.json();
 }
+const fetchAuth0API = async (auth0Params) => {
+    const {access_token, token_type} = auth0Params;
+    if(typeof window === "undefined")
+        return ;
+    const headers = {
+        'Content-Type': 'application/json'
+    };
+    headers["Authorization"] = `${token_type} ${access_token}`;
+    let fetchMethod = {
+        method: "POST",
+        mode: 'cors',
+        cache: 'no-cache',
+        headers,
+        redirect: 'follow',
+        referrerPolicy: 'no-referrer',
+    }
+    const response = await fetch(`https://${process.env.AUTH0_ISSUER_BASE_URL}/userinfo `, fetchMethod);
+    return response.json();
+}
 const formatDate = (date) => {
     const _date = new Date(date);
     return (_date.getMonth() + 1) +
@@ -65,6 +84,43 @@ const validateNewSourceForm = (type, data) => {
 const sanitizeUrl = (url) => {
     return `${url.slice(0, 4) !== "http" ? "https://" : ""}${url}`;
 }
+const initAuth0 = () => {
+    // Initialize app
+    if (webAuth !== undefined)
+        return;
+    var webAuth = new auth0.WebAuth({
+        domain:       process.env.AUTH0_ISSUER_BASE_URL,
+        clientID:     process.env.AUTH0_CLIENT_ID
+    });
+    var url = webAuth.client.buildAuthorizeUrl({
+        clientID:  process.env.AUTH0_CLIENT_ID, // string
+        responseType: 'token', // code or token
+        redirectUri: process.env.AUTH0_BASE_URL,
+        scope: 'openid profile email',
+        state: 'test_'
+    });
+    return url;
+}
+const buildAuth0Params = (url) => {
+    if (!url || url === "")
+        return null;
+    var sanitizedUrl = url.replace("/auth#", "")
+    if (!sanitizedUrl || sanitizedUrl === "")
+        return null;
+    sanitizedUrl = sanitizedUrl.split("&")
+    if (sanitizedUrl.length === 0)
+        return null
+    const params = {};
+    sanitizedUrl.forEach(_param => {
+        var param = _param.split("=")
+        if (param.length === 2) {
+            params[param[0]] = param[1]
+        }
+    });
+    if (!params.access_token)
+        return null;
+    return params;
+}
 export {
     fetchAPI,
     isEmail,
@@ -74,5 +130,8 @@ export {
     getSMShareUrl,
     isURL,
     validateNewSourceForm,
-    sanitizeUrl
+    sanitizeUrl,
+    initAuth0,
+    buildAuth0Params,
+    fetchAuth0API
 }

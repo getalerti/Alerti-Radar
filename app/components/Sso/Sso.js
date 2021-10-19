@@ -1,36 +1,47 @@
 import styles from "./style.module.scss"
 import useTranslation from "../../helpers/i18n";
-import {useAuth0} from "@auth0/auth0-react";
 import {useEffect, useState} from "react";
 import auth0Icon from "./../../images/auth0.svg";
 import {auth} from "../../store/actions";
 import {connect} from "react-redux";
-import consts from "../../helpers/consts";
 import {useRouter} from "next/router";
+import {buildAuth0Params, fetchAuth0API, initAuth0} from "../../helpers/utils";
 
-const Sso = ({ auth }) => {
+const Sso = ({ auth, user_status }) => {
     const t = useTranslation();
-    const { loginWithRedirect } = useAuth0();
     const [waiting, setWaiting] = useState(false);
-    const { user } = useAuth0()
-     const router = useRouter();
-
-    useEffect(() => {
-        if (user) {
-            setWaiting(true);
-            if (typeof window != "undefined") {
-                const isAuthenticatedValue = window.localStorage.getItem(consts.isAuthenticatedKey);
-                let listTopics = window.localStorage.getItem(consts.userSelectedTopics);
-                listTopics = listTopics ? JSON.parse(listTopics) : [];
-                (async function() {
-                    const { email, name, picture, sub } = user;
-                    await auth({ email, name, picture, sub, listTopics });
-                    setWaiting(false);
-                    router.push("/dashboard");
-                })();
-            }
+    const router = useRouter();
+    const loginWithRedirect = () => {
+        try {
+            const url = initAuth0();
+            window.location.href = url;
+        } catch (e) {
+            alert("Error Auth0 config");
+            console.log({initAuth0Exception: e})
         }
-    }, [user])
+    }
+    useEffect(() => {
+        const auth0Params = buildAuth0Params(router.asPath)
+        if (auth0Params) {
+            setWaiting(true)
+            fetchAuth0API(auth0Params)
+                .then((response) => {
+                    auth(response);
+                })
+                .catch((err) => {
+                    alert("Error Auth0 response");
+                   console.log({authError: err})
+                })
+                .finally(() => {
+                setWaiting(false)
+            })
+        }
+    }, [])
+    useEffect(() => {
+        if (user_status === "authorized") {
+            router.push("/dashboard")
+        }
+    }, [user_status])
     return (
         <div className={styles.sso_container}>
             <button disabled={waiting} onClick={loginWithRedirect}>
@@ -43,6 +54,7 @@ const Sso = ({ auth }) => {
 
 
 const mapStateToProps = state => ({
+    user_status : state.user_status
 });
 
 const mapDispatchToProps = {

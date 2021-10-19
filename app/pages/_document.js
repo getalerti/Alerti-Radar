@@ -20,6 +20,7 @@ class MyDocument extends Document {
                         src={`https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_API_KEY}&libraries=places`}>
                 </script>
                 <script src={"https://connect.facebook.net/en_US/sdk.js"}></script>
+                <script src="https://cdn.auth0.com/js/auth0/9.11/auth0.min.js"></script>
                 <script src={"/scripts.js"}></script>
                 </body>
             </Html>

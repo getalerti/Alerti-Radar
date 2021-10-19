@@ -24,7 +24,10 @@ const t = useTranslation();
 export const auth = ({sub, email, name, picture, listTopics}) => dispatch => {
     dispatch({ type: SET_ERROR, payload: "" });
     dispatch({ type: LOADING, payload: true });
-
+    dispatch({
+        type: USER_STATUS,
+        payload: "unauthorized"
+    })
     fetchAPI("/auth/sso", "POST", {sub, email, name, picture, listTopics}, false)
         .then(response => {
             if (response && response.error) {
@@ -33,6 +36,10 @@ export const auth = ({sub, email, name, picture, listTopics}) => dispatch => {
             if (typeof window !== "undefined") {
                 window.localStorage.setItem(consts.isAuthenticatedKey, true);
                 window.localStorage.setItem(consts.isAuthenticatedUser, JSON.stringify(response));
+                dispatch({
+                    type: USER_STATUS,
+                    payload: "authorized"
+                })
             }
         }).catch(error => {
             console.log({authError: error})
