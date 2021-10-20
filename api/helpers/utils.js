@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const Parser = require('rss-parser');
 const parser = new Parser();
-const fs = require('fs');
+const fs = require('fs')
 const nodemailer = require("nodemailer");
 const { uuid } = require('uuidv4');
 
@@ -62,7 +62,7 @@ const mergeFeedArrays = (feeds) => {
     })
     return result;
 }
-const createUserContent = async (userId, feeds) => {
+const createAccountContent = async (userId, feeds) => {
     const items = feeds.map(({name, url, type}) => {
         return {
             name,
@@ -84,7 +84,7 @@ const createUserContent = async (userId, feeds) => {
         content
     }));
 }
-function randomString(length) {
+const randomString = (length) => {
     var result           = '';
     var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz&_@=$*0123456789';
     var charactersLength = characters.length;
@@ -125,7 +125,7 @@ const isURL = (string) => {
 const genID = (pref = "") => `${pref === "" ? "" : (pref + "_")}${uuid()}`
 module.exports = {
     generateAccessToken,
-    createUserContent,
+    createAccountContent,
     randomString,
     sendMail,
     isURL,

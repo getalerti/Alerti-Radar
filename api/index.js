@@ -8,7 +8,7 @@ const fs = require('fs')
 const path = require('path')
 const router = require('./routes');
 const { generateFeeds } = require("./jobs/Feeds")
-require('./config/db');
+require('./helpers/db');
 const app = express()
 const port = process.env.PORT || 3000
 var corsOptions = {

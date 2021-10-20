@@ -1,16 +1,16 @@
-const elasticSearchClient = require('./../config/db');
-const { createUserContent } = require("./../utils")
+const elasticSearchClient = require('./../helpers/db');
+const { createAccountContent } = require("./../helpers/utils")
 const generateFeeds = async () => {
     try {
         const queryByID = {
-            index: 'users',
+            index: 'accounts',
         }
-        const users = await elasticSearchClient.search(queryByID);
-        const usersResult = users && users.hits && users.hits.hits && users.hits.hits.length ? users.hits.hits : [];
-        for (let i = 0; i < usersResult.length; i++) {
-            const user = usersResult[i];
-            const userId = user._id;
-            await createUserContent(userId, user.feeds);
+        const accounts = await elasticSearchClient.search(queryByID);
+        const accountsResult = accounts && accounts.hits && accounts.hits.hits && accounts.hits.hits.length ? accounts.hits.hits : [];
+        for (let i = 0; i < accountsResult.length; i++) {
+            const account = accountsResult[i];
+            const accountId = account._id;
+            await createAccountContent(accountId, account.feeds);
         }
     } catch (e) {
         console.log({ jobGenerateFeeds: e })

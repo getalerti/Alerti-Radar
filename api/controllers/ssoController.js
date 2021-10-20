@@ -1,64 +1,94 @@
-const { validationResult } = require('express-validator');
-const elasticSearchClient = require('./../config/db');
-const UserDto = require('../entities/UserDto');
-const { generateAccessToken, genID, USER_COLLECTION_PREF_ID } = require('../utils');
-const { TechnicalError } = require('../errors/TechnicalError');
+const { validationResult }      = require('express-validator');
+const elasticSearchClient       = require('./../helpers/db');
+const Account                   = require('../classes/Account');
+const {
+    generateAccessToken,
+    genID,
+    USER_COLLECTION_PREF_ID
+}                               = require('../helpers/utils');
+const { TechnicalError }        = require('../errors/TechnicalError');
+const { InvalidAccountData }    = require('../errors/AccountError');
+const defaultResponse           = require('../responses/defaultResponse');
 
 module.exports =  async (req, res) => {
     try {
-        validationResult(req).throw();
+        try {
+            validationResult(req).throw();
+        } catch (_) {
+            return defaultResponse(
+                res,
+                false,
+                InvalidAccountData,
+                null,
+                InvalidAccountData.code
+            );
+        }
         let { email, name, picture, sub, listTopics } = req.body;
         sub = sub.replace("|", "_")
-        const queryByUsername = {
-            index: 'users',
+        const queryByAccountname = {
+            index: 'accounts',
             q: `email:"${email}"`
         }
-        const resByEmail = await elasticSearchClient.search(queryByUsername);
+        const resByEmail = await elasticSearchClient.search(queryByAccountname);
         if (resByEmail && resByEmail.hits && resByEmail.hits.hits && resByEmail.hits.hits.length > 0) {
-            const userDto = new UserDto(resByEmail.hits.hits[0]._source);
-            userDto.sub = sub;
-            userDto.picture = picture;
-            if (userDto.feeds.length == 0) {
-                userDto.interests = listTopics;
-                userDto.interestsToFeeds();
+            const account = new Account(resByEmail.hits.hits[0]._source);
+            account.sub = sub;
+            account.picture = picture;
+            if (!account.feeds.length || account.feeds.length === 0) {
+                account.interests = listTopics;
+                account.interestsToFeeds();
             }
-            userDto.name = name;
-            userDto._id = resByEmail.hits.hits[0]._id;
-            userDto.jwt = generateAccessToken(JSON.stringify({ id: userDto._id, email, sub }));
+            account.name = name;
+            account._id = resByEmail.hits.hits[0]._id;
+            account.jwt = generateAccessToken(JSON.stringify({ id: account._id, email, sub }));
             const queryUpdate = {
-                index: 'users',
-                id: `${userDto._id}`,
+                index: 'accounts',
+                id: `${account._id}`,
                 body: {
-                    doc: userDto.sanitizedUserToUpdate
+                    doc: account.sanitizedAccountToUpdate
                 }
             }
             await elasticSearchClient.update(queryUpdate);
-            return res.json({
-                ...userDto.sanitizedUser
-            });
+            return defaultResponse(
+                res,
+                true,
+                null,
+                { ...account.sanitizedAccount },
+                200
+            );
         } else {
-            const userDto = new UserDto({ email, name, picture, sub });
+            const account = new Account({ email, name, picture, sub });
             const id = genID(USER_COLLECTION_PREF_ID);
-            if (userDto.feeds.length === 0) {
-                userDto.interests = listTopics;
-                userDto.interestsToFeeds();
+            if (account.feeds.length === 0) {
+                account.interests = listTopics;
+                account.interestsToFeeds();
             }
-            userDto.jwt = generateAccessToken(JSON.stringify({ id, email, sub }));
-            userDto.interestsToFeeds();
+            account.jwt = generateAccessToken(JSON.stringify({ id, email, sub }));
+            account.interestsToFeeds();
             const addQuery = {
-                index: "users",
+                index: "accounts",
                 id,
                 body: {
-                    ...userDto
+                    ...account
                 }
             }
             await elasticSearchClient.index(addQuery);
-            return res.json({
-                ...userDto.sanitizedUser
-            });
+            return defaultResponse(
+                res,
+                true,
+                null,
+                { ...account.sanitizedAccount },
+                200
+            );
         }
     } catch (err) {
         console.log(err);
-        return res.status(TechnicalError.code).json(TechnicalError);
+        return defaultResponse(
+            res,
+            false,
+            TechnicalError,
+            null,
+            TechnicalError.code
+        );
     }
 }

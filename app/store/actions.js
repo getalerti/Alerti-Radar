@@ -4,18 +4,13 @@ import consts from "../helpers/consts";
 
 export const LOAD_FEEDS         = "LOAD_FEEDS";
 export const LOAD_FOLLOWINGS    = "LOAD_FOLLOWINGS";
-export const ADD_FOLLOWING      = "ADD_FOLLOWING";
-export const REMOVE_FOLLOWING   = "REMOVE_FOLLOWING";
-export const GENERATE_FEEDS     = "GENERATE_FEEDS";
 export const SET_ERROR          = "SET_ERROR";
 export const SET_SUCCESS        = "SET_SUCCESS";
 export const USER_STATUS        = "USER_STATUS";
-export const SAVE_ITEM          = "SAVE_ITEM";
 export const SAVED_ITEMS        = "SAVED_ITEMS";
 export const VIEW_ITEM          = "VIEW_ITEM";
 export const LOADING            = "LOADING";
 export const LOAD_FOLDERS       = "GET_FOLDERS";
-export const SAVE_FOLDER        = "SAVE_FOLDER";
 export const LOAD_ALERTS        = "LOAD_ALERTS";
 export const LOAD_ALERT_ITEMS   = "LOAD_ALERT_ITEMS";
 export const SET_FEED_FOLDER    = "SET_FEED_FOLDER";
@@ -30,12 +25,12 @@ export const auth = ({sub, email, name, picture, listTopics}) => dispatch => {
     })
     fetchAPI("/auth/sso", "POST", {sub, email, name, picture, listTopics}, false)
         .then(response => {
-            if (response && response.error) {
+            if (response && !response.success) {
                 dispatch({ type: SET_ERROR, payload: t("technical_error") })
             }
             if (typeof window !== "undefined") {
                 window.localStorage.setItem(consts.isAuthenticatedKey, true);
-                window.localStorage.setItem(consts.isAuthenticatedUser, JSON.stringify(response));
+                window.localStorage.setItem(consts.isAuthenticatedUser, JSON.stringify(response.data));
                 dispatch({
                     type: USER_STATUS,
                     payload: "authorized"
@@ -51,9 +46,9 @@ export const auth = ({sub, email, name, picture, listTopics}) => dispatch => {
 export const loadFollwings = () => dispatch => {
     dispatch({ type: SET_ERROR, payload: "" });
     dispatch({ type: LOADING, payload: true });
-    fetchAPI("/user/following", "GET", null, true)
+    fetchAPI("/following", "GET", null, true)
         .then(response => {
-            if (response && response.error) {
+            if (response && !response.success) {
                 if (response.error === "unauthorized") {
                     dispatch({
                         type: USER_STATUS,
@@ -78,9 +73,9 @@ export const loadFollwings = () => dispatch => {
 export const loadSavedItems = () => dispatch => {
     dispatch({ type: SET_ERROR, payload: "" });
     dispatch({ type: LOADING, payload: true });
-    fetchAPI("/user/saved", "GET", null, true)
+    fetchAPI("/saved", "GET", null, true)
         .then(response => {
-            if (response && response.error) {
+            if (response && !response.success) {
                 if (response.error === "unauthorized") {
                     dispatch({
                         type: USER_STATUS,
@@ -90,7 +85,7 @@ export const loadSavedItems = () => dispatch => {
                 else
                     dispatch({ type: SET_ERROR, payload: t("technical_error") })
             } else {
-                dispatch({ type: SAVED_ITEMS, payload: response })
+                dispatch({ type: SAVED_ITEMS, payload: response.data })
                 dispatch({ type: LOADING, payload: false });
                 dispatch({
                     type: USER_STATUS,
@@ -105,9 +100,9 @@ export const loadSavedItems = () => dispatch => {
 export const saveItem = (item) => dispatch => {
     dispatch({ type: SET_ERROR, payload: "" });
     dispatch({ type: LOADING, payload: true });
-    fetchAPI("/user/saved", "POST", {item}, true)
+    fetchAPI("/saved", "POST", {item}, true)
         .then(response => {
-            if (response && response.error) {
+            if (response && !response.success) {
                 if (response.error === "unauthorized") {
                     dispatch({
                         type: USER_STATUS,
@@ -132,9 +127,9 @@ export const saveItem = (item) => dispatch => {
 export const loadFeeds = () => dispatch => {
     dispatch({ type: SET_ERROR, payload: "" });
     dispatch({ type: LOADING, payload: true });
-    fetchAPI("/user/feeds", "GET", null, true)
+    fetchAPI("/feeds", "GET", null, true)
         .then(response => {
-            if (response && response.error) {
+            if (response && !response.success) {
                 if (response.error === "unauthorized") {
                     dispatch({
                         type: USER_STATUS,
@@ -144,7 +139,7 @@ export const loadFeeds = () => dispatch => {
                 else
                     dispatch({ type: SET_ERROR, payload: t("technical_error") })
             } else {
-                dispatch({ type: LOAD_FEEDS, payload: response })
+                dispatch({ type: LOAD_FEEDS, payload: response.data })
                 dispatch({ type: LOADING, payload: false });
                 dispatch({
                     type: USER_STATUS,
@@ -166,9 +161,9 @@ export const loadFeeds = () => dispatch => {
 export const addRemoveFeed = (item, action) => dispatch => {
     dispatch({ type: SET_ERROR, payload: "" });
     dispatch({ type: LOADING, payload: true });
-    fetchAPI("/user/feeds", "POST", {...item, action}, true)
+    fetchAPI("/feeds", "POST", {...item, action}, true)
         .then(response => {
-            if (response && response.error) {
+            if (response && !response.success) {
                 if (response.error === "unauthorized") {
                     dispatch({
                         type: USER_STATUS,
@@ -201,9 +196,9 @@ export const addRemoveFeed = (item, action) => dispatch => {
 export const updateFeedFolder = (feedId, folderId) => dispatch => {
     dispatch({ type: SET_ERROR, payload: "" });
     dispatch({ type: LOADING, payload: true });
-    fetchAPI("/user/feeds/folder", "PUT", {feedId, folderId}, true)
+    fetchAPI("/feeds/folder", "PUT", {feedId, folderId}, true)
         .then(response => {
-            if (response && response.error) {
+            if (response && !response.success) {
                 if (response.error === "unauthorized") {
                     dispatch({
                         type: USER_STATUS,
@@ -229,9 +224,9 @@ export const updateFeedFolder = (feedId, folderId) => dispatch => {
 export const generateFeeds = () => dispatch => {
     dispatch({ type: SET_ERROR, payload: "" });
     dispatch({ type: LOADING, payload: true });
-    fetchAPI("/user/generate-feeds", "GET", null, true)
+    fetchAPI("/generate-feeds", "GET", null, true)
         .then(response => {
-            if (response && response.error) {
+            if (response && !response.success) {
                 if (response.error === "unauthorized") {
                     dispatch({
                         type: USER_STATUS,
@@ -264,9 +259,9 @@ export const generateFeeds = () => dispatch => {
 export const loadFolders = () => dispatch => {
     dispatch({ type: SET_ERROR, payload: "" });
     dispatch({ type: LOADING, payload: true });
-    fetchAPI("/user/folders", "GET", null, true)
+    fetchAPI("/folders", "GET", null, true)
         .then(response => {
-            if (response && response.error) {
+            if (response && !response.success) {
                 if (response.error === "unauthorized") {
                     dispatch({
                         type: USER_STATUS,
@@ -276,7 +271,7 @@ export const loadFolders = () => dispatch => {
                 else
                     dispatch({ type: SET_ERROR, payload: t("technical_error") })
             } else {
-                dispatch({ type: LOAD_FOLDERS, payload: response })
+                dispatch({ type: LOAD_FOLDERS, payload: response.data })
                 dispatch({ type: LOADING, payload: false });
                 dispatch({
                     type: USER_STATUS,
@@ -298,9 +293,9 @@ export const loadFolders = () => dispatch => {
 export const saveFolder = (name) => dispatch => {
     dispatch({ type: SET_ERROR, payload: "" });
     dispatch({ type: LOADING, payload: true });
-    fetchAPI("/user/folders", "POST", {name}, true)
+    fetchAPI("/folders", "POST", {name}, true)
         .then(response => {
-            if (response && response.error) {
+            if (response && !response.success) {
                 if (response.error === "unauthorized") {
                     dispatch({
                         type: USER_STATUS,

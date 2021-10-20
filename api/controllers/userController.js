@@ -1,9 +1,16 @@
-const elasticSearchClient = require('./../config/db');
-const UserDto = require('../entities/UserDto');
-const { randomString, sendMail } = require('../utils');
-const resetPasswordEmail = require('./../emails/resetPassword');
-const { UserNotFound, UserAlreadyExists } = require('../errors/UserError');
-const { TechnicalError } = require('../errors/TechnicalError');
+const elasticSearchClient       = require('./../helpers/db');
+const Account                   = require('../classes/Account');
+const {
+    randomString,
+    sendMail
+}                               = require('../helpers/utils');
+const resetPasswordEmail        = require('./../emails/resetPassword');
+const {
+    AccountNotFound,
+    AccountAlreadyExists
+}                               = require('../errors/AccountError');
+const { TechnicalError }        = require('../errors/TechnicalError');
+const defaultResponse           = require('../responses/defaultResponse');
 
 const resetPassword = async (req, res) => {
     try {
@@ -11,96 +18,141 @@ const resetPassword = async (req, res) => {
         if (!email)
             return res.status(402).json({error: 'invalid data'})
         const queryByEmail = {
-            index: 'users',
+            index: 'accounts',
             q: `email:"${email}"`
         }
         const user = await elasticSearchClient.search(queryByEmail);
         if(user && user.hits && user.hits.hits && user.hits.hits.length > 0) {
             const userId = user.hits.hits[0]._id;
-            const userDto = new UserDto(user.hits.hits[0]._source);
-            userDto.changePassword = true;
+            const account = new Account(user.hits.hits[0]._source);
+            account.changePassword = true;
             const newPassword = randomString(10);
-            userDto.password = newPassword;
-            await userDto.hashPassword();
-            const message = resetPasswordEmail(userDto.name, newPassword);
-            await sendMail(userDto.email, "Alerti Radar - New password", message)
+            account.password = newPassword;
+            await account.hashPassword();
+            const message = resetPasswordEmail(account.name, newPassword);
+            await sendMail(account.email, "Alerti Radar - New password", message)
             const queryUpdate = {
-                index: 'users',
+                index: 'accounts',
                 id: `${userId}`,
                 body: {
-                    doc: userDto.sanitizedUserToUpdate
+                    doc: account.sanitizedAccountToUpdate
                 }
             }
             await elasticSearchClient.update(queryUpdate);
-            return res.status(200).json({success: true});
+            return defaultResponse(
+                res,
+                true,
+                null,
+                [],
+                200
+            );
         }
-        return res.status(UserNotFound.code).json(UserNotFound);
+        return defaultResponse(
+            res,
+            false,
+            AccountNotFound,
+            null,
+            AccountNotFound.code
+        );
     } catch (e) {
         console.log(e);
-        res.status(TechnicalError.code).json(TechnicalError)
+        return defaultResponse(
+            res,
+            false,
+            TechnicalError,
+            null,
+            TechnicalError.code
+        );
     }
 
 }
-const updateUser = async (req, res) => {
+const updateAccount = async (req, res) => {
     try {
-        let userId = req.user;/*
-        if (userId.sub) {
-            userId = userId.id;
-        }
-        */
+        let userId = req.user;
         const { name, email, username, changePassword, password } = req.body
         const queryByID = {
-            index: 'users',
+            index: 'accounts',
             id: `${userId}`
         }
         const user = await elasticSearchClient.get(queryByID);
         if (user && user._source) {
-            const userDto = new UserDto(user._source);
-            if (email !== userDto.email) {
+            const account = new Account(user._source);
+            if (email !== account.email) {
                 const queryByEmail = {
-                    index: 'users',
+                    index: 'accounts',
                     q: `email:"${user.email}"`
                 }
                 const resByEmail= await elasticSearchClient.search(queryByEmail);
                 if (resByEmail && resByEmail.hits && resByEmail.hits.hits && resByEmail.hits.hits.length > 0) {
-                    return res.status(UserAlreadyExists.code).json(UserAlreadyExists);
+                    return defaultResponse(
+                        res,
+                        false,
+                        AccountAlreadyExists,
+                        null,
+                        AccountAlreadyExists.code
+                    );
                 }
             }
-            if (username !== userDto.username) {
-                const queryByUsername = {
-                    index: 'users',
+            if (username !== account.username) {
+                const queryByAccountname = {
+                    index: 'accounts',
                     q: `username:${user.username}`
                 }
-                const resByUsername = await elasticSearchClient.search(queryByUsername);
-                if (resByUsername && resByUsername.hits && resByUsername.hits.hits && resByUsername.hits.hits.length > 0) {
-                    return res.status(UserAlreadyExists.code).json(UserAlreadyExists);
+                const resByAccountname = await elasticSearchClient.search(queryByAccountname);
+                if (resByAccountname && resByAccountname.hits && resByAccountname.hits.hits && resByAccountname.hits.hits.length > 0) {
+                    return defaultResponse(
+                        res,
+                        false,
+                        AccountAlreadyExists,
+                        null,
+                        AccountAlreadyExists.code
+                    );
                 }
             }
-            userDto.changePassword = false;
-            userDto.name = name;
-            userDto.username = username;
-            userDto.email = email;
+            account.changePassword = false;
+            account.name = name;
+            account.username = username;
+            account.email = email;
             if(changePassword) {
-                userDto.password = password;
-                await userDto.hashPassword();
+                account.password = password;
+                await account.hashPassword();
             }
             const queryUpdate = {
-                index: 'users',
+                index: 'accounts',
                 id: `${userId}`,
                 body: {
-                    doc: userDto.sanitizedUserToUpdate
+                    doc: account.sanitizedAccountToUpdate
                 }
             }
             await elasticSearchClient.update(queryUpdate);
-            return res.json({success: true})
+            return defaultResponse(
+                res,
+                true,
+                null,
+                [],
+                200
+            );
         }
-        return res.status(UserNotFound.code).json(UserNotFound)
+        return defaultResponse(
+            res,
+            false,
+            AccountNotFound,
+            null,
+            AccountNotFound.code
+        );
     } catch (e) {
         console.log(e);
-        return res.status(TechnicalError.code).json(TechnicalError)
+        return defaultResponse(
+            res,
+            false,
+            TechnicalError,
+            null,
+            TechnicalError.code
+        );
     }
 }
-const removeUser = (req, res) => {
+const removeAccount = (req, res) => {
+    // TODO
     res.json({
         success: true
     })
@@ -108,6 +160,6 @@ const removeUser = (req, res) => {
 
 module.exports = {
     resetPassword,
-    updateUser,
-    removeUser
+    updateAccount,
+    removeAccount
 }

@@ -1,75 +1,72 @@
-const elasticSearchClient = require('./../config/db');
-const { validationResult } = require('express-validator');
-const UserDto = require('../entities/UserDto');
-const { genID, FOLDER_COLLECTION_PREF_ID } = require('../utils');
-const { TechnicalError } = require('../errors/TechnicalError');
+const elasticSearchClient   = require('./../helpers/db');
+const { validationResult }  = require('express-validator');
+const Account               = require('../classes/Account');
+const {
+    genID,
+    FOLDER_COLLECTION_PREF_ID
+}                           = require('../helpers/utils');
+const { TechnicalError }    = require('../errors/TechnicalError');
 const { InvalidFolderData } = require('../errors/FolderError');
+const defaultResponse       = require('../responses/defaultResponse');
 
 const addFolder = async (req, res) => {
     try {
         validationResult(req).throw();
     } catch (_) {
-        return res.status(InvalidFolderData.code).json(InvalidFolderData)
+        return defaultResponse(res, false, InvalidFolderData, null, InvalidFolderData.code);
     }
     try {
-        let userId = req.user;/*
-        if (userId.sub) {
-            userId = userId.id;
-        }
-        */
+        let userId = req.user;
         const { name } = req.body;
         const queryByID = {
-            index: 'users',
+            index: 'accounts',
             id: `${userId}`
         }
         const idFolder = genID(FOLDER_COLLECTION_PREF_ID)
         const user = await elasticSearchClient.get(queryByID);
         if (user && user._source) {
-            const userDto = new UserDto(user._source)
-            userDto.id = userId;
-            userDto.addFolder({
+            const account = new Account(user._source)
+            account.id = userId;
+            account.addFolder({
                 id: idFolder,
                 name
             })
 
             const queryUpdate = {
-                index: 'users',
+                index: 'accounts',
                 id: `${userId}`,
                 body: {
-                    doc: userDto.sanitizedUserToUpdate
+                    doc: account.sanitizedAccountToUpdate
                 }
             }
             await elasticSearchClient.update(queryUpdate);
-            return res.json({success: true})
+            return defaultResponse(res, true, null, [], 200);
         }
-        return res.status(TechnicalError.code).json(TechnicalError.code)
+        return defaultResponse(res, false, TechnicalError, null, TechnicalError.code);
     } catch (e) {
         console.log({error: e});
-        return res.status(TechnicalError.code).json(TechnicalError)
+        return defaultResponse(res, false, TechnicalError, null, TechnicalError.code);
     }
 
 }
 
 const getFolders = async (req, res) => {
     try {
-        let userId = req.user;/*
-        if (userId.sub) {
-            userId = userId.id;
-        }
-        */
+        let userId = req.user;
         console.log({userId})
         const queryByID = {
-            index: 'users',
+            index: 'accounts',
             id: `${userId}`
         }
         const user = await elasticSearchClient.get(queryByID);
         if (user && user._source) {
             const items = user._source.folders || [];
-            return res.status(200).json(items)
+            return defaultResponse(res, true, null, items, 200);
         }
     } catch (e) {
         console.log({getFolders: e})
-        return res.status(403).json({error: 'invalid data', e})
+        return defaultResponse(res, false, TechnicalError, null, TechnicalError.code);
+
     }
 }
 module.exports = {

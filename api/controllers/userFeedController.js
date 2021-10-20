@@ -1,263 +1,363 @@
-const { validationResult } = require('express-validator');
-const elasticSearchClient = require('./../config/db');
-const UserDto = require('../entities/UserDto');
-const Feed = require('../entities/Feed');
-const { createUserContent, getFeedTitle } = require('../utils');
-const fs = require('fs');
-const { TechnicalError } = require('../errors/TechnicalError');
+const { validationResult }      = require('express-validator');
+const elasticSearchClient       = require('./../helpers/db');
+const Account                   = require('../classes/Account');
+const Feed                      = require('../classes/Feed');
+const {
+    createAccountContent,
+    getFeedTitle
+}                               = require('../helpers/utils');
+const fs                        = require('fs');
+const { TechnicalError }        = require('../errors/TechnicalError');
+const { InvalidAccountData }    = require('../errors/AccountError');
+const defaultResponse           = require('../responses/defaultResponse');
 
-const addRemoveFeed = async (req, res) => {
+const checkValidation = (req, res) => {
     try {
         validationResult(req).throw();
-        let userId = req.user;/*
-        if (userId.sub) {
-            userId = userId.id;
-        }
-        */
+    } catch (_) {
+        defaultResponse(
+            res,
+            false,
+            InvalidAccountData,
+            null,
+            InvalidAccountData.code
+        );
+    }
+}
+const addRemoveFeed = async (req, res) => {
+    try {
+        checkValidation(req, res);
+        let userId = req.user;
         const { type, data, action } = req.body;
         const name = await getFeedTitle(data);
         const queryByID = {
-            index: 'users',
+            index: 'accounts',
             id: `${userId}`
         }
         const user = await elasticSearchClient.get(queryByID);
         if (user && user._source) {
-            const userDto = new UserDto(user._source)
-            userDto.id = userId;
-            userDto.feeds = user._source.feeds;
+            const account = new Account(user._source)
+            account.id = userId;
+            account.feeds = user._source.feeds;
             if (action) {
-                userDto.addFeed(new Feed(name, data, "", type === "podcast" ? "podcast" : "rss"));
+                account.addFeed(new Feed(name, data, "", type === "podcast" ? "podcast" : "rss"));
             }
             if (!action && req.body.idFeed) {
-                userDto.removeFeed(req.body.idFeed)
+                account.removeFeed(req.body.idFeed)
             }
 
             const queryUpdate = {
-                index: 'users',
+                index: 'accounts',
                 id: `${userId}`,
                 body: {
-                    doc: userDto.sanitizedUserToUpdate
+                    doc: account.sanitizedAccountToUpdate
                 }
             }
             await elasticSearchClient.update(queryUpdate);
-            return res.json({success: true})
+            return defaultResponse(
+                res,
+                true,
+                null,
+                [],
+                200
+            );
         }
-        return res.status(TechnicalError.code).json(TechnicalError.code)
+        return defaultResponse(
+            res,
+            false,
+            TechnicalError,
+            null,
+            TechnicalError.code
+        );
     } catch (e) {
         console.log({error: e});
-        return res.status(TechnicalError.code).json(TechnicalError)
+        return defaultResponse(
+            res,
+            false,
+            TechnicalError,
+            null,
+            TechnicalError.code
+        );
     }
 
 }
 
 const updateFeedFolder = async (req, res) => {
     try {
-        validationResult(req).throw();
-        let userId = req.user;/*
-        if (userId.sub) {
-            userId = userId.id;
-        }
-        */
+        checkValidation(req, res);
+        let userId = req.user;
         const { feedId, folderId } = req.body;
         const queryByID = {
-            index: 'users',
+            index: 'accounts',
             id: `${userId}`
         }
         const user = await elasticSearchClient.get(queryByID);
         if (user && user._source) {
-            const userDto = new UserDto(user._source)
-            userDto.id = userId;
-            userDto.feeds = user._source.feeds;
-            userDto.changeFeedFolder(feedId, folderId);
+            const account = new Account(user._source)
+            account.id = userId;
+            account.feeds = user._source.feeds;
+            account.changeFeedFolder(feedId, folderId);
 
             const queryUpdate = {
-                index: 'users',
+                index: 'accounts',
                 id: `${userId}`,
                 body: {
-                    doc: userDto.sanitizedUserToUpdate
+                    doc: account.sanitizedAccountToUpdate
                 }
             }
             await elasticSearchClient.update(queryUpdate);
-            return res.json({success: true})
+            return defaultResponse(
+                res,
+                true,
+                null,
+                [],
+                200
+            );
         }
-        return res.status(TechnicalError.code).json(TechnicalError.code)
+        return defaultResponse(
+            res,
+            false,
+            TechnicalError,
+            null,
+            TechnicalError.code
+        );
     } catch (e) {
         console.log({error: e});
-        return res.status(TechnicalError.code).json(TechnicalError)
+        return defaultResponse(
+            res,
+            false,
+            TechnicalError,
+            null,
+            TechnicalError.code
+        );
     }
-
 }
 
 // generate feeds content for a user
 const generateFeeds = async (req, res) => {
     try {
-        let userId = req.user;/*
-        if (userId.sub) {
-            userId = userId.id;
-        }
-        */
+        checkValidation(req, res);
+        let userId = req.user;
         const queryByID = {
-            index: 'users',
+            index: 'accounts',
             id: `${userId}`
         }
         const user = await elasticSearchClient.get(queryByID);
         if (user && user._source) {
-            await createUserContent(userId, user._source.feeds);
-            res.json({
-                success: true
-            })
+            await createAccountContent(userId, user._source.feeds);
+            return defaultResponse(
+                res,
+                true,
+                null,
+                [],
+                200
+            );
         }
     } catch (e) {
-        console.log({ generateFeedsError: e })
-        return res.status(TechnicalError.code).json(TechnicalError)
+        console.log({ generateFeedsError: e });
+        return defaultResponse(
+            res,
+            false,
+            TechnicalError,
+            null,
+            TechnicalError.code
+        );
     }
 }
 
 // get feeds content for a user
 const getFeeds = async (req, res) => {
+    checkValidation(req, res);
     try {
-        let userId = req.user;/*
-        if (userId.sub) {
-            userId = userId.id;
-        }
-        */
+        let userId = req.user;
         const fileExists = await fs.existsSync(`./.cache/${userId}`);
         if (fileExists) {
             const feed = await fs.readFileSync(`./.cache/${userId}`);
             return res.status(200).json(JSON.parse(feed))
         } else {
             const queryByID = {
-                index: 'users',
+                index: 'accounts',
                 id: `${userId}`
             }
             const user = await elasticSearchClient.get(queryByID);
             if (user && user._source) {
-                await createUserContent(userId, user._source.feeds);
+                await createAccountContent(userId, user._source.feeds);
                 const feed = await fs.readFileSync(`./.cache/${userId}`);
-                return res.status(200).json(JSON.parse(feed))
+                return defaultResponse(
+                    res,
+                    true,
+                    null,
+                    [],
+                    200
+                );
             }
         }
     } catch (e) {
-        console.log({getFeeds: e})
-        return res.status(TechnicalError.code).json(TechnicalError)
+        console.log({getFeeds: e});
+        return defaultResponse(
+            res,
+            false,
+            TechnicalError,
+            null,
+            TechnicalError.code
+        );
     }
 }
 const getSavedItems = async (req, res) => {
+    checkValidation(req, res);
     try {
-        let userId = req.user;/*
-        if (userId.sub) {
-            userId = userId.id;
-        }
-        */
+        let userId = req.user;
         const queryByID = {
-            index: 'users',
+            index: 'accounts',
             id: `${userId}`
         }
         const user = await elasticSearchClient.get(queryByID);
         if (user && user._source) {
             const items = user._source.savedItems || [];
-            return res.status(200).json(items)
+            return defaultResponse(
+                res,
+                true,
+                null,
+                [],
+                200
+            );
         }
     } catch (e) {
-        console.log(e)
-        return res.status(TechnicalError.code).json(TechnicalError)
+        console.log(e);
+        return defaultResponse(
+            res,
+            false,
+            TechnicalError,
+            null,
+            TechnicalError.code
+        );
     }
 }
 const saveFeedItem = async (req, res) => {
+    checkValidation(req, res);
     try {
-        validationResult(req).throw();
-        let userId = req.user;/*
-        if (userId.sub) {
-            userId = userId.id;
-        }
-        */
+        let userId = req.user;
         const { item } = req.body;
         const queryByID = {
-            index: 'users',
+            index: 'accounts',
             id: `${userId}`
         }
         const user = await elasticSearchClient.get(queryByID);
         if (user && user._source) {
-            const userDto = new UserDto(user._source)
-            userDto.id = userId;
-            userDto.saveItem({...item, saved: true})
+            const account = new Account(user._source)
+            account.id = userId;
+            account.saveItem({...item, saved: true})
 
             const queryUpdate = {
-                index: 'users',
+                index: 'accounts',
                 id: `${userId}`,
                 body: {
-                    doc: userDto.sanitizedUserToUpdate
+                    doc: account.sanitizedAccountToUpdate
                 }
             }
             await elasticSearchClient.update(queryUpdate);
-            return res.json({success: true})
+            return defaultResponse(
+                res,
+                true,
+                null,
+                [],
+                200
+            );
         }
-        return res.status(TechnicalError.code).json(TechnicalError.code)
+        return defaultResponse(
+            res,
+            false,
+            TechnicalError,
+            null,
+            TechnicalError.code
+        );
     } catch (e) {
         console.log({error: e});
-        return res.status(TechnicalError.code).json(TechnicalError)
+        return defaultResponse(
+            res,
+            false,
+            TechnicalError,
+            null,
+            TechnicalError.code
+        );
     }
-
 }
 const deleteSavedFeedItem = async (req, res) => {
+    checkValidation(req, res);
     try {
-        validationResult(req).throw();
-        let userId = req.user;/*
-        if (userId.sub) {
-            userId = userId.id;
-        }
-        */
+        let userId = req.user;
         const { item } = req.body;
         const queryByID = {
-            index: 'users',
+            index: 'accounts',
             id: `${userId}`
         }
         const user = await elasticSearchClient.get(queryByID);
         if (user && user._source) {
-            const userDto = new UserDto(user._source)
-            userDto.id = userId;
-            userDto.removeItem(item)
+            const account = new Account(user._source)
+            account.id = userId;
+            account.removeItem(item)
 
             const queryUpdate = {
-                index: 'users',
+                index: 'accounts',
                 id: `${userId}`,
                 body: {
-                    doc: userDto.sanitizedUserToUpdate
+                    doc: account.sanitizedAccountToUpdate
                 }
             }
             await elasticSearchClient.update(queryUpdate);
-            return res.json({success: true})
+            return defaultResponse(
+                res,
+                true,
+                null,
+                [],
+                200
+            );
         }
-        return res.status(TechnicalError.code).json(TechnicalError.code)
+        return defaultResponse(
+            res,
+            false,
+            TechnicalError,
+            null,
+            TechnicalError.code
+        );
     } catch (e) {
         console.log({error: e});
-        return res.status(403).json({error: 'invalid data'})
+        return defaultResponse(
+            res,
+            false,
+            TechnicalError,
+            null,
+            TechnicalError.code
+        );
     }
-
 }
 const following = async (req, res) => {
+    checkValidation(req, res);
     try {
-        let userId = req.user;/*
-        if (userId.sub) {
-            userId = userId.id;
-        }
-        */
-        if (!userId || userId === "")
-            return res.status(403).json({error: 'invalid data'})
+        let userId = req.user;
         const queryByID = {
-            index: 'users',
+            index: 'accounts',
             id: `${userId}`
         }
         const user = await elasticSearchClient.get(queryByID);
         if (user && user._source) {
-            return res.json({
-                success: true,
-                data: user._source.feeds
-            })
+            return defaultResponse(
+                res,
+                true,
+                null,
+                user._source.feeds,
+                200
+            );
         }
     } catch (e) {
-        console.log({error: e})
-        return res.status(403).json({error: 'invalid data'})
+        console.log({error: e});
+        return defaultResponse(
+            res,
+            false,
+            TechnicalError,
+            null,
+            TechnicalError.code
+        );
     }
 }
 

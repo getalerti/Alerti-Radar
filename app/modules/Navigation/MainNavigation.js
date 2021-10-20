@@ -24,7 +24,7 @@ export default () => {
                 <Link href={"/"}>
                     <FaHome className={isActiveLink("/dashboard") ? styles.navbar__item__active : ""} />
                 </Link>
-                <Link href={"/dashboard"}>
+                <Link href={"/dashboard/new"}>
                     <FaPlus title={"new"} className={isActiveLink("/dashboard/new") ? styles.navbar__item__active : ""} />
                 </Link>
                 <Link href={"/dashboard/saved"}>

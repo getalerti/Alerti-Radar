@@ -14,7 +14,7 @@ async function initializeIndex(indexName) {
     }
 }
 const indexes = [
-    "users"
+    "accounts"
 ]
 indexes.forEach((index) => { initializeIndex(index) });
 

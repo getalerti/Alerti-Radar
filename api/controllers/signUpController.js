@@ -1,53 +1,81 @@
-const { validationResult } = require('express-validator');
-const elasticSearchClient = require('./../config/db');
-const UserDto = require('../entities/UserDto');
-const { generateAccessToken } = require('../utils')
-const { genID, USER_COLLECTION_PREF_ID } = require('../utils');
-const { UserAlreadyExists, InvalidUserData } = require('../errors/UserError');
-const { TechnicalError } = require('../errors/TechnicalError');
+const { validationResult }      = require('express-validator');
+const elasticSearchClient       = require('./../helpers/db');
+const Account                   = require('../classes/Account');
+const { generateAccessToken }   = require('../helpers/utils')
+const {
+    genID,
+    USER_COLLECTION_PREF_ID
+}                               = require('../helpers/utils');
+const {
+    AccountAlreadyExists,
+    InvalidAccountData
+}                               = require('../errors/AccountError');
+const { TechnicalError }        = require('../errors/TechnicalError');
+const defaultResponse           = require('../responses/defaultResponse');
 
 module.exports =  async (req, res) => {
     try {
         validationResult(req).throw();
     } catch (_) {
-        return res.status(InvalidUserData.code).json(InvalidUserData);
+        return defaultResponse(
+            res,
+            false,
+            InvalidAccountData,
+            null,
+            InvalidAccountData.code
+        );
     }
     try {
-        const userDto = new UserDto(req.body);
-        await userDto.hashPassword();
+        const account = new Account(req.body);
+        await account.hashPassword();
         const id = genID(USER_COLLECTION_PREF_ID);
-        userDto.jwt = generateAccessToken(id);
+        account.jwt = generateAccessToken(id);
 
-        const queryByUsername = {
-            index: 'users',
-            q: `username:${userDto.username}`
+        const queryByAccountname = {
+            index: 'accounts',
+            q: `username:${account.username}`
         }
         const queryByEmail = {
-            index: 'users',
-            q: `email:"${userDto.email}"`
+            index: 'accounts',
+            q: `email:"${account.email}"`
         }
-        const resByUsername = await elasticSearchClient.search(queryByUsername);
+        const resByAccountname = await elasticSearchClient.search(queryByAccountname);
         const resByEmail= await elasticSearchClient.search(queryByEmail);
-        if ((resByUsername && resByUsername.hits && resByUsername.hits.hits && resByUsername.hits.hits.length == 0)
+        if ((resByAccountname && resByAccountname.hits && resByAccountname.hits.hits && resByAccountname.hits.hits.length == 0)
             &&
             (resByEmail && resByEmail.hits && resByEmail.hits.hits && resByEmail.hits.hits.length == 0)) {
-            userDto.interestsToFeeds();
+            account.interestsToFeeds();
             const addQuery = {
-                index: "users",
+                index: "accounts",
                 id,
                 body: {
-                    ...userDto
+                    ...account
                 }
             }
             await elasticSearchClient.index(addQuery);
-            return res.json({
-                ...userDto.sanitizedUser
-            });
-
+            return defaultResponse(
+                res,
+                true,
+                null,
+                { ...account.sanitizedAccount },
+                200
+            );
         }
-        return res.status(UserAlreadyExists.code).json(UserAlreadyExists);
+        return defaultResponse(
+            res,
+            false,
+            AccountAlreadyExists,
+            null,
+            AccountAlreadyExists.code
+        );
     } catch (err) {
-        console.log(err)
-        return res.status(TechnicalError.code).json(TechnicalError);
+        console.log(err);
+        return defaultResponse(
+            res,
+            false,
+            TechnicalError,
+            null,
+            TechnicalError.code
+        );
     }
 }

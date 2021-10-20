@@ -1,28 +1,30 @@
-const bcrypt = require('bcrypt');
-const rssByTopic = require('./../config/rssByTopic');
-const podcastByTopic = require('./../config/podcastsByTopics');
-const Feed = require('./../entities/Feed');
-module.exports = class UserDto {
-    constructor({ id, email, name, username, password, jwt, feeds, listTopics, changePassword, savedItems, folders, picture, sub }) {
-        this._id = id;
-        this.email = email;
-        this.picture = picture || null;
-        this.sub = sub || null;
-        this.name = name;
-        this.username = username || null;
-        this.password = password || null;
-        this.url = "";
-        this.feeds = feeds || [];
-        this.interests = listTopics || [];
-        this.changePassword = changePassword === true;
-        this.savedItems = savedItems || [];
-        this.jwt = jwt;
-        this.folders = folders || [];
+const bcrypt    = require('bcrypt');
+const {
+    rssTopics,
+    podcastsTopics
+}               = require('./../helpers/data.js');
+const Feed      = require('./../classes/Feed');
+
+module.exports = class Account {
+    constructor({ id, email, name, username, password, jwt, feeds = [], listTopics = [], changePassword = false, savedItems = [], folders = [], picture = "", sub = null }) {
+        this._id            = id;
+        this.email          = email;
+        this.password       = password || null;
+        this.username       = username || null;
+        this.picture        = picture;
+        this.sub            = sub;
+        this.name           = name;
+        this.feeds          = feeds;
+        this.interests      = listTopics;
+        this.changePassword = changePassword;
+        this.savedItems     = savedItems;
+        this.jwt            = jwt;
+        this.folders        = folders;
     }
     async hashPassword() {
         this.password = await bcrypt.hash(this.password, 10);
     }
-    get sanitizedUser() {
+    get sanitizedAccount() {
         const getCleanUser = {...this, password: ""}
         delete getCleanUser.password;
         delete getCleanUser.sub;
@@ -33,7 +35,7 @@ module.exports = class UserDto {
         delete getCleanUser._id;
         return getCleanUser;
     }
-    get sanitizedUserToUpdate() {
+    get sanitizedAccountToUpdate() {
         const sanitizedUser = {...this}
         delete sanitizedUser._id;
         return sanitizedUser;
@@ -46,19 +48,19 @@ module.exports = class UserDto {
             return;
         this.interests.forEach(item => {
             let rssKey = "";
-            rssKey = Object.keys(rssByTopic);
+            rssKey = Object.keys(rssTopics);
             rssKey = rssKey[item] || null;
-            if (rssKey && rssByTopic[rssKey]) {
-                rssByTopic[rssKey].map(feed => {
+            if (rssKey && rssTopics[rssKey]) {
+                rssTopics[rssKey].map(feed => {
                     this.addFeed(new Feed(feed.name, feed.url, ""))
                 })
             }
 
             let podcastKey = "";
-            podcastKey = Object.keys(podcastByTopic);
+            podcastKey = Object.keys(podcastsTopics);
             podcastKey = podcastKey[item] || null;
-            if (podcastKey && podcastByTopic[podcastKey]) {
-                podcastByTopic[podcastKey].map(feed => {
+            if (podcastKey && podcastsTopics[podcastKey]) {
+                podcastsTopics[podcastKey].map(feed => {
                     this.addFeed(new Feed(feed.name, feed.url, "", "podcast"))
                 })
             }
@@ -79,7 +81,7 @@ module.exports = class UserDto {
             this.feeds = [];
         }
         for (let i = 0; i < this.feeds.length; i++) {
-            if (this.feeds[i].url == feed.url) {
+            if (this.feeds[i].url === feed.url) {
                 exist = true
             }
         }
@@ -90,7 +92,7 @@ module.exports = class UserDto {
     }
     changeFeedFolder(feedId, folderId) {
         for (var i = 0; i < this.feeds.length; i++) {
-            if (this.feeds[i].id == feedId) {
+            if (this.feeds[i].id === feedId) {
                 this.feeds[i].folder = folderId;
                 return;
             }

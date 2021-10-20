@@ -25,7 +25,7 @@ const Following =({loadFollwings, followings}) => {
     return (
         <>
         <div className={styles.following}>
-            <Link href={"/dashboard/all"}>
+            <Link href={"/dashboard"}>
                 <div className={styles.nav_link}>
                     <FaThList title={t('all')} /> {t('all')}
                 </div>
