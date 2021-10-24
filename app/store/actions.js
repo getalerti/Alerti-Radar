@@ -16,14 +16,17 @@ export const LOAD_ALERT_ITEMS   = "LOAD_ALERT_ITEMS";
 export const SET_FEED_FOLDER    = "SET_FEED_FOLDER";
 
 const t = useTranslation();
-export const auth = ({sub, email, name, picture, listTopics}) => dispatch => {
+export const auth = (entries, mode = "sso") => dispatch => {
     dispatch({ type: SET_ERROR, payload: "" });
     dispatch({ type: LOADING, payload: true });
     dispatch({
         type: USER_STATUS,
         payload: "unauthorized"
     })
-    fetchAPI("/auth/sso", "POST", {sub, email, name, picture, listTopics}, false)
+    let url = "/auth/sso";
+    if (mode === "signin") { url = "/auth/signin"; }
+    if (mode === "signup") { url = "/auth/signup"; }
+    fetchAPI(url, "POST", entries, false)
         .then(response => {
             if (response && !response.success) {
                 dispatch({ type: SET_ERROR, payload: t("technical_error") })
@@ -37,11 +40,11 @@ export const auth = ({sub, email, name, picture, listTopics}) => dispatch => {
                 })
             }
         }).catch(error => {
-            console.log({authError: error})
-            dispatch({ type: SET_ERROR, payload: t("technical_error") })
-        }).finally(() => {
-            dispatch({ type: LOADING, payload: false });
-        })
+        console.log({authError: error})
+        dispatch({ type: SET_ERROR, payload: t("technical_error") })
+    }).finally(() => {
+        dispatch({ type: LOADING, payload: false });
+    })
 };
 export const loadFollwings = () => dispatch => {
     dispatch({ type: SET_ERROR, payload: "" });

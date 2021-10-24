@@ -46,6 +46,7 @@ module.exports = class Account {
     interestsToFeeds() {
         if(this.feeds.length > 0)
             return;
+        console.log({rssTopics})
         this.interests.forEach(item => {
             let rssKey = "";
             rssKey = Object.keys(rssTopics);

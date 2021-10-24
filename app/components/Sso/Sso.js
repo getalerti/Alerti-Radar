@@ -6,6 +6,7 @@ import {auth} from "../../store/actions";
 import {connect} from "react-redux";
 import {useRouter} from "next/router";
 import {buildAuth0Params, fetchAuth0API, initAuth0} from "../../helpers/utils";
+import consts from "../../helpers/consts";
 
 const Sso = ({ auth, user_status }) => {
     const t = useTranslation();
@@ -26,7 +27,12 @@ const Sso = ({ auth, user_status }) => {
             setWaiting(true)
             fetchAuth0API(auth0Params)
                 .then((response) => {
-                    auth(response);
+                    let listTopics = [];
+                    if (typeof window !== "undefined") {
+                        listTopics = window.localStorage.getItem(consts.userSelectedTopics);
+                        listTopics = JSON.parse(listTopics);
+                    }
+                    auth({...response, listTopics});
                 })
                 .catch((err) => {
                     alert("Error Auth0 response");
@@ -44,7 +50,7 @@ const Sso = ({ auth, user_status }) => {
     }, [user_status])
     return (
         <div className={styles.sso_container}>
-            <button disabled={waiting} onClick={loginWithRedirect}>
+            <button disabled={waiting} onClick={loginWithRedirect} disabled={user_status === "pending" || waiting}>
                 { !waiting ? t('login_with') : t('processing_data')  }
                 <img src={auth0Icon} />
             </button>

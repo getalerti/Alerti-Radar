@@ -3,7 +3,7 @@ import topics from "../../helpers/topics"
 import useTranslation from "../../helpers/i18n";
 import {useEffect, useState} from "react";
 import consts from "../../helpers/consts";
-export default ({ setTopics, setNext }) => {
+export default ({ setNext }) => {
     const t = useTranslation();
     const [selectedItems, setSelectedItems] = useState([]);
     const selectItem = (index) => {
@@ -13,7 +13,6 @@ export default ({ setTopics, setNext }) => {
             newItems = selectedItems.filter(item => item !== index);
         else
             newItems = [...selectedItems, index]
-        setTopics(newItems);
         setSelectedItems(newItems);
         window.localStorage.setItem(consts.userSelectedTopics, JSON.stringify(newItems))
     }

@@ -8,7 +8,6 @@ import consts from "../helpers/consts";
 import Sso from "../components/Sso/Sso";
 
 export default function Home() {
-    const [_, setTopics] = useState([]);
     const [mode, setMode] = useState("");
 
     useEffect(() => {
@@ -23,7 +22,7 @@ export default function Home() {
     }, [])
     return (
         <div  className={styles.auth_container}>
-            { mode === "topics" && <Topics setTopics={setTopics} setNext={setMode} /> }
+            { mode === "topics" && <Topics setNext={setMode} /> }
             { mode === "login" && <Login setMode={setMode} /> }
             { mode === "signup" && <Signup setMode={setMode} /> }
             { mode === "reset" && <ResetPassword setMode={setMode} /> }

@@ -35,7 +35,7 @@ router.post('/auth/signin',authValidation, signInController )
 router.post('/auth/sso',ssoValidation, ssoController )
 router.post('/reset-password', resetPassword)
 router.put('/user',[authenticateToken, userValidation], updateAccount)
-router.delete('',authenticateToken, removeAccount)
+router.delete('/user',authenticateToken, removeAccount)
 
 // Feeds
 router.post('/feeds',[authenticateToken, userFeedValidation], addRemoveFeed );

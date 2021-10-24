@@ -173,7 +173,13 @@ const getFeeds = async (req, res) => {
         const fileExists = await fs.existsSync(`./.cache/${userId}`);
         if (fileExists) {
             const feed = await fs.readFileSync(`./.cache/${userId}`);
-            return res.status(200).json(JSON.parse(feed))
+            return defaultResponse(
+                res,
+                true,
+                null,
+                JSON.parse(feed),
+                200
+            );
         } else {
             const queryByID = {
                 index: 'accounts',
@@ -187,7 +193,7 @@ const getFeeds = async (req, res) => {
                     res,
                     true,
                     null,
-                    [],
+                    feed,
                     200
                 );
             }

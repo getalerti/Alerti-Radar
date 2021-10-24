@@ -111,7 +111,7 @@ const rssTopics = {
     ]
 };
 
-module.expors = {
+module.exports = {
     podcastsTopics,
     rssTopics
 }

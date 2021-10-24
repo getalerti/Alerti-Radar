@@ -32,6 +32,8 @@ const sanitizedFeedItems = (items, type, basedUrl) => {
 const getFeedItems = async (url, max, type) => {
     try {
         const feed = await parser.parseURL(url);
+        if (!feed)
+            return [];
         const items = feed.items;
         if (items.length <= max)
             return sanitizedFeedItems(items, type, url);
@@ -46,6 +48,7 @@ const getFeedTitle = async (url) => {
         const feed = await parser.parseURL(url);
         return feed.title || "";
     } catch (e) {
+        console.log({url})
         console.log({getFeedTitle: e});
         return "";
     }
