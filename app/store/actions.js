@@ -29,15 +29,16 @@ export const auth = (entries, mode = "sso") => dispatch => {
     fetchAPI(url, "POST", entries, false)
         .then(response => {
             if (response && !response.success) {
-                dispatch({ type: SET_ERROR, payload: t("technical_error") })
-            }
-            if (typeof window !== "undefined") {
-                window.localStorage.setItem(consts.isAuthenticatedKey, true);
-                window.localStorage.setItem(consts.isAuthenticatedUser, JSON.stringify(response.data));
-                dispatch({
-                    type: USER_STATUS,
-                    payload: "authorized"
-                })
+                dispatch({ type: SET_ERROR, payload: response.error.error })
+            } else {
+                if (typeof window !== "undefined") {
+                    window.localStorage.setItem(consts.isAuthenticatedKey, true);
+                    window.localStorage.setItem(consts.isAuthenticatedUser, JSON.stringify(response.data));
+                    dispatch({
+                        type: USER_STATUS,
+                        payload: "authorized"
+                    })
+                }
             }
         }).catch(error => {
         console.log({authError: error})

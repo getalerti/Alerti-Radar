@@ -1,24 +1,31 @@
 import useTranslation from "../../helpers/i18n";
 import styles from "./style.module.scss"
-import {useState} from "react";
-import {fetchAPI, isEmail, isPassword} from "../../helpers/utils";
+import {useEffect, useState} from "react";
+import {isNotEmpty, isPassword} from "../../helpers/utils";
 import {useRouter} from "next/router";
-import {useDispatch} from "react-redux";
-import consts from "../../helpers/consts";
+import {connect} from "react-redux";
+import {auth} from "../../store/actions";
 
-export default ({ setMode }) => {
+const Login = ({ setMode, auth, user_status, api_error }) => {
     const t = useTranslation();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const router = useRouter();
-
+    useEffect(() => {
+        setError(api_error);
+    }, [api_error]);
+    useEffect(() => {
+        if (user_status === "authorized") {
+            router.push("/dashboard")
+        }
+    }, [user_status])
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
         setLoading(true);
         const email = e.target.email.value;
         const password = e.target.password.value;
-        if (!isEmail(email)) {
+        if (!isNotEmpty(email)) {
             setError(t("invalid_email"));
             setLoading(false);
             return;
@@ -28,15 +35,7 @@ export default ({ setMode }) => {
             setLoading(false);
             return;
         }
-        const response = await fetchAPI("/auth/signin", "POST", {email, password});
-        if (response && response.error)
-            setError(t(response.error))
-        if (response && response.jwt) {
-            if (typeof window !== "undefined") {
-                window.localStorage.setItem(consts.isAuthenticatedUser, JSON.stringify(response))
-                router.push("/dashboard")
-            }
-        }
+        auth({email, password}, "signin");
         setLoading(false);
     }
     return (
@@ -50,8 +49,8 @@ export default ({ setMode }) => {
                 }
             </p>
             <div className={styles["form-group"]}>
-                <label htmlFor="email">{t("login-email")}</label>
-                <input name={"email"} required id={"email"} className={styles.input} type={"email"} />
+                <label htmlFor="email">{t("login-email")} / {t("login-username")}</label>
+                <input name={"email"} required id={"email"} className={styles.input} />
             </div>
             <div className={styles["form-group"]}>
                 <label htmlFor="password">{t("login-password")}</label>
@@ -72,3 +71,16 @@ export default ({ setMode }) => {
         </form>
     )
 }
+
+const mapStateToProps = state => ({
+    user_status : state.user_status,
+    api_error : state.error
+});
+
+const mapDispatchToProps = {
+    auth
+};
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Login);

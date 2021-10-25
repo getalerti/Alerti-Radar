@@ -1,20 +1,26 @@
 import useTranslation from "../../helpers/i18n";
 import styles from "./style.module.scss"
 import {useEffect, useState} from "react";
-import {fetchAPI, isEmail, isNotEmpty, isPassword} from "../../helpers/utils";
-import {useRouter} from "next/router";
-import {useDispatch} from "react-redux";
+import {isEmail, isNotEmpty, isPassword} from "../../helpers/utils";
+import {connect} from "react-redux";
 import Topics from "./Topics";
-import _topics from "../../helpers/topics"
+import {auth} from "../../store/actions";
+import consts from "../../helpers/consts";
+import {useRouter} from "next/router";
 
-export default ({ setMode }) => {
+const Signup = ({ setMode, auth, user_status, api_error }) => {
     const t = useTranslation();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
-    const [next, setNext] = useState(false);
-    const [topics, setTopics] = useState([]);
     const router = useRouter();
-    const dispatch = useDispatch();
+    useEffect(() => {
+        setError(api_error);
+    }, [api_error]);
+    useEffect(() => {
+        if (user_status === "authorized") {
+            router.push("/dashboard")
+        }
+    }, [user_status])
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -24,7 +30,6 @@ export default ({ setMode }) => {
         const password = e.target.password.value;
         const fullname = e.target.fullname.value;
         const username = e.target.username.value;
-        const listTopics = _topics.filter((_,index) => topics.indexOf(index) >= 0).map(top => top.name.toLocaleLowerCase());
         if (!isEmail(email)) {
             setError(t("invalid_email"));
             setLoading(false);
@@ -45,19 +50,18 @@ export default ({ setMode }) => {
             setLoading(false);
             return;
         }
-        const response = await fetchAPI("/auth/signup", "POST", {email, password, username, name: fullname, listTopics});
-        if (response && response.error)
-            setError(t(response.error))
-        if (response && response.jwt) {
-            dispatch({type: "AUTH", jwt: response.jwt})
-            router.push("/")
+        let listTopics = [];
+        if (typeof window !== "undefined") {
+            listTopics = window.localStorage.getItem(consts.userSelectedTopics);
+            listTopics = JSON.parse(listTopics);
         }
+        auth({email, password, username, name: fullname, listTopics}, "signup");
+
         setLoading(false);
     }
     return (
         <div className={styles.slider_container}>
-            <div className={styles.slider} style={{ left: next ? "-100%" : "0" }}>
-                <div className={styles.slider__item}><Topics setNext={setNext} setTopics={setTopics} /></div>
+            <div className={styles.slider}>
                 <div className={styles.slider__item}><form action="" className={styles.form} onSubmit={handleSubmit}>
                     <h2 className={styles["title-1"]}>
                         {t("signup-title")}
@@ -100,3 +104,16 @@ export default ({ setMode }) => {
         </div>
     )
 }
+
+const mapStateToProps = state => ({
+    user_status : state.user_status,
+    api_error : state.error
+});
+
+const mapDispatchToProps = {
+    auth
+};
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Signup);
