@@ -32,6 +32,14 @@ module.exports =  async (req, res) => {
             const account = new Account(resByEmail.hits.hits[0]._source);
             account._id = resByEmail.hits.hits[0]._id;
             account.jwt = generateAccessToken(account._id);
+            if (!account.password) {
+                return defaultResponse(
+                    res,
+                    false,
+                    AccountNotFound,
+                    null,
+                    AccountNotFound.code);
+            }
             const isPasswordValid = await account.validatePassword(password);
             if (isPasswordValid) {
                 return defaultResponse(
