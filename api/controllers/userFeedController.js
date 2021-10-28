@@ -70,12 +70,11 @@ const addRemoveFeed = async (req, res) => {
             TechnicalError.code
         );
     } catch (e) {
-        console.log({error: e});
         return defaultResponse(
             res,
             false,
             TechnicalError,
-            null,
+            e,
             TechnicalError.code
         );
     }
@@ -127,7 +126,7 @@ const updateFeedFolder = async (req, res) => {
             res,
             false,
             TechnicalError,
-            null,
+            e,
             TechnicalError.code
         );
     }
@@ -154,12 +153,11 @@ const generateFeeds = async (req, res) => {
             );
         }
     } catch (e) {
-        console.log({ generateFeedsError: e });
         return defaultResponse(
             res,
             false,
             TechnicalError,
-            null,
+            e,
             TechnicalError.code
         );
     }
@@ -199,12 +197,11 @@ const getFeeds = async (req, res) => {
             }
         }
     } catch (e) {
-        console.log({getFeeds: e});
         return defaultResponse(
             res,
             false,
             TechnicalError,
-            null,
+            e,
             TechnicalError.code
         );
     }
@@ -229,12 +226,11 @@ const getSavedItems = async (req, res) => {
             );
         }
     } catch (e) {
-        console.log(e);
         return defaultResponse(
             res,
             false,
             TechnicalError,
-            null,
+            e,
             TechnicalError.code
         );
     }
@@ -278,12 +274,11 @@ const saveFeedItem = async (req, res) => {
             TechnicalError.code
         );
     } catch (e) {
-        console.log({error: e});
         return defaultResponse(
             res,
             false,
             TechnicalError,
-            null,
+            e,
             TechnicalError.code
         );
     }
@@ -327,12 +322,11 @@ const deleteSavedFeedItem = async (req, res) => {
             TechnicalError.code
         );
     } catch (e) {
-        console.log({error: e});
         return defaultResponse(
             res,
             false,
             TechnicalError,
-            null,
+            e,
             TechnicalError.code
         );
     }
@@ -356,12 +350,11 @@ const following = async (req, res) => {
             );
         }
     } catch (e) {
-        console.log({error: e});
         return defaultResponse(
             res,
             false,
             TechnicalError,
-            null,
+            e,
             TechnicalError.code
         );
     }

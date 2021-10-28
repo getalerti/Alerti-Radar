@@ -5,9 +5,9 @@
   padding:$spacer;
   overflow: auto;
   color: $text-color;
-  font-size: .815rem;
-  h1, h2, h3, h4, h5, h6, svg {
-    color: #c7c8c9;
+  font-size: .85rem;
+  svg {
+    color: $icon-color;
   }
   .nav_link {
     display: flex;
@@ -29,7 +29,7 @@
     align-items: center;
     svg {
       padding: 5px 10px;
-      border-radius: 0px;
+      border-radius: 0;
       width: 12px;
     }
     margin-bottom: $spacer;
@@ -74,7 +74,6 @@
     top: 10px;
     opacity: 0;
     transition: all 0.3s;
-    cursor: pointer;
     cursor: grab;
     &:active {
       cursor: grabbing;

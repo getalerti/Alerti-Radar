@@ -82,12 +82,11 @@ module.exports =  async (req, res) => {
             );
         }
     } catch (err) {
-        console.log(err);
         return defaultResponse(
             res,
             false,
             TechnicalError,
-            null,
+            err,
             TechnicalError.code
         );
     }

@@ -32,7 +32,7 @@ module.exports =  async (req, res) => {
             const account = new Account(resByEmail.hits.hits[0]._source);
             account._id = resByEmail.hits.hits[0]._id;
             account.jwt = generateAccessToken(account._id);
-            if (!account.password) {
+            if (!account.password && account.sub) {
                 return defaultResponse(
                     res,
                     false,
@@ -53,7 +53,6 @@ module.exports =  async (req, res) => {
         }
         return defaultResponse(res, false, AccountNotFound, null, AccountNotFound.code);
     } catch (err) {
-        console.log(err);
-        return defaultResponse(res, false, TechnicalError, null, TechnicalError.code);
+        return defaultResponse(res, false, TechnicalError, err, TechnicalError.code);
     }
 }

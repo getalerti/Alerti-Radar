@@ -9,7 +9,6 @@ import useTranslation from "../../helpers/i18n";
 const NewFolder = ({ saveFolder }) => {
     const t = useTranslation();
     const [error, setError] = useState("");
-    const [source, setSource] = useState(null);
     const submitHandler = (e) => {
         e.preventDefault();
         setError("");

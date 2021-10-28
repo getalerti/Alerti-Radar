@@ -69,12 +69,11 @@ module.exports =  async (req, res) => {
             AccountAlreadyExists.code
         );
     } catch (err) {
-        console.log(err);
         return defaultResponse(
             res,
             false,
             TechnicalError,
-            null,
+            err,
             TechnicalError.code
         );
     }

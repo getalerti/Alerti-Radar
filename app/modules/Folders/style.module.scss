@@ -14,6 +14,7 @@
       padding: 5px 10px;
       border-radius: 0px;
       width: 12px;
+      color: $icon-color;
     }
     margin-bottom: $spacer;
   }
@@ -22,6 +23,9 @@
     overflow: hidden;
     box-sizing: border-box;
     display: flex;
+    justify-content: center;
+    align-items: center;
+    justify-items: center;
     margin-left: $spacer / 2;
     .new_item_error {
       color: $error-color;
@@ -39,26 +43,25 @@
       svg {
         width: 15px;
         cursor: pointer;
+        color: $icon-color;
       }
 
     }
     input {
       max-width: 100%;
-      border-bottom: 1px solid $grey;
-      line-height: 30px;
-      background: transparent;
-      font-size: 11px;
-      line-height: normal !important;
-      padding-left: 5px;
-      margin-right: 5px;
+      border: 2px solid $white;
+      background: $bg-3;
+      font-size: 12px;
+      padding: 5px 10px;
       height: 19px;
+      border-radius: 5px;
     }
     .btn {
-      border-radius: 100px;
-      padding: 2px 10px;
+      border-radius: 10px;
+      margin-left: 5px;
       svg {
-        color: $bg-2;
-        font-size: 11px;
+        color: $white;
+        font-size: 12px;
       }
     }
   }

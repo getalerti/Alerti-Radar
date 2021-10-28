@@ -29,7 +29,9 @@ const {
     getFolders
 }                               = require('./controllers/foldersController');
 
+const version = "1.0";
 // Account
+router.get('/', (req, res) => { res.json({ version }) } )
 router.post('/auth/signup',userValidation, signUpController )
 router.post('/auth/signin',authValidation, signInController )
 router.post('/auth/sso',ssoValidation, ssoController )

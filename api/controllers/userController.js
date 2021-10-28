@@ -55,12 +55,11 @@ const resetPassword = async (req, res) => {
             AccountNotFound.code
         );
     } catch (e) {
-        console.log(e);
         return defaultResponse(
             res,
             false,
             TechnicalError,
-            null,
+            e,
             TechnicalError.code
         );
     }
@@ -141,12 +140,11 @@ const updateAccount = async (req, res) => {
             AccountNotFound.code
         );
     } catch (e) {
-        console.log(e);
         return defaultResponse(
             res,
             false,
             TechnicalError,
-            null,
+            e,
             TechnicalError.code
         );
     }

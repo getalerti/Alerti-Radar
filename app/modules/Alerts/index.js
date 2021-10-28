@@ -14,8 +14,8 @@ const Alerts =({ alerts, alert_items, loadAlerts, loadAlert, loading }) => {
     const [selectedAlert, setSelectedAlert] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [freez, setFreez] = useState(loading);
-    const [alertItems, setAlertItems] = useState([]);
-    const [alertsList, setAlertsList] = useState([]);
+    const [alertItems, setAlertItems] = useState(null);
+    const [alertsList, setAlertsList] = useState(null);
     const alertContentRef = useRef(null);
     useEffect(() => {
         loadAlerts();
@@ -39,7 +39,7 @@ const Alerts =({ alerts, alert_items, loadAlerts, loadAlert, loading }) => {
     }, [currentPage]);
     useEffect(() => {
         if (currentPage === 1)
-            setAlertItems(alert_items)
+            setAlertItems(alert_items || [])
         if (alertItems && currentPage > 1) {
             const _alertItems = alertItems || []
             _alertItems.entries.push(...alert_items.entries)
@@ -81,7 +81,7 @@ const Alerts =({ alerts, alert_items, loadAlerts, loadAlert, loading }) => {
         <div className={styles.alerts}>
             <h1>Alerts<FaUndo onClick={() => { init(true) }} /></h1>
             <div className={styles.alerts__list}>
-                { !alertsList && <BulletList /> }
+                { alertsList === null && <BulletList /> }
                 {
                     <>
                         {
@@ -100,7 +100,7 @@ const Alerts =({ alerts, alert_items, loadAlerts, loadAlert, loading }) => {
                 }
             </div>
             <div className={styles.alerts__content__items} ref={alertContentRef} onScroll={handleAlertContentScroll}>
-                { !alertItems && <BulletList /> }
+                { alertItems === null && <BulletList /> }
                 {
                     alertItems && alertItems.paging && alertItems.entries.map((item ,index) => (
                         <div key={index}>

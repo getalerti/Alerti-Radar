@@ -44,8 +44,7 @@ const addFolder = async (req, res) => {
         }
         return defaultResponse(res, false, TechnicalError, null, TechnicalError.code);
     } catch (e) {
-        console.log({error: e});
-        return defaultResponse(res, false, TechnicalError, null, TechnicalError.code);
+        return defaultResponse(res, false, TechnicalError, e, TechnicalError.code);
     }
 
 }
@@ -53,7 +52,6 @@ const addFolder = async (req, res) => {
 const getFolders = async (req, res) => {
     try {
         let userId = req.user;
-        console.log({userId})
         const queryByID = {
             index: 'accounts',
             id: `${userId}`
@@ -64,9 +62,7 @@ const getFolders = async (req, res) => {
             return defaultResponse(res, true, null, items, 200);
         }
     } catch (e) {
-        console.log({getFolders: e})
-        return defaultResponse(res, false, TechnicalError, null, TechnicalError.code);
-
+        return defaultResponse(res, false, TechnicalError, e, TechnicalError.code);
     }
 }
 module.exports = {

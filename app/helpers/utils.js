@@ -7,7 +7,7 @@ const fetchAPI = async (url, method, data, isProtected = false, isAlerti = false
         'Content-Type': 'application/json'
     };
     if (isAlerti) {
-        headers["x-auth-token"] = process.env.ALERTI_API_TOKEN;
+        headers["X-Auth-Token"] = process.env.ALERTI_API_TOKEN;
     }
     if (!isAlerti && isProtected) {
         let authenticatedUser = window.localStorage.getItem(consts.isAuthenticatedUser);

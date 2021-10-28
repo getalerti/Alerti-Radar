@@ -1,7 +1,7 @@
 import styles from "./style.module.scss";
 import {loadFeeds, viewItem, generateFeeds} from "../../store/actions";
 import {connect} from "react-redux";
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import FeedsPanel from "./FeedsPanel";
 import useTranslation from "../../helpers/i18n";
 import FeedsLoader from "../../components/loaders/FeedsLoader";

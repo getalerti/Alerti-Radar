@@ -1,8 +1,9 @@
 import Link from 'next/link'
-import { FaAlgolia, FaHome, FaRss, FaPodcast, FaBookmark, FaSignOutAlt, FaPlus } from 'react-icons/fa';
+import { FaHome, FaBookmark, FaSignOutAlt, FaPlus } from 'react-icons/fa';
 import styles from "./style.module.scss";
 import consts from "./../../helpers/consts";
 import { useRouter } from "next/router";
+import logo from "./../../images/logo-alerti.png"
 
 export default () => {
     const router = useRouter();
@@ -18,7 +19,7 @@ export default () => {
     return (
         <nav className={styles.navbar}>
             <Link href="/">
-                <FaAlgolia className={styles.navbar__logo} />
+                <img src={logo} className={styles.navbar__logo} />
             </Link>
             <div className={styles.navbar__items}>
                 <Link href={"/"}>
@@ -31,9 +32,14 @@ export default () => {
                     <FaBookmark title={"saved"} className={isActiveLink("/dashboard/saved") ? styles.navbar__item__active : ""} />
                 </Link>
             </div>
-            <span className={styles.navbar__logout} onClick={() => { handleLogout()}}>
-                <FaSignOutAlt />
-            </span>
+            <div  className={styles.navbar__items}>
+                <span className={styles.navbar__logout} onClick={() => { handleLogout()}}>
+                    <FaSignOutAlt />
+                </span>
+                <span className={styles.app__version}>
+                    v{process.env.APP_VERSION || "1.0"}
+                </span>
+            </div>
         </nav>
     )
 }

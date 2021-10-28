@@ -70,6 +70,11 @@ export const loadFollwings = () => dispatch => {
                 })
             }
         }).catch(error => {
+            if (error === "NO_AUTH")
+                dispatch({
+                    type: USER_STATUS,
+                    payload: "unauthorized"
+                })
             console.log({loadFollwingsError: error})
             dispatch({ type: SET_ERROR, payload: t("technical_error") })
         })
@@ -97,6 +102,12 @@ export const loadSavedItems = () => dispatch => {
                 })
             }
         }).catch(error => {
+            if (error === "NO_AUTH") {
+                dispatch({
+                    type: USER_STATUS,
+                    payload: "unauthorized"
+                });
+            }
             console.log({loadSavedItemsError: error})
             dispatch({ type: SET_ERROR, payload: t("technical_error") })
         })
@@ -124,6 +135,12 @@ export const saveItem = (item) => dispatch => {
                 })
             }
         }).catch(error => {
+        if (error === "NO_AUTH") {
+            dispatch({
+                type: USER_STATUS,
+                payload: "unauthorized"
+            });
+        }
             console.log({loadSaveItemError: error})
             dispatch({ type: SET_ERROR, payload: t("technical_error") })
         })
@@ -350,7 +367,7 @@ export const loadAlerts = () => dispatch => {
         dispatch({ type: SET_ERROR, payload: t("technical_error") })
         }).finally(() => {
         dispatch({ type: LOADING, payload: false });
-    })
+        })
 };
 export const loadAlert = (id, page = "") => dispatch => {
     if (alertApiUrl === "")
