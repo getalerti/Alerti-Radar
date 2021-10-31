@@ -61,18 +61,31 @@
     .feed__items {
       overflow-y: auto;
       height: 325px;
+      .feed__bloc__image {
+        display: none;
+      }
       &[data-display="blocs"] {
+        .feed__bloc__image {
+          display: block;
+          img, svg {
+            width: 100%;
+            height: auto;
+            margin-top: 10px;
+            margin-bottom: $spacer;
+            border-radius: 5px;
+          }
+        }
         display: flex;
         flex-wrap: wrap;
-        justify-content: space-around;
+        justify-content: space-between;
         align-items: center;
         .feed__item {
-          width: 300px;
+          width: 22%;
           margin: $spacer/2;
           flex-direction: column;
           .feed__item__fullcontent {
             display: block;
-            width: 250px;
+            width: 100%;
             font-size: 11px;
             padding: $spacer 5px;
             height: 50px;
@@ -104,7 +117,7 @@
             cursor: pointer;
             position: absolute;
             right: 5px;
-            top: 18px;
+            top: 5px;
         }
         .feed__item__fullcontent {
           display: none;

@@ -8,7 +8,7 @@ import {FaRss, FaPodcast, FaList, FaMicrosoft, FaUndo, FaTwitterSquare} from "re
 
 export default ({feeds, title, link, viewItemAction, generateContent, single = false}) => {
     const [loader, setLoader] = useState(true);
-    const [display, setDisplay] = useState("list");
+    const [display, setDisplay] = useState("blocs");
     const t = useTranslation()
     const Icon = (type) => type === "podcast" ? <FaPodcast /> : <FaRss />;
     const sharePost = (link) => {
@@ -18,6 +18,7 @@ export default ({feeds, title, link, viewItemAction, generateContent, single = f
     }
     useEffect(() => {
         if (feeds) {
+            console.log(feeds[0])
             setLoader(false)
         } else {
             setLoader(true)
@@ -38,6 +39,10 @@ export default ({feeds, title, link, viewItemAction, generateContent, single = f
                     feeds.map((item, index) => (
                         <div key={index} className={styles.feed__item} title={item.title}>
                             <FaTwitterSquare onClick={() => { sharePost(item.link) }} />
+                            <div className={styles.feed__bloc__image}>
+                                { item.media.type === "img" && <img src={item.media.source} /> }
+                                { item.media.type === "svg" && <svg dangerouslySetInnerHTML={{__html: item.media.source}}></svg> }
+                            </div>
                             <p onClick={() => {viewItemAction(item)}}>
                                 {Icon(item.type)}
                                 <span> {item.feed_name}:</span>

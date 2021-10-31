@@ -4,14 +4,13 @@
   bottom: $spacer;
   left: 10%;
   width: 80%;
-  background: $bg-1;
   border-radius: 5px 5px 0 0;
   box-shadow: 0 0 20px 0px $grey;
   svg {
     cursor: pointer;
   }
   .viewer__header {
-    background: $bg-2;
+    background: $bg-1;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -28,6 +27,7 @@
       }
       svg {
         margin: 0 5px;
+        color: $icon-color;
         &:last-child {
           margin-left: $spacer * 2;
         }
@@ -36,6 +36,7 @@
   }
   .viewer__body {
     padding: $spacer;
+    background-color: $white;
     overflow-y: auto;
     max-height: 85vh;
     .viewer__body__title{

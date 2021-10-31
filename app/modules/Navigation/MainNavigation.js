@@ -1,9 +1,11 @@
 import Link from 'next/link'
-import { FaHome, FaBookmark, FaSignOutAlt, FaPlus } from 'react-icons/fa';
+import { FaHome, FaSignOutAlt } from 'react-icons/fa';
 import styles from "./style.module.scss";
 import consts from "./../../helpers/consts";
 import { useRouter } from "next/router";
-import logo from "./../../images/logo-alerti.png"
+import logo from "./../../images/logo-alerti.png";
+import ChatwootLogo from "../../images/chatwoot";
+import { IoMdAnalytics } from "react-icons/io";
 
 export default () => {
     const router = useRouter();
@@ -25,11 +27,11 @@ export default () => {
                 <Link href={"/"}>
                     <FaHome className={isActiveLink("/dashboard") ? styles.navbar__item__active : ""} />
                 </Link>
-                <Link href={"/dashboard/new"}>
-                    <FaPlus title={"new"} className={isActiveLink("/dashboard/new") ? styles.navbar__item__active : ""} />
+                <Link href={"#"}>
+                    <ChatwootLogo />
                 </Link>
-                <Link href={"/dashboard/saved"}>
-                    <FaBookmark title={"saved"} className={isActiveLink("/dashboard/saved") ? styles.navbar__item__active : ""} />
+                <Link href={"#"}>
+                    <IoMdAnalytics />
                 </Link>
             </div>
             <div  className={styles.navbar__items}>

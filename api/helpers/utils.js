@@ -1,30 +1,57 @@
-const jwt = require('jsonwebtoken');
-const Parser = require('rss-parser');
-const parser = new Parser();
-const fs = require('fs')
-const nodemailer = require("nodemailer");
-const { uuid } = require('uuidv4');
+const jwt           = require('jsonwebtoken');
+const Parser        = require('rss-parser');
+const parser        = new Parser();
+const fs            = require('fs')
+const nodemailer    = require("nodemailer");
+const { uuid }      = require('uuidv4');
+var jsdom           = require("jsdom");
 
-const USER_COLLECTION_PREF_ID = "usr";
-const FEED_COLLECTION_PREF_ID = "feed";
+const USER_COLLECTION_PREF_ID   = "usr";
+const FEED_COLLECTION_PREF_ID   = "feed";
 const FOLDER_COLLECTION_PREF_ID = "folder";
 
 const generateAccessToken = (username) => {
     return jwt.sign(username, process.env.JWT_SECRET);
 }
+const getImageFromHTML = (html) => {
+    const { JSDOM } = jsdom;
+    const dom = new JSDOM(`${html}`);
+    const image = dom.window.document.querySelector("img");
+    let source = image ? image.src : null;
+    let type = "img";
+    if (!source) {
+        let svg = dom.window.document.querySelector("svg");
+        type = "svg";
+        if (svg && svg.length > 0) {
+            source = svg[0].innerHTML;
+        } else {
+            source = svg ? svg.innerHTML : null;
+        }
+    }
+    if (!source) {
+        type = "img";
+        source = "https://fakeimg.pl/600x400/282828/eae0d0/?retina=1&text=NO%20IMAGE!";
+    }
+    return {
+        type,
+        source
+    };
+
+}
 const sanitizedFeedItems = (items, type, basedUrl) => {
     return items.map((item) => {
         let {title, creator, pubDate, "content:encoded": content_encoded, link, content, enclosure } = item;
         if (!isURL(link))
-            link = new URL(basedUrl).origin + link
+            link = new URL(basedUrl).origin + link;
+        const _content = content_encoded ? content_encoded : content;
         return {
             id: uuid(),
             title,
             creator,
             date: pubDate,
             type,
-            content: content_encoded ? content_encoded : content,
-            media: enclosure,
+            content: _content,
+            media: getImageFromHTML(_content),
             link
         };
     })
