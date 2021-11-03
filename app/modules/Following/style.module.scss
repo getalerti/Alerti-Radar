@@ -6,6 +6,15 @@
   overflow: auto;
   color: $text-color;
   font-size: .85rem;
+  .following__big_title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    justify-items: center;
+    font-size: 18px;
+    margin-bottom: $spacer * 2;
+    font-weight: bold;
+  }
   svg {
     color: $icon-color;
   }

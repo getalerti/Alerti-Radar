@@ -1,0 +1,58 @@
+@import "./../../styles/base";
+.popover_btn {
+  position: relative;
+  button {
+    background-color: $btn-bg;
+    color: $white;
+    padding: $spacer/3 $spacer;
+    border-radius: 100px;
+  }
+  .popover_btn__list {
+    display: none;
+    opacity: 0;
+    transition: all 0.4s;
+    &[data-show=true] {
+      display: block;
+      opacity: 1;
+    }
+    &::before {
+      content: " ";
+    display: block;
+    position: absolute;
+    background: $white;
+    z-index: 999;
+    width: 10px;
+    height: 10px;
+    top: -5px;
+    left: calc(50% - 5px);
+    transform: rotate(45deg);
+    }
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    font-size: 13px;
+    font-weight: normal;
+    padding: $spacer $spacer*2 0 $spacer;
+    text-align: left;
+    background: $white;
+    right: 0;
+    top: 35px;
+    border-radius: 10px;
+    z-index: 99;
+    span, a {
+      cursor: pointer;
+      color: $blue;
+      text-decoration: none;
+      padding-bottom: $spacer;
+      display: flex;
+      transition: all 0.4s;
+      &:hover {
+        text-decoration: underline;
+      }
+      svg {
+        margin-right: 5px;
+        color: $blue;
+      }
+    }
+  }
+}
